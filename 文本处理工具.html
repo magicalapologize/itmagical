@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文本处理工具 - 云云的AI工具箱</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+        .text-tool {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .tool-section {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-area {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        .tool-controls {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .result-area {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .stats {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        select, input[type="number"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .tab-container {
+            margin: 20px 0;
+        }
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            border-top: 2px solid transparent;
+        }
+        .tab-button.active {
+            background: #fff;
+            border-top: 2px solid #007acc;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="page-wrapper">
+        <!-- Header -->
+        <section id="header">
+            <h1><a href="index.html">云云的AI工具箱</a></h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">主页</a></li>
+                    <li class="current"><a href="文本处理工具.html">文本处理工具</a></li>
+                    <li><a href="切图工具.html">图片处理</a></li>
+                    <li><a href="格式转换工具.html">格式转换</a></li>
+                </ul>
+            </nav>
+        </section>
+
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="text-tool">
+                    <header class="major">
+                        <h2>文本处理工具</h2>
+                        <p>提供文本格式化、转换、翻译等多种文本处理功能</p>
+                    </header>
+                    
+                    <!-- 输入区域 -->
+                    <div class="tool-section">
+                        <h3>输入文本</h3>
+                        <textarea id="inputText" class="text-area" placeholder="请在此输入或粘贴您要处理的文本..."></textarea>
+                        <div class="tool-controls">
+                            <button id="clearBtn" class="button alt">清空</button>
+                            <button id="pasteBtn" class="button alt">粘贴</button>
+                            <button id="copyInputBtn" class="button alt">复制</button>
+                            <input type="file" id="fileInput" accept=".txt" style="display: none;">
+                            <button id="loadFileBtn" class="button alt">加载文件</button>
+                        </div>
+                        <div class="stats" id="textStats">
+                            字符数: 0 | 单词数: 0 | 行数: 0
+                        </div>
+                    </div>
+
+                    <!-- 功能选项卡 -->
+                    <div class="tab-container">
+                        <div class="tab-buttons">
+                            <button class="tab-button active" data-tab="format">格式化</button>
+                            <button class="tab-button" data-tab="convert">转换</button>
+                            <button class="tab-button" data-tab="translate">翻译</button>
+                            <button class="tab-button" data-tab="analyze">分析</button>
+                        </div>
+
+                        <!-- 格式化功能 -->
+                        <div class="tab-content active" id="format">
+                            <div class="tool-section">
+                                <h3>文本格式化</h3>
+                                <div class="tool-controls">
+                                    <button id="trimBtn" class="button">去除首尾空格</button>
+                                    <button id="removeExtraSpacesBtn" class="button">去除多余空格</button>
+                                    <button id="removeEmptyLinesBtn" class="button">去除空行</button>
+                                    <button id="addLineNumbersBtn" class="button">添加行号</button>
+                                </div>
+                                <div class="tool-controls">
+                                    <button id="uppercaseBtn" class="button">转大写</button>
+                                    <button id="lowercaseBtn" class="button">转小写</button>
+                                    <button id="titleCaseBtn" class="button">标题格式</button>
+                                    <button id="reverseBtn" class="button">反转文本</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 转换功能 -->
+                        <div class="tab-content" id="convert">
+                            <div class="tool-section">
+                                <h3>文本转换</h3>
+                                <div class="control-group">
+                                    <label>编码转换:</label>
+                                    <select id="encodingSelect">
+                                        <option value="base64">Base64编码</option>
+                                        <option value="url">URL编码</option>
+                                        <option value="html">HTML实体编码</option>
+                                        <option value="unicode">Unicode编码</option>
+                                    </select>
+                                    <button id="encodeBtn" class="button">编码</button>
+                                    <button id="decodeBtn" class="button">解码</button>
+                                </div>
+                                <div class="control-group">
+                                    <label>分隔符替换:</label>
+                                    <input type="text" id="oldSeparator" placeholder="原分隔符" style="width: 100px;">
+                                    <span>→</span>
+                                    <input type="text" id="newSeparator" placeholder="新分隔符" style="width: 100px;">
+                                    <button id="replaceSeparatorBtn" class="button">替换</button>
+                                </div>
+                                <div class="control-group">
+                                    <button id="jsonFormatBtn" class="button">JSON格式化</button>
+                                    <button id="jsonMinifyBtn" class="button">JSON压缩</button>
+                                    <button id="csvToJsonBtn" class="button">CSV转JSON</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 翻译功能 -->
+                        <div class="tab-content" id="translate">
+                            <div class="tool-section">
+                                <h3>文本翻译</h3>
+                                <div class="control-group">
+                                    <label>从:</label>
+                                    <select id="fromLang">
+                                        <option value="auto">自动检测</option>
+                                        <option value="zh">中文</option>
+                                        <option value="en">英文</option>
+                                        <option value="ja">日文</option>
+                                        <option value="ko">韩文</option>
+                                        <option value="fr">法文</option>
+                                        <option value="de">德文</option>
+                                        <option value="es">西班牙文</option>
+                                    </select>
+                                    <label>到:</label>
+                                    <select id="toLang">
+                                        <option value="zh">中文</option>
+                                        <option value="en">英文</option>
+                                        <option value="ja">日文</option>
+                                        <option value="ko">韩文</option>
+                                        <option value="fr">法文</option>
+                                        <option value="de">德文</option>
+                                        <option value="es">西班牙文</option>
+                                    </select>
+                                    <button id="translateBtn" class="button primary">翻译</button>
+                                </div>
+                                <p style="color: #666; font-size: 12px;">注意: 翻译功能需要网络连接，使用第三方翻译服务</p>
+                            </div>
+                        </div>
+
+                        <!-- 分析功能 -->
+                        <div class="tab-content" id="analyze">
+                            <div class="tool-section">
+                                <h3>文本分析</h3>
+                                <div class="tool-controls">
+                                    <button id="analyzeBtn" class="button primary">开始分析</button>
+                                    <button id="wordFrequencyBtn" class="button">词频统计</button>
+                                    <button id="readabilityBtn" class="button">可读性分析</button>
+                                </div>
+                                <div id="analysisResult" class="result-area" style="margin-top: 15px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 结果区域 -->
+                    <div class="tool-section">
+                        <h3>处理结果</h3>
+                        <div id="resultArea" class="result-area">处理结果将在此显示...</div>
+                        <div class="tool-controls">
+                            <button id="copyResultBtn" class="button primary">复制结果</button>
+                            <button id="downloadBtn" class="button alt">下载文件</button>
+                            <button id="clearResultBtn" class="button alt">清空结果</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // 全局变量
+        const inputText = document.getElementById('inputText');
+        const resultArea = document.getElementById('resultArea');
+        const textStats = document.getElementById('textStats');
+
+        // 选项卡切换
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // 移除所有活动状态
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // 添加活动状态
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // 更新文本统计
+        function updateStats() {
+            const text = inputText.value;
+            const charCount = text.length;
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const lineCount = text.split('\n').length;
+            
+            textStats.textContent = `字符数: ${charCount} | 单词数: ${wordCount} | 行数: ${lineCount}`;
+        }
+
+        // 显示结果
+        function showResult(result) {
+            resultArea.textContent = result;
+        }
+
+        // 基础功能
+        inputText.addEventListener('input', updateStats);
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            inputText.value = '';
+            updateStats();
+        });
+
+        document.getElementById('pasteBtn').addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                inputText.value = text;
+                updateStats();
+            } catch (err) {
+                alert('无法访问剪贴板，请手动粘贴');
+            }
+        });
+
+        document.getElementById('copyInputBtn').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(inputText.value);
+                alert('已复制到剪贴板');
+            } catch (err) {
+                alert('复制失败');
+            }
+        });
+
+        document.getElementById('copyResultBtn').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(resultArea.textContent);
+                alert('结果已复制到剪贴板');
+            } catch (err) {
+                alert('复制失败');
+            }
+        });
+
+        document.getElementById('clearResultBtn').addEventListener('click', () => {
+            resultArea.textContent = '处理结果将在此显示...';
+        });
+
+        // 文件加载
+        document.getElementById('loadFileBtn').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    inputText.value = e.target.result;
+                    updateStats();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // 格式化功能
+        document.getElementById('trimBtn').addEventListener('click', () => {
+            const result = inputText.value.trim();
+            showResult(result);
+        });
+
+        document.getElementById('removeExtraSpacesBtn').addEventListener('click', () => {
+            const result = inputText.value.replace(/\s+/g, ' ');
+            showResult(result);
+        });
+
+        document.getElementById('removeEmptyLinesBtn').addEventListener('click', () => {
+            const result = inputText.value.replace(/^\s*\n/gm, '');
+            showResult(result);
+        });
+
+        document.getElementById('addLineNumbersBtn').addEventListener('click', () => {
+            const lines = inputText.value.split('\n');
+            const result = lines.map((line, index) => `${index + 1}. ${line}`).join('\n');
+            showResult(result);
+        });
+
+        document.getElementById('uppercaseBtn').addEventListener('click', () => {
+            showResult(inputText.value.toUpperCase());
+        });
+
+        document.getElementById('lowercaseBtn').addEventListener('click', () => {
+            showResult(inputText.value.toLowerCase());
+        });
+
+        document.getElementById('titleCaseBtn').addEventListener('click', () => {
+            const result = inputText.value.replace(/\w\S*/g, (txt) => 
+                txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            showResult(result);
+        });
+
+        document.getElementById('reverseBtn').addEventListener('click', () => {
+            showResult(inputText.value.split('').reverse().join(''));
+        });
+
+        // 编码转换功能
+        document.getElementById('encodeBtn').addEventListener('click', () => {
+            const encoding = document.getElementById('encodingSelect').value;
+            const text = inputText.value;
+            let result = '';
+
+            try {
+                switch(encoding) {
+                    case 'base64':
+                        result = btoa(unescape(encodeURIComponent(text)));
+                        break;
+                    case 'url':
+                        result = encodeURIComponent(text);
+                        break;
+                    case 'html':
+                        result = text.replace(/[&<>"']/g, function(m) {
+                            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+                        });
+                        break;
+                    case 'unicode':
+                        result = text.split('').map(char => 
+                            '\\u' + ('0000' + char.charCodeAt(0).toString(16)).slice(-4)
+                        ).join('');
+                        break;
+                }
+                showResult(result);
+            } catch (err) {
+                alert('编码失败: ' + err.message);
+            }
+        });
+
+        document.getElementById('decodeBtn').addEventListener('click', () => {
+            const encoding = document.getElementById('encodingSelect').value;
+            const text = inputText.value;
+            let result = '';
+
+            try {
+                switch(encoding) {
+                    case 'base64':
+                        result = decodeURIComponent(escape(atob(text)));
+                        break;
+                    case 'url':
+                        result = decodeURIComponent(text);
+                        break;
+                    case 'html':
+                        const div = document.createElement('div');
+                        div.innerHTML = text;
+                        result = div.textContent || div.innerText || '';
+                        break;
+                    case 'unicode':
+                        result = text.replace(/\\u[\dA-F]{4}/gi, function(match) {
+                            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+                        });
+                        break;
+                }
+                showResult(result);
+            } catch (err) {
+                alert('解码失败: ' + err.message);
+            }
+        });
+
+        // 分隔符替换
+        document.getElementById('replaceSeparatorBtn').addEventListener('click', () => {
+            const oldSep = document.getElementById('oldSeparator').value;
+            const newSep = document.getElementById('newSeparator').value;
+            
+            if (!oldSep) {
+                alert('请输入原分隔符');
+                return;
+            }
+            
+            const result = inputText.value.split(oldSep).join(newSep);
+            showResult(result);
+        });
+
+        // JSON处理
+        document.getElementById('jsonFormatBtn').addEventListener('click', () => {
+            try {
+                const obj = JSON.parse(inputText.value);
+                const result = JSON.stringify(obj, null, 2);
+                showResult(result);
+            } catch (err) {
+                alert('JSON格式错误: ' + err.message);
+            }
+        });
+
+        document.getElementById('jsonMinifyBtn').addEventListener('click', () => {
+            try {
+                const obj = JSON.parse(inputText.value);
+                const result = JSON.stringify(obj);
+                showResult(result);
+            } catch (err) {
+                alert('JSON格式错误: ' + err.message);
+            }
+        });
+
+        // 翻译功能（模拟）
+        document.getElementById('translateBtn').addEventListener('click', () => {
+            const fromLang = document.getElementById('fromLang').value;
+            const toLang = document.getElementById('toLang').value;
+            const text = inputText.value;
+            
+            if (!text.trim()) {
+                alert('请输入要翻译的文本');
+                return;
+            }
+            
+            // 这里应该调用真实的翻译API
+            showResult('翻译功能需要集成第三方翻译服务API\n\n原文: ' + text + '\n\n译文: [翻译结果将在此显示]');
+        });
+
+        // 文本分析
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
+            const text = inputText.value;
+            const analysisResult = document.getElementById('analysisResult');
+            
+            if (!text.trim()) {
+                alert('请输入要分析的文本');
+                return;
+            }
+            
+            const charCount = text.length;
+            const wordCount = text.trim().split(/\s+/).length;
+            const lineCount = text.split('\n').length;
+            const paragraphCount = text.split(/\n\s*\n/).length;
+            const avgWordsPerLine = (wordCount / lineCount).toFixed(2);
+            
+            const analysis = `文本分析结果:\n\n` +
+                `总字符数: ${charCount}\n` +
+                `总单词数: ${wordCount}\n` +
+                `总行数: ${lineCount}\n` +
+                `段落数: ${paragraphCount}\n` +
+                `平均每行单词数: ${avgWordsPerLine}\n` +
+                `预计阅读时间: ${Math.ceil(wordCount / 200)} 分钟`;
+            
+            analysisResult.textContent = analysis;
+        });
+
+        // 词频统计
+        document.getElementById('wordFrequencyBtn').addEventListener('click', () => {
+            const text = inputText.value.toLowerCase();
+            const words = text.match(/\b\w+\b/g);
+            
+            if (!words) {
+                alert('未找到有效单词');
+                return;
+            }
+            
+            const frequency = {};
+            words.forEach(word => {
+                frequency[word] = (frequency[word] || 0) + 1;
+            });
+            
+            const sorted = Object.entries(frequency)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 20);
+            
+            const result = '词频统计 (前20个):\n\n' + 
+                sorted.map(([word, count]) => `${word}: ${count}`).join('\n');
+            
+            document.getElementById('analysisResult').textContent = result;
+        });
+
+        // 下载功能
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const content = resultArea.textContent;
+            if (content === '处理结果将在此显示...') {
+                alert('没有可下载的内容');
+                return;
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'processed_text.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // 初始化
+        updateStats();
+    </script>
+</body>
+</html>
