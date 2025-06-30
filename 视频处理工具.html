@@ -1,0 +1,1227 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>视频处理工具 - IT魔法师</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+        .video-tool {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tool-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .tab-button.active {
+            color: #007acc;
+            border-bottom-color: #007acc;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #007acc;
+            background: #f8f9fa;
+        }
+        
+        .upload-area.dragover {
+            border-color: #007acc;
+            background: #e3f2fd;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .video-preview {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .video-preview video {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .video-controls {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .control-group {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group label {
+            min-width: 120px;
+            font-weight: bold;
+        }
+        
+        .slider {
+            flex: 1;
+            min-width: 200px;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #007acc;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #007acc;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .timeline {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .timeline-track {
+            height: 60px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            position: relative;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .timeline-segment {
+            height: 100%;
+            background: linear-gradient(45deg, #007acc, #0056b3);
+            position: absolute;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .format-card {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .format-card:hover {
+            border-color: #007acc;
+            background: #f8f9fa;
+        }
+        
+        .format-card.selected {
+            border-color: #007acc;
+            background: #e3f2fd;
+        }
+        
+        .watermark-area {
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .subtitle-editor {
+            margin: 20px 0;
+        }
+        
+        .subtitle-item {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            align-items: center;
+        }
+        
+        .subtitle-time {
+            min-width: 100px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .subtitle-text {
+            flex: 1;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007acc, #0056b3);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .file-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .file-info h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .effect-btn {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .effect-btn:hover {
+            border-color: #007acc;
+            background: #f8f9fa;
+        }
+        
+        .effect-btn.active {
+            border-color: #007acc;
+            background: #e3f2fd;
+            color: #007acc;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                text-align: left;
+                border-bottom: 1px solid #eee;
+                border-radius: 0;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .control-group label {
+                min-width: auto;
+            }
+            
+            .slider {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="page-wrapper">
+        <header id="header">
+            <h1 id="logo"><a href="index.html">IT魔法师</a></h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="文本处理工具.html">文本处理</a></li>
+                    <li><a href="图片压缩工具.html">图片压缩</a></li>
+                    <li><a href="格式转换工具.html">格式转换</a></li>
+                    <li><a href="音频处理工具.html">音频处理</a></li>
+                    <li><a href="视频处理工具.html" class="current">视频处理</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>视频处理工具</h2>
+                    <p>专业的视频编辑处理平台，让视频创作变得简单高效</p>
+                </header>
+
+                <div class="video-tool">
+                    <div class="tool-tabs">
+                        <button class="tab-button active" onclick="switchTab('clip')">视频剪辑</button>
+                        <button class="tab-button" onclick="switchTab('compress')">视频压缩</button>
+                        <button class="tab-button" onclick="switchTab('convert')">格式转换</button>
+                        <button class="tab-button" onclick="switchTab('watermark')">添加水印</button>
+                        <button class="tab-button" onclick="switchTab('subtitle')">字幕编辑</button>
+                        <button class="tab-button" onclick="switchTab('effects')">视频特效</button>
+                        <button class="tab-button" onclick="switchTab('merge')">视频合并</button>
+                    </div>
+
+                    <!-- 视频剪辑 -->
+                    <div id="clip" class="tab-content active">
+                        <h3>视频剪辑</h3>
+                        <div class="upload-area" onclick="document.getElementById('videoInput').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>点击或拖拽上传视频文件</h4>
+                            <p>支持 MP4, AVI, MOV, MKV, WMV 等格式</p>
+                            <input type="file" id="videoInput" class="file-input" accept="video/*" onchange="handleVideoUpload(this)">
+                        </div>
+                        
+                        <div id="videoPreview" class="video-preview" style="display: none;">
+                            <video id="previewVideo" controls></video>
+                        </div>
+                        
+                        <div id="videoInfo" class="file-info" style="display: none;">
+                            <h4>视频信息</h4>
+                            <div class="info-grid">
+                                <div class="info-item"><span>文件名:</span><span id="fileName"></span></div>
+                                <div class="info-item"><span>文件大小:</span><span id="fileSize"></span></div>
+                                <div class="info-item"><span>视频时长:</span><span id="videoDuration"></span></div>
+                                <div class="info-item"><span>分辨率:</span><span id="videoResolution"></span></div>
+                            </div>
+                        </div>
+                        
+                        <div id="clipControls" class="video-controls" style="display: none;">
+                            <div class="control-group">
+                                <label>剪辑范围:</label>
+                                <div class="input-group">
+                                    <input type="number" id="startTime" placeholder="开始时间(秒)" min="0" step="0.1">
+                                    <span>到</span>
+                                    <input type="number" id="endTime" placeholder="结束时间(秒)" min="0" step="0.1">
+                                </div>
+                            </div>
+                            
+                            <div class="timeline">
+                                <h4>时间轴</h4>
+                                <div class="timeline-track">
+                                    <div class="timeline-segment" id="clipSegment" style="left: 0%; width: 100%;">选中片段</div>
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="previewClip()">预览剪辑</button>
+                                <button class="btn" onclick="processClip()">开始剪辑</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 视频压缩 -->
+                    <div id="compress" class="tab-content">
+                        <h3>视频压缩</h3>
+                        <div class="upload-area" onclick="document.getElementById('compressInput').click()">
+                            <i class="fas fa-compress-alt" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>上传需要压缩的视频</h4>
+                            <p>智能压缩，保持画质的同时减小文件大小</p>
+                            <input type="file" id="compressInput" class="file-input" accept="video/*">
+                        </div>
+                        
+                        <div class="video-controls">
+                            <div class="control-group">
+                                <label>压缩质量:</label>
+                                <input type="range" class="slider" id="qualitySlider" min="10" max="100" value="70">
+                                <span id="qualityValue">70%</span>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>目标大小:</label>
+                                <div class="input-group">
+                                    <input type="number" id="targetSize" placeholder="目标大小(MB)" min="1">
+                                    <span>MB</span>
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>分辨率:</label>
+                                <select id="resolutionSelect">
+                                    <option value="original">保持原分辨率</option>
+                                    <option value="1920x1080">1080p (1920×1080)</option>
+                                    <option value="1280x720">720p (1280×720)</option>
+                                    <option value="854x480">480p (854×480)</option>
+                                    <option value="640x360">360p (640×360)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="startCompress()">开始压缩</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 格式转换 -->
+                    <div id="convert" class="tab-content">
+                        <h3>格式转换</h3>
+                        <div class="upload-area" onclick="document.getElementById('convertInput').click()">
+                            <i class="fas fa-exchange-alt" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>上传视频进行格式转换</h4>
+                            <p>支持多种视频格式之间的相互转换</p>
+                            <input type="file" id="convertInput" class="file-input" accept="video/*">
+                        </div>
+                        
+                        <div class="format-options">
+                            <div class="format-card" onclick="selectFormat('mp4')">
+                                <h4>MP4</h4>
+                                <p>通用格式</p>
+                            </div>
+                            <div class="format-card" onclick="selectFormat('avi')">
+                                <h4>AVI</h4>
+                                <p>经典格式</p>
+                            </div>
+                            <div class="format-card" onclick="selectFormat('mov')">
+                                <h4>MOV</h4>
+                                <p>苹果格式</p>
+                            </div>
+                            <div class="format-card" onclick="selectFormat('mkv')">
+                                <h4>MKV</h4>
+                                <p>高质量</p>
+                            </div>
+                            <div class="format-card" onclick="selectFormat('webm')">
+                                <h4>WebM</h4>
+                                <p>网页优化</p>
+                            </div>
+                            <div class="format-card" onclick="selectFormat('gif')">
+                                <h4>GIF</h4>
+                                <p>动图格式</p>
+                            </div>
+                        </div>
+                        
+                        <div class="video-controls">
+                            <div class="control-group">
+                                <label>输出质量:</label>
+                                <input type="range" class="slider" id="convertQuality" min="1" max="10" value="7">
+                                <span id="convertQualityValue">高质量</span>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="startConvert()">开始转换</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 添加水印 -->
+                    <div id="watermark" class="tab-content">
+                        <h3>添加水印</h3>
+                        <div class="upload-area" onclick="document.getElementById('watermarkVideoInput').click()">
+                            <i class="fas fa-video" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>上传视频文件</h4>
+                            <input type="file" id="watermarkVideoInput" class="file-input" accept="video/*">
+                        </div>
+                        
+                        <div class="video-controls">
+                            <div class="control-group">
+                                <label>水印类型:</label>
+                                <div class="input-group">
+                                    <label><input type="radio" name="watermarkType" value="text" checked> 文字水印</label>
+                                    <label><input type="radio" name="watermarkType" value="image"> 图片水印</label>
+                                </div>
+                            </div>
+                            
+                            <div id="textWatermark">
+                                <div class="control-group">
+                                    <label>水印文字:</label>
+                                    <input type="text" id="watermarkText" placeholder="输入水印文字" value="IT魔法师">
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label>字体大小:</label>
+                                    <input type="range" class="slider" id="fontSize" min="12" max="72" value="24">
+                                    <span id="fontSizeValue">24px</span>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label>字体颜色:</label>
+                                    <input type="color" id="fontColor" value="#ffffff">
+                                </div>
+                            </div>
+                            
+                            <div id="imageWatermark" style="display: none;">
+                                <div class="watermark-area" onclick="document.getElementById('watermarkImageInput').click()">
+                                    <p>点击上传水印图片</p>
+                                    <input type="file" id="watermarkImageInput" class="file-input" accept="image/*">
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>水印位置:</label>
+                                <select id="watermarkPosition">
+                                    <option value="top-left">左上角</option>
+                                    <option value="top-right">右上角</option>
+                                    <option value="bottom-left">左下角</option>
+                                    <option value="bottom-right" selected>右下角</option>
+                                    <option value="center">居中</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>透明度:</label>
+                                <input type="range" class="slider" id="watermarkOpacity" min="0.1" max="1" step="0.1" value="0.8">
+                                <span id="opacityValue">80%</span>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="addWatermark()">添加水印</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 字幕编辑 -->
+                    <div id="subtitle" class="tab-content">
+                        <h3>字幕编辑</h3>
+                        <div class="upload-area" onclick="document.getElementById('subtitleVideoInput').click()">
+                            <i class="fas fa-closed-captioning" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>上传视频文件</h4>
+                            <input type="file" id="subtitleVideoInput" class="file-input" accept="video/*">
+                        </div>
+                        
+                        <div class="subtitle-editor">
+                            <div class="control-group">
+                                <button class="btn" onclick="addSubtitle()">添加字幕</button>
+                                <button class="btn btn-secondary" onclick="importSRT()">导入SRT文件</button>
+                                <input type="file" id="srtInput" class="file-input" accept=".srt">
+                            </div>
+                            
+                            <div id="subtitleList">
+                                <!-- 字幕列表将在这里动态生成 -->
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>字幕样式:</label>
+                                <div class="input-group">
+                                    <select id="subtitleFont">
+                                        <option value="Arial">Arial</option>
+                                        <option value="微软雅黑">微软雅黑</option>
+                                        <option value="宋体">宋体</option>
+                                        <option value="黑体">黑体</option>
+                                    </select>
+                                    <input type="number" id="subtitleSize" value="24" min="12" max="72">
+                                    <input type="color" id="subtitleColor" value="#ffffff">
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="generateSubtitles()">生成字幕视频</button>
+                                <button class="btn btn-secondary" onclick="exportSRT()">导出SRT文件</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 视频特效 -->
+                    <div id="effects" class="tab-content">
+                        <h3>视频特效</h3>
+                        <div class="upload-area" onclick="document.getElementById('effectsVideoInput').click()">
+                            <i class="fas fa-magic" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>上传视频添加特效</h4>
+                            <input type="file" id="effectsVideoInput" class="file-input" accept="video/*">
+                        </div>
+                        
+                        <div class="video-controls">
+                            <h4>滤镜效果</h4>
+                            <div class="effects-grid">
+                                <div class="effect-btn" onclick="toggleEffect('blur')">模糊</div>
+                                <div class="effect-btn" onclick="toggleEffect('brightness')">亮度</div>
+                                <div class="effect-btn" onclick="toggleEffect('contrast')">对比度</div>
+                                <div class="effect-btn" onclick="toggleEffect('saturate')">饱和度</div>
+                                <div class="effect-btn" onclick="toggleEffect('sepia')">复古</div>
+                                <div class="effect-btn" onclick="toggleEffect('grayscale')">黑白</div>
+                                <div class="effect-btn" onclick="toggleEffect('invert')">反色</div>
+                                <div class="effect-btn" onclick="toggleEffect('hue-rotate')">色调</div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>播放速度:</label>
+                                <select id="playbackSpeed">
+                                    <option value="0.25">0.25x</option>
+                                    <option value="0.5">0.5x</option>
+                                    <option value="1" selected>1x (正常)</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2x</option>
+                                    <option value="4">4x</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>音量调节:</label>
+                                <input type="range" class="slider" id="volumeSlider" min="0" max="200" value="100">
+                                <span id="volumeValue">100%</span>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="applyEffects()">应用特效</button>
+                                <button class="btn btn-secondary" onclick="resetEffects()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 视频合并 -->
+                    <div id="merge" class="tab-content">
+                        <h3>视频合并</h3>
+                        <div class="upload-area" onclick="document.getElementById('mergeInput').click()">
+                            <i class="fas fa-layer-group" style="font-size: 48px; color: #007acc; margin-bottom: 15px;"></i>
+                            <h4>选择多个视频文件进行合并</h4>
+                            <p>按顺序选择要合并的视频文件</p>
+                            <input type="file" id="mergeInput" class="file-input" accept="video/*" multiple>
+                        </div>
+                        
+                        <div id="mergeList" class="video-controls" style="display: none;">
+                            <h4>待合并视频列表</h4>
+                            <div id="videoList"></div>
+                            
+                            <div class="control-group">
+                                <label>合并模式:</label>
+                                <select id="mergeMode">
+                                    <option value="concat">顺序连接</option>
+                                    <option value="side-by-side">左右并排</option>
+                                    <option value="top-bottom">上下排列</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>输出分辨率:</label>
+                                <select id="mergeResolution">
+                                    <option value="auto">自动适配</option>
+                                    <option value="1920x1080">1080p</option>
+                                    <option value="1280x720">720p</option>
+                                    <option value="854x480">480p</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button class="btn" onclick="startMerge()">开始合并</button>
+                                <button class="btn btn-secondary" onclick="clearMergeList()">清空列表</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 进度条和结果区域 -->
+                    <div id="progressArea" style="display: none;">
+                        <h4>处理进度</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p id="progressText">准备中...</p>
+                    </div>
+                    
+                    <div id="resultArea" style="display: none;">
+                        <h4>处理完成</h4>
+                        <div class="video-preview">
+                            <video id="resultVideo" controls></video>
+                        </div>
+                        <div class="control-group">
+                            <button class="btn" onclick="downloadResult()">下载视频</button>
+                            <button class="btn btn-secondary" onclick="resetTool()">重新处理</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer id="footer">
+            <ul class="icons">
+                <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+            </ul>
+            <ul class="copyright">
+                <li>&copy; IT魔法师. All rights reserved.</li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        let currentVideo = null;
+        let processedVideo = null;
+        let subtitles = [];
+        let mergeVideos = [];
+        let selectedFormat = 'mp4';
+        let activeEffects = {};
+        
+        // 标签页切换
+        function switchTab(tabName) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有按钮的激活状态
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabName).classList.add('active');
+            
+            // 激活对应的按钮
+            event.target.classList.add('active');
+        }
+        
+        // 处理视频上传
+        function handleVideoUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            currentVideo = file;
+            
+            // 显示视频预览
+            const video = document.getElementById('previewVideo');
+            const url = URL.createObjectURL(file);
+            video.src = url;
+            document.getElementById('videoPreview').style.display = 'block';
+            
+            // 显示文件信息
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('videoInfo').style.display = 'block';
+            
+            // 当视频加载完成后显示更多信息
+            video.onloadedmetadata = function() {
+                document.getElementById('videoDuration').textContent = formatTime(video.duration);
+                document.getElementById('videoResolution').textContent = `${video.videoWidth}×${video.videoHeight}`;
+                document.getElementById('endTime').value = video.duration.toFixed(1);
+                document.getElementById('clipControls').style.display = 'block';
+            };
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 格式化时间
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // 预览剪辑
+        function previewClip() {
+            const video = document.getElementById('previewVideo');
+            const startTime = parseFloat(document.getElementById('startTime').value) || 0;
+            const endTime = parseFloat(document.getElementById('endTime').value) || video.duration;
+            
+            video.currentTime = startTime;
+            video.play();
+            
+            // 在结束时间停止播放
+            const checkTime = setInterval(() => {
+                if (video.currentTime >= endTime) {
+                    video.pause();
+                    clearInterval(checkTime);
+                }
+            }, 100);
+        }
+        
+        // 处理剪辑
+        function processClip() {
+            if (!currentVideo) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            const startTime = parseFloat(document.getElementById('startTime').value) || 0;
+            const endTime = parseFloat(document.getElementById('endTime').value);
+            
+            if (!endTime || endTime <= startTime) {
+                alert('请设置有效的剪辑时间范围');
+                return;
+            }
+            
+            showProgress('正在剪辑视频...');
+            
+            // 模拟处理过程
+            simulateProcessing(() => {
+                showResult('视频剪辑完成！');
+            });
+        }
+        
+        // 开始压缩
+        function startCompress() {
+            const input = document.getElementById('compressInput');
+            if (!input.files[0]) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            showProgress('正在压缩视频...');
+            simulateProcessing(() => {
+                showResult('视频压缩完成！');
+            });
+        }
+        
+        // 选择格式
+        function selectFormat(format) {
+            selectedFormat = format;
+            document.querySelectorAll('.format-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.format-card').classList.add('selected');
+        }
+        
+        // 开始转换
+        function startConvert() {
+            const input = document.getElementById('convertInput');
+            if (!input.files[0]) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            if (!selectedFormat) {
+                alert('请选择输出格式');
+                return;
+            }
+            
+            showProgress(`正在转换为 ${selectedFormat.toUpperCase()} 格式...`);
+            simulateProcessing(() => {
+                showResult(`格式转换完成！已转换为 ${selectedFormat.toUpperCase()} 格式`);
+            });
+        }
+        
+        // 添加水印
+        function addWatermark() {
+            const input = document.getElementById('watermarkVideoInput');
+            if (!input.files[0]) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            const watermarkType = document.querySelector('input[name="watermarkType"]:checked').value;
+            
+            if (watermarkType === 'text') {
+                const text = document.getElementById('watermarkText').value;
+                if (!text.trim()) {
+                    alert('请输入水印文字');
+                    return;
+                }
+            } else {
+                const imageInput = document.getElementById('watermarkImageInput');
+                if (!imageInput.files[0]) {
+                    alert('请上传水印图片');
+                    return;
+                }
+            }
+            
+            showProgress('正在添加水印...');
+            simulateProcessing(() => {
+                showResult('水印添加完成！');
+            });
+        }
+        
+        // 添加字幕
+        function addSubtitle() {
+            const subtitleItem = document.createElement('div');
+            subtitleItem.className = 'subtitle-item';
+            subtitleItem.innerHTML = `
+                <div class="subtitle-time">00:00</div>
+                <input type="text" class="subtitle-text" placeholder="输入字幕内容">
+                <button class="btn btn-danger" onclick="removeSubtitle(this)">删除</button>
+            `;
+            
+            document.getElementById('subtitleList').appendChild(subtitleItem);
+        }
+        
+        // 删除字幕
+        function removeSubtitle(button) {
+            button.closest('.subtitle-item').remove();
+        }
+        
+        // 生成字幕视频
+        function generateSubtitles() {
+            const input = document.getElementById('subtitleVideoInput');
+            if (!input.files[0]) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            const subtitleItems = document.querySelectorAll('.subtitle-item');
+            if (subtitleItems.length === 0) {
+                alert('请先添加字幕');
+                return;
+            }
+            
+            showProgress('正在生成字幕视频...');
+            simulateProcessing(() => {
+                showResult('字幕视频生成完成！');
+            });
+        }
+        
+        // 切换特效
+        function toggleEffect(effect) {
+            const button = event.target;
+            if (button.classList.contains('active')) {
+                button.classList.remove('active');
+                delete activeEffects[effect];
+            } else {
+                button.classList.add('active');
+                activeEffects[effect] = true;
+            }
+        }
+        
+        // 应用特效
+        function applyEffects() {
+            const input = document.getElementById('effectsVideoInput');
+            if (!input.files[0]) {
+                alert('请先上传视频文件');
+                return;
+            }
+            
+            showProgress('正在应用特效...');
+            simulateProcessing(() => {
+                showResult('特效应用完成！');
+            });
+        }
+        
+        // 重置特效
+        function resetEffects() {
+            document.querySelectorAll('.effect-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            activeEffects = {};
+        }
+        
+        // 开始合并
+        function startMerge() {
+            if (mergeVideos.length < 2) {
+                alert('请至少选择两个视频文件进行合并');
+                return;
+            }
+            
+            showProgress('正在合并视频...');
+            simulateProcessing(() => {
+                showResult('视频合并完成！');
+            });
+        }
+        
+        // 清空合并列表
+        function clearMergeList() {
+            mergeVideos = [];
+            document.getElementById('videoList').innerHTML = '';
+            document.getElementById('mergeList').style.display = 'none';
+        }
+        
+        // 显示进度
+        function showProgress(message) {
+            document.getElementById('progressArea').style.display = 'block';
+            document.getElementById('progressText').textContent = message;
+            document.getElementById('resultArea').style.display = 'none';
+        }
+        
+        // 显示结果
+        function showResult(message) {
+            document.getElementById('progressArea').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
+            
+            // 创建模拟的处理结果视频
+            const resultVideo = document.getElementById('resultVideo');
+            if (currentVideo) {
+                resultVideo.src = URL.createObjectURL(currentVideo);
+            }
+            
+            alert(message);
+        }
+        
+        // 模拟处理过程
+        function simulateProcessing(callback) {
+            let progress = 0;
+            const progressFill = document.getElementById('progressFill');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(callback, 500);
+                }
+                progressFill.style.width = progress + '%';
+            }, 200);
+        }
+        
+        // 下载结果
+        function downloadResult() {
+            alert('下载功能需要服务器端支持，这里仅为演示');
+        }
+        
+        // 重置工具
+        function resetTool() {
+            document.getElementById('progressArea').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('videoPreview').style.display = 'none';
+            document.getElementById('videoInfo').style.display = 'none';
+            document.getElementById('clipControls').style.display = 'none';
+            
+            // 重置所有输入
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.value = '';
+            });
+            
+            currentVideo = null;
+            processedVideo = null;
+        }
+        
+        // 滑块值更新
+        document.getElementById('qualitySlider').oninput = function() {
+            document.getElementById('qualityValue').textContent = this.value + '%';
+        };
+        
+        document.getElementById('convertQuality').oninput = function() {
+            const qualities = ['最低', '很低', '低', '较低', '中等', '较高', '高', '很高', '最高', '极高'];
+            document.getElementById('convertQualityValue').textContent = qualities[this.value - 1];
+        };
+        
+        document.getElementById('fontSize').oninput = function() {
+            document.getElementById('fontSizeValue').textContent = this.value + 'px';
+        };
+        
+        document.getElementById('watermarkOpacity').oninput = function() {
+            document.getElementById('opacityValue').textContent = Math.round(this.value * 100) + '%';
+        };
+        
+        document.getElementById('volumeSlider').oninput = function() {
+            document.getElementById('volumeValue').textContent = this.value + '%';
+        };
+        
+        // 水印类型切换
+        document.querySelectorAll('input[name="watermarkType"]').forEach(radio => {
+            radio.onchange = function() {
+                if (this.value === 'text') {
+                    document.getElementById('textWatermark').style.display = 'block';
+                    document.getElementById('imageWatermark').style.display = 'none';
+                } else {
+                    document.getElementById('textWatermark').style.display = 'none';
+                    document.getElementById('imageWatermark').style.display = 'block';
+                }
+            };
+        });
+        
+        // 合并视频文件选择
+        document.getElementById('mergeInput').onchange = function() {
+            const files = Array.from(this.files);
+            mergeVideos = files;
+            
+            const videoList = document.getElementById('videoList');
+            videoList.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'subtitle-item';
+                item.innerHTML = `
+                    <span>${index + 1}.</span>
+                    <span>${file.name}</span>
+                    <span>${formatFileSize(file.size)}</span>
+                    <button class="btn btn-danger" onclick="removeMergeVideo(${index})">删除</button>
+                `;
+                videoList.appendChild(item);
+            });
+            
+            if (files.length > 0) {
+                document.getElementById('mergeList').style.display = 'block';
+            }
+        };
+        
+        // 删除合并视频
+        function removeMergeVideo(index) {
+            mergeVideos.splice(index, 1);
+            
+            // 重新渲染列表
+            const videoList = document.getElementById('videoList');
+            videoList.innerHTML = '';
+            
+            mergeVideos.forEach((file, i) => {
+                const item = document.createElement('div');
+                item.className = 'subtitle-item';
+                item.innerHTML = `
+                    <span>${i + 1}.</span>
+                    <span>${file.name}</span>
+                    <span>${formatFileSize(file.size)}</span>
+                    <button class="btn btn-danger" onclick="removeMergeVideo(${i})">删除</button>
+                `;
+                videoList.appendChild(item);
+            });
+            
+            if (mergeVideos.length === 0) {
+                document.getElementById('mergeList').style.display = 'none';
+            }
+        }
+        
+        // 拖拽上传功能
+        document.querySelectorAll('.upload-area').forEach(area => {
+            area.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            area.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+            
+            area.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = this.querySelector('input[type="file"]');
+                    if (input) {
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
