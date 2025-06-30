@@ -1600,10 +1600,24 @@ input, select, textarea {
 
 		.box p {
 			flex-grow: 1; /* 让段落区域自适应填充空间 */
-			overflow: hidden; /* 防止内容溢出 */
-			display: -webkit-box;
-			-webkit-line-clamp: 4; /* 限制显示行数 */
-			-webkit-box-orient: vertical;
+			overflow: hidden; /* 隐藏溢出内容，不显示滚动条 */
+			display: -webkit-box; /* 使用webkit-box布局 */
+			-webkit-line-clamp: 6; /* 限制显示6行文字 */
+			-webkit-box-orient: vertical; /* 垂直方向 */
+			line-height: 1.6; /* 设置合适的行高 */
+			text-overflow: ellipsis; /* 超出部分显示省略号 */
+		}
+		
+		/* 最新动态板块特殊样式 */
+		#main .col-12:last-child .box {
+			height: auto; /* 自适应高度 */
+			min-height: 400px; /* 最小高度保持一致 */
+		}
+		
+		#main .col-12:last-child .box p {
+			-webkit-line-clamp: unset; /* 移除行数限制 */
+			overflow: visible; /* 允许内容显示 */
+			display: block; /* 改为普通块级元素 */
 		}
 
 		.box.post h2 {
@@ -2391,6 +2405,18 @@ input, select, textarea {
 				font-size: 12pt;
 			}
 
+	}
+
+/* 大屏幕优化 - 调整工具集卡片高度以获得更好的布局 */
+	@media screen and (min-width: 1681px) {
+		.box {
+			height: 550px; /* 适中的卡片高度，避免文字和按钮距离过远 */
+		}
+		
+		.box p {
+			max-height: none; /* 移除最大高度限制 */
+			padding-right: 8px; /* 增加滚动条空间 */
+		}
 	}
 
 /* Large */
