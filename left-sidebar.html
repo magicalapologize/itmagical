@@ -10,6 +10,94 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+			/* 修复页面布局问题 */
+			body {
+				padding-bottom: 0;
+				margin-bottom: 0;
+			}
+			
+			#page-wrapper {
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+			
+			#main {
+				flex: 1;
+				padding-bottom: 2em;
+			}
+			
+			#footer {
+				position: relative;
+				margin-top: auto;
+				clear: both;
+			}
+			
+			#copyright {
+				margin-top: 2em;
+				padding: 1.5em 0;
+			}
+			
+			/* 修复left-sidebar布局问题 */
+			.left-sidebar #main .container .row {
+				display: flex;
+				flex-wrap: wrap;
+			}
+			
+			/* 确保侧边栏在左侧显示 */
+			.left-sidebar #main .col-4 {
+				order: 1;
+				flex: 0 0 33.33333%;
+				max-width: 33.33333%;
+			}
+			
+			/* 确保主内容在右侧显示 */
+			.left-sidebar #main .col-8 {
+				order: 2;
+				flex: 0 0 66.66667%;
+				max-width: 66.66667%;
+			}
+			
+			/* 响应式调整 - medium屏幕 */
+			@media screen and (max-width: 1280px) {
+				#main {
+					padding-bottom: 1em;
+				}
+				
+				/* 在medium屏幕上保持正确的布局顺序 */
+				.left-sidebar #main .col-4.col-12-medium {
+					order: 1;
+					flex: 0 0 100%;
+					max-width: 100%;
+					margin-bottom: 2em;
+				}
+				
+				.left-sidebar #main .col-8.col-12-medium {
+					order: 2;
+					flex: 0 0 100%;
+					max-width: 100%;
+				}
+				
+				/* 覆盖imp-medium的order设置 */
+				.left-sidebar #main .imp-medium {
+					order: 2 !important;
+				}
+			}
+			
+			@media screen and (max-width: 736px) {
+				.left-sidebar #main .col-4,
+				.left-sidebar #main .col-8 {
+					flex: 0 0 100%;
+					max-width: 100%;
+					margin-bottom: 1em;
+				}
+				
+				#copyright {
+					padding: 1em 0;
+				}
+			}
+		</style>
 	</head>
 	<body class="left-sidebar is-preload">
 		<div id="page-wrapper">
@@ -61,26 +149,28 @@
 									<section class="box">
 										<a href="#" class="image featured"><img src="images/pic09.jpg" alt="" /></a>
 										<header>
-											<h3>快速入门指南</h3>
+											<h3>🚀 快速入门指南</h3>
 								</header>
-								<p>通过简单的步骤指导，帮助您快速掌握云云工具箱的基本使用方法，让您能够轻松上手各项功能。</p>
+								<p>通过详细的步骤指导，帮助您快速掌握云云工具箱的各项功能，包括图片处理、文档转换、音视频编辑等实用工具。</p>
 										<footer>
-											<a href="#" class="button alt">开始学习</a>
+											<a href="#quickstart" class="button alt">立即开始</a>
 										</footer>
 									</section>
 									<section class="box">
 										<header>
-											<h3>常见问题</h3>
+											<h3>❓ 常见问题解答</h3>
 								</header>
-								<p>这里列出了用户经常遇到的问题和解决方案，帮助您更好地使用我们的工具。</p>
+								<p>汇总了用户使用过程中的常见问题和详细解决方案，帮助您快速解决遇到的困难。</p>
 										<ul class="divided">
-									<li><a href="#">如何批量处理图片？</a></li>
-									<li><a href="#">文件格式转换指南</a></li>
-									<li><a href="#">在线协作功能说明</a></li>
-									<li><a href="#">账号管理与安全</a></li>
+									<li><a href="#faq-image">图片压缩和格式转换问题</a></li>
+									<li><a href="#faq-pdf">PDF工具使用指南</a></li>
+									<li><a href="#faq-audio">音频处理常见问题</a></li>
+									<li><a href="#faq-video">视频编辑功能说明</a></li>
+									<li><a href="#faq-text">文本处理工具使用</a></li>
+									<li><a href="#faq-security">文件安全与隐私保护</a></li>
 								</ul>
 										<footer>
-											<a href="#" class="button alt">查看更多</a>
+											<a href="#faq" class="button alt">查看详细FAQ</a>
 										</footer>
 									</section>
 
@@ -100,36 +190,209 @@
 										<p>
 											我们深知，一个好的工具不仅要功能强大，更要易于上手。因此，我们为您准备了详细的图文教程和常见问题解答，无论您是初次使用还是希望深入了解某个特定功能，都能在这里找到所需的帮助。
 										</p>
-										<section>
+										<section id="quickstart">
 											<header>
-												<h3>快速入门指南</h3>
+												<h2>🚀 快速入门指南</h2>
 											</header>
-											<p>
-												1. **选择工具：** 在主页或工具分类页面，找到您需要的工具。
-												2. **上传文件/输入内容：** 根据工具提示，上传相应文件或输入文本内容。
-												3. **调整设置（可选）：** 部分工具提供高级设置，您可以根据需求进行调整。
-												4. **开始处理：** 点击“开始”或“转换”按钮，等待处理完成。
-												5. **下载结果：** 处理完成后，下载您的文件或复制处理结果。
-											</p>
-											<p>
-												**提示：** 每个工具页面通常都会有详细的使用说明和示例，建议您在使用前仔细阅读。
-											</p>
+											<p>欢迎使用云云工具箱！我们为您提供了丰富的在线工具，包括图片处理、文档转换、音视频编辑、文本处理等多种实用功能。所有工具均支持本地处理，保护您的隐私安全。</p>
+											
+											<h3>📋 基本操作流程</h3>
+											<ol>
+												<li><strong>选择工具</strong>：从主页或导航菜单中选择您需要的工具类型</li>
+												<li><strong>上传文件</strong>：通过拖拽或点击上传按钮选择文件（支持批量上传）</li>
+												<li><strong>设置参数</strong>：根据需要调整输出格式、质量、尺寸等参数</li>
+												<li><strong>开始处理</strong>：点击相应的处理按钮，系统将自动开始处理</li>
+												<li><strong>下载结果</strong>：处理完成后，点击下载按钮获取处理后的文件</li>
+											</ol>
+											
+											<h3>🛠️ 主要工具介绍</h3>
+											<div class="row">
+												<div class="col-6 col-12-small">
+													<h4>🖼️ 图片处理工具</h4>
+													<ul>
+														<li><strong>图片压缩</strong>：智能压缩图片大小，保持画质</li>
+														<li><strong>格式转换</strong>：支持JPG、PNG、WebP、GIF等格式互转</li>
+														<li><strong>尺寸调整</strong>：批量调整图片尺寸和分辨率</li>
+														<li><strong>水印添加</strong>：为图片添加文字或图片水印</li>
+													</ul>
+												</div>
+												<div class="col-6 col-12-small">
+													<h4>📄 PDF工具集</h4>
+													<ul>
+														<li><strong>格式转换</strong>：PDF转Word、图片、文本等格式</li>
+														<li><strong>合并拆分</strong>：多个PDF合并或单个PDF拆分</li>
+														<li><strong>页面提取</strong>：提取PDF中的指定页面</li>
+														<li><strong>密码保护</strong>：为PDF添加或移除密码保护</li>
+													</ul>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-6 col-12-small">
+													<h4>🎵 音频处理工具</h4>
+													<ul>
+														<li><strong>格式转换</strong>：MP3、WAV、AAC等格式互转</li>
+														<li><strong>音频剪切</strong>：精确剪切音频片段</li>
+														<li><strong>音量调节</strong>：调整音频音量大小</li>
+														<li><strong>音频合并</strong>：将多个音频文件合并</li>
+													</ul>
+												</div>
+												<div class="col-6 col-12-small">
+													<h4>🎬 视频编辑工具</h4>
+													<ul>
+														<li><strong>格式转换</strong>：MP4、AVI、MOV等格式转换</li>
+														<li><strong>视频压缩</strong>：减小视频文件大小</li>
+														<li><strong>视频剪切</strong>：剪切视频片段</li>
+														<li><strong>提取音频</strong>：从视频中提取音频文件</li>
+													</ul>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-6 col-12-small">
+													<h4>📝 文本处理工具</h4>
+													<ul>
+														<li><strong>文本转换</strong>：大小写转换、繁简转换</li>
+														<li><strong>文本统计</strong>：字数统计、词频分析</li>
+														<li><strong>文本格式化</strong>：JSON格式化、代码美化</li>
+														<li><strong>编码转换</strong>：Base64、URL编码等</li>
+													</ul>
+												</div>
+												<div class="col-6 col-12-small">
+													<h4>🔧 格式转换工具</h4>
+													<ul>
+														<li><strong>图片转换</strong>：支持多种图片格式互转</li>
+														<li><strong>文档转换</strong>：Word、PDF、TXT等格式转换</li>
+														<li><strong>音视频转换</strong>：音频视频格式转换</li>
+														<li><strong>批量处理</strong>：支持批量格式转换</li>
+													</ul>
+												</div>
+											</div>
 										</section>
-										<section>
-											<header>
-												<h3>常见问题 (FAQ)</h3>
-											</header>
-											<p>
-												**Q: 工具箱是否免费？**
-												A: 云云工具箱提供大部分免费工具，部分高级功能可能需要付费。
-												**Q: 文件上传有大小限制吗？**
-												A: 不同工具的文件大小限制不同，具体请参考各工具页面说明。
-												**Q: 我的文件安全吗？**
-												A: 我们采用加密传输和定期清理机制，确保您的文件安全和隐私。
-												**Q: 遇到问题如何寻求帮助？**
-												A: 您可以通过页面底部的联系方式或常见问题页面获取帮助。
-											</p>
-										</section>
+										<section id="faq">
+												<header>
+													<h2>❓ 常见问题解答 (FAQ)</h2>
+												</header>
+												<p>以下是用户在使用云云工具箱过程中经常遇到的问题和详细解决方案，帮助您快速解决使用中的困难。</p>
+												
+												<h3 id="faq-image">🖼️ 图片处理相关问题</h3>
+												<h4>Q: 图片压缩后质量下降明显怎么办？</h4>
+												<p>A: 您可以通过以下方式优化压缩效果：</p>
+												<ul>
+													<li>调整压缩质量滑块，选择更高的质量设置（80-95%）</li>
+													<li>对于照片类图片，建议使用JPEG格式；对于图标类图片，建议使用PNG格式</li>
+													<li>尝试WebP格式，它在保持质量的同时能提供更好的压缩率</li>
+													<li>如果图片包含透明背景，请使用PNG格式</li>
+												</ul>
+												
+												<h4>Q: 支持哪些图片格式转换？</h4>
+												<p>A: 我们支持以下主流图片格式的互相转换：</p>
+												<ul>
+													<li><strong>输入格式</strong>：JPEG、PNG、GIF、WebP、BMP、TIFF、SVG</li>
+													<li><strong>输出格式</strong>：JPEG、PNG、WebP、GIF、BMP</li>
+													<li>支持批量转换，一次可处理多个文件</li>
+													<li>保持原始图片的EXIF信息（可选）</li>
+												</ul>
+												
+												<h3 id="faq-pdf">📄 PDF工具使用问题</h3>
+												<h4>Q: PDF转换功能支持哪些格式？</h4>
+												<p>A: PDF工具集支持以下转换功能：</p>
+												<ul>
+													<li><strong>PDF转文本</strong>：提取PDF中的文字内容，生成TXT文件</li>
+													<li><strong>PDF转图片</strong>：将PDF页面转换为PNG或JPEG图片</li>
+													<li><strong>PDF合并</strong>：将多个PDF文件合并为一个</li>
+													<li><strong>PDF拆分</strong>：将PDF按页面或页面范围拆分</li>
+													<li><strong>页面提取</strong>：提取PDF中的指定页面</li>
+												</ul>
+												
+												<h4>Q: 如何处理有密码保护的PDF？</h4>
+												<p>A: 对于密码保护的PDF文件：</p>
+												<ul>
+													<li>上传文件后，系统会提示您输入密码</li>
+													<li>输入正确密码后即可正常处理文件</li>
+													<li>我们也提供PDF密码移除功能（需要知道原密码）</li>
+													<li>可以为PDF添加新的密码保护</li>
+												</ul>
+												
+												<h3 id="faq-audio">🎵 音频处理常见问题</h3>
+												<h4>Q: 音频格式转换支持哪些格式？</h4>
+												<p>A: 音频工具支持以下格式的转换：</p>
+												<ul>
+													<li><strong>输入格式</strong>：MP3、WAV、AAC、FLAC、OGG、M4A、WMA</li>
+													<li><strong>输出格式</strong>：MP3、WAV、AAC、OGG</li>
+													<li>可调整音频质量、采样率、声道数等参数</li>
+													<li>支持批量转换多个音频文件</li>
+												</ul>
+												
+												<h4>Q: 如何精确剪切音频？</h4>
+												<p>A: 音频剪切功能提供多种精确控制方式：</p>
+												<ul>
+													<li>可以输入具体的开始和结束时间（格式：mm:ss或hh:mm:ss）</li>
+													<li>使用可视化波形图拖拽选择剪切范围</li>
+													<li>支持预览功能，剪切前可以试听选中片段</li>
+													<li>精确到毫秒级别的剪切控制</li>
+												</ul>
+												
+												<h3 id="faq-video">🎬 视频编辑功能说明</h3>
+												<h4>Q: 视频压缩会影响画质吗？</h4>
+												<p>A: 我们提供智能视频压缩功能：</p>
+												<ul>
+													<li>可以选择压缩级别：轻度、中度、重度压缩</li>
+													<li>支持自定义分辨率、码率、帧率等参数</li>
+													<li>提供预览功能，压缩前可以预估效果</li>
+													<li>使用先进的H.264/H.265编码，在保持画质的同时最大化压缩效果</li>
+												</ul>
+												
+												<h4>Q: 支持哪些视频格式？</h4>
+												<p>A: 视频工具支持主流视频格式：</p>
+												<ul>
+													<li><strong>输入格式</strong>：MP4、AVI、MOV、WMV、FLV、MKV、WebM</li>
+													<li><strong>输出格式</strong>：MP4、AVI、MOV、WebM</li>
+													<li>支持从视频中提取音频（MP3、WAV格式）</li>
+													<li>可以调整视频分辨率、质量、帧率等参数</li>
+												</ul>
+												
+												<h3 id="faq-text">📝 文本处理工具使用</h3>
+												<h4>Q: 文本转换工具有哪些功能？</h4>
+												<p>A: 文本处理工具提供丰富的转换功能：</p>
+												<ul>
+													<li><strong>大小写转换</strong>：全部大写、全部小写、首字母大写、驼峰命名</li>
+													<li><strong>繁简转换</strong>：简体中文与繁体中文互转</li>
+													<li><strong>编码转换</strong>：Base64编码/解码、URL编码/解码、HTML实体转换</li>
+													<li><strong>格式化</strong>：JSON格式化、XML格式化、代码美化</li>
+													<li><strong>文本统计</strong>：字数统计、词频分析、行数统计</li>
+												</ul>
+												
+												<h3 id="faq-security">🔒 文件安全与隐私保护</h3>
+												<h4>Q: 我的文件会被上传到服务器吗？</h4>
+												<p>A: <strong>绝对不会！</strong>我们承诺：</p>
+												<ul>
+													<li>所有文件处理都在您的浏览器本地进行</li>
+													<li>文件从不离开您的设备，不会上传到任何服务器</li>
+													<li>处理完成后，临时文件会自动从内存中清除</li>
+													<li>我们无法访问、查看或存储您的任何文件内容</li>
+													<li>即使在离线状态下，大部分工具仍可正常使用</li>
+												</ul>
+												
+												<h4>Q: 如何批量处理多个文件？</h4>
+												<p>A: 大部分工具都支持批量处理，操作方法：</p>
+												<ul>
+													<li><strong>多选文件</strong>：按住Ctrl键（Windows）或Cmd键（Mac）点击多个文件</li>
+													<li><strong>拖拽上传</strong>：直接拖拽多个文件到上传区域</li>
+													<li><strong>文件夹上传</strong>：部分工具支持直接拖拽整个文件夹</li>
+													<li><strong>批量下载</strong>：处理完成后可以打包下载所有结果文件</li>
+												</ul>
+												
+												<h4>Q: 遇到问题如何获得帮助？</h4>
+												<p>A: 如果您在使用过程中遇到问题：</p>
+												<ul>
+													<li>首先查看本FAQ页面，大部分常见问题都有详细解答</li>
+													<li>每个工具页面都有详细的使用说明和示例</li>
+													<li>检查浏览器控制台是否有错误信息</li>
+													<li>尝试刷新页面或使用其他浏览器</li>
+													<li>确保您的浏览器版本较新，支持现代Web标准</li>
+												</ul>
+											</section>
 									</article>
 
 							</div>
@@ -141,129 +404,77 @@
 				<section id="footer">
 					<div class="container">
 						<div class="row">
-							<div class="col-8 col-12-medium">
-								<section>
-									<header>
-										<h2>Blandit nisl adipiscing</h2>
-									</header>
-									<ul class="dates">
-										<li>
-											<span class="date">Jan <strong>27</strong></span>
-											<h3><a href="#">Lorem dolor sit amet veroeros</a></h3>
-											<p>Ipsum dolor sit amet veroeros consequat blandit ipsum phasellus lorem consequat etiam.</p>
-										</li>
-										<li>
-											<span class="date">Jan <strong>23</strong></span>
-											<h3><a href="#">Ipsum sed blandit nisl consequat</a></h3>
-											<p>Blandit phasellus lorem ipsum dolor tempor sapien tortor hendrerit adipiscing feugiat lorem.</p>
-										</li>
-										<li>
-											<span class="date">Jan <strong>15</strong></span>
-											<h3><a href="#">Magna tempus lorem feugiat</a></h3>
-											<p>Dolore consequat sed phasellus lorem sed etiam nullam dolor etiam sed amet sit consequat.</p>
-										</li>
-										<li>
-											<span class="date">Jan <strong>12</strong></span>
-											<h3><a href="#">Dolore tempus ipsum feugiat nulla</a></h3>
-											<p>Feugiat lorem dolor sed nullam tempus lorem ipsum dolor sit amet nullam consequat.</p>
-										</li>
-										<li>
-											<span class="date">Jan <strong>10</strong></span>
-											<h3><a href="#">Blandit tempus aliquam?</a></h3>
-											<p>Feugiat sed tempus blandit tempus adipiscing nisl lorem ipsum dolor sit amet dolore.</p>
-										</li>
-									</ul>
-								</section>
-							</div>
-							<div class="col-4 col-12-medium">
-								<section>
-									<header>
-										<h2>What's this all about?</h2>
-									</header>
-									<a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
-									<p>
-										This is <strong>Dopetrope</strong> a free, fully responsive HTML5 site template by
-										<a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a> It's released for free under
-										the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for any personal or commercial project &ndash; just don't forget to credit us!
-									</p>
-									<footer>
-										<ul class="actions">
-											<li><a href="#" class="button">Find out more</a></li>
-										</ul>
-									</footer>
-								</section>
-							</div>
 							<div class="col-4 col-6-medium col-12-small">
 								<section>
 									<header>
-										<h2>Tempus consequat</h2>
+										<h2>🛠️ 热门工具</h2>
 									</header>
 									<ul class="divided">
-										<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
-										<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
-										<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
-										<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
-										<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
-										<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+										<li><a href="图片压缩工具.html">图片压缩 - 智能压缩保持画质</a></li>
+										<li><a href="pdf工具集.html">PDF工具集 - 转换合并拆分</a></li>
+										<li><a href="格式转换工具.html">格式转换 - 多种格式互转</a></li>
+										<li><a href="音频处理工具.html">音频处理 - 剪切转换合并</a></li>
+										<li><a href="视频编辑工具.html">视频编辑 - 压缩剪切提取</a></li>
+										<li><a href="文本处理工具.html">文本处理 - 转换统计格式化</a></li>
 									</ul>
 								</section>
 							</div>
 							<div class="col-4 col-6-medium col-12-small">
 								<section>
 									<header>
-										<h2>Ipsum et phasellus</h2>
+										<h2>📚 帮助资源</h2>
 									</header>
 									<ul class="divided">
-										<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
-										<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
-										<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
-										<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
-										<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
-										<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+										<li><a href="#quickstart">快速入门指南 - 新手必看</a></li>
+										<li><a href="#faq">常见问题解答 - 问题汇总</a></li>
+										<li><a href="#faq-security">隐私安全说明 - 本地处理</a></li>
+										<li><a href="index.html">返回首页 - 工具导航</a></li>
+										<li><a href="#faq-image">图片处理技巧 - 优化建议</a></li>
+										<li><a href="#faq-pdf">PDF工具使用 - 详细教程</a></li>
 									</ul>
 								</section>
 							</div>
 							<div class="col-4 col-12-medium">
 								<section>
 									<header>
-										<h2>Vitae tempor lorem</h2>
+										<h2>📞 联系我们</h2>
 									</header>
 									<ul class="social">
 										<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
 										<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-										<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-										<li><a class="icon brands fa-tumblr" href="#"><span class="label">Tumblr</span></a></li>
-										<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
+										<li><a class="icon brands fa-github" href="#"><span class="label">GitHub</span></a></li>
+										<li><a class="icon brands fa-weibo" href="#"><span class="label">微博</span></a></li>
+										<li><a class="icon brands fa-qq" href="#"><span class="label">QQ</span></a></li>
 									</ul>
 									<ul class="contact">
 										<li>
-											<h3>Address</h3>
+											<h3>🏢 公司地址</h3>
 											<p>
-												Untitled Incorporated<br />
-												1234 Somewhere Road Suite<br />
-												Nashville, TN 00000-0000
+												云云科技有限公司<br />
+												中国北京市朝阳区<br />
+												科技园区创新大厦 8层
 											</p>
 										</li>
 										<li>
-											<h3>Mail</h3>
-											<p><a href="#">someone@untitled.tld</a></p>
+											<h3>📧 邮箱联系</h3>
+											<p><a href="mailto:support@yuntools.com">support@yuntools.com</a></p>
 										</li>
 										<li>
-											<h3>Phone</h3>
-											<p>(800) 000-0000</p>
+											<h3>📱 客服热线</h3>
+											<p>400-888-9999</p>
 										</li>
 									</ul>
 								</section>
 							</div>
 							<div class="col-12">
-
 								<!-- Copyright -->
-									<div id="copyright">
-										<ul class="links">
-											<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-										</ul>
-									</div>
-
+								<div id="copyright">
+									<ul class="links">
+										<li>&copy; 2024 云云工具箱. 保留所有权利.</li>
+										<li>技术支持: <a href="#">云云科技团队</a></li>
+										<li>本地处理 · 隐私安全 · 完全免费</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>

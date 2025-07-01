@@ -1579,7 +1579,7 @@ input, select, textarea {
 		background: #ffffff;
 		border-bottom: solid 1px #ccc;
 		padding: 2.75em 1.75em 2.75em 1.75em;
-		height: 500px; /* 固定卡片高度 */
+		min-height: 200px; /* 最小高度而非固定高度 */
 		display: flex;
 		flex-direction: column;
 	}
@@ -1599,25 +1599,27 @@ input, select, textarea {
 		}
 
 		.box p {
-			flex-grow: 1; /* 让段落区域自适应填充空间 */
-			overflow: hidden; /* 隐藏溢出内容，不显示滚动条 */
-			display: -webkit-box; /* 使用webkit-box布局 */
-			-webkit-line-clamp: 6; /* 限制显示6行文字 */
-			-webkit-box-orient: vertical; /* 垂直方向 */
-			line-height: 1.6; /* 设置合适的行高 */
-			text-overflow: ellipsis; /* 超出部分显示省略号 */
-		}
+		flex-grow: 1; /* 让段落区域自适应填充空间 */
+		line-height: 1.6; /* 设置合适的行高 */
+		display: block; /* 使用标准块级布局 */
+	}
 		
-		/* 最新动态板块特殊样式 */
-		#main .col-12:last-child .box {
+		/* 内容区域自适应样式 */
+		#main .box {
 			height: auto; /* 自适应高度 */
-			min-height: 400px; /* 最小高度保持一致 */
+			min-height: 200px; /* 最小高度保持一致 */
 		}
 		
-		#main .col-12:last-child .box p {
-			-webkit-line-clamp: unset; /* 移除行数限制 */
+		#main .box p {
 			overflow: visible; /* 允许内容显示 */
 			display: block; /* 改为普通块级元素 */
+		}
+		
+		/* 文章内容区域特殊样式 */
+		article.box.post {
+			height: auto; /* 自适应高度 */
+			min-height: 300px; /* 适当的最小高度 */
+			overflow: visible; /* 允许内容溢出显示 */
 		}
 
 		.box.post h2 {
