@@ -24,20 +24,29 @@
         
         .tab-button {
             padding: 15px 20px;
-            background: none;
-            border: none;
+            background: #c2185b;
+            border: 1px solid #ad1457;
+            border-radius: 6px 6px 0 0;
             cursor: pointer;
             font-size: 14px;
-            color: #666;
+            color: white;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
             white-space: nowrap;
+            margin-right: 2px;
+        }
+        
+        .tab-button:hover {
+            background: #ad1457;
+            color: white;
         }
         
         .tab-button.active {
-            color: #007acc;
+            background: #007acc;
+            color: white;
             border-bottom-color: #007acc;
             font-weight: bold;
+            border-color: #007acc;
         }
         
         .tab-content {
@@ -198,6 +207,24 @@
         
         .format-card.selected {
             border-color: #007acc;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3c3;
             background: #e3f2fd;
         }
         
@@ -868,7 +895,7 @@
         // 处理剪辑
         function processClip() {
             if (!currentVideo) {
-                alert('请先上传视频文件');
+                showMessage('请先上传视频文件', 'error');
                 return;
             }
             
@@ -876,7 +903,7 @@
             const endTime = parseFloat(document.getElementById('endTime').value);
             
             if (!endTime || endTime <= startTime) {
-                alert('请设置有效的剪辑时间范围');
+                showMessage('请设置有效的剪辑时间范围', 'error');
                 return;
             }
             
@@ -892,7 +919,7 @@
         function startCompress() {
             const input = document.getElementById('compressInput');
             if (!input.files[0]) {
-                alert('请先上传视频文件');
+                showMessage('请先上传视频文件', 'error');
                 return;
             }
             
@@ -915,12 +942,12 @@
         function startConvert() {
             const input = document.getElementById('convertInput');
             if (!input.files[0]) {
-                alert('请先上传视频文件');
+                showMessage('请先上传视频文件', 'error');
                 return;
             }
             
             if (!selectedFormat) {
-                alert('请选择输出格式');
+                showMessage('请选择输出格式', 'error');
                 return;
             }
             
@@ -934,7 +961,7 @@
         function addWatermark() {
             const input = document.getElementById('watermarkVideoInput');
             if (!input.files[0]) {
-                alert('请先上传视频文件');
+                showMessage('请先上传视频文件', 'error');
                 return;
             }
             
@@ -943,13 +970,13 @@
             if (watermarkType === 'text') {
                 const text = document.getElementById('watermarkText').value;
                 if (!text.trim()) {
-                    alert('请输入水印文字');
+                    showMessage('请输入水印文字', 'error');
                     return;
                 }
             } else {
                 const imageInput = document.getElementById('watermarkImageInput');
                 if (!imageInput.files[0]) {
-                    alert('请上传水印图片');
+                    showMessage('请上传水印图片', 'error');
                     return;
                 }
             }
@@ -982,13 +1009,13 @@
         function generateSubtitles() {
             const input = document.getElementById('subtitleVideoInput');
             if (!input.files[0]) {
-                alert('请先上传视频文件');
+                showMessage('请先上传视频文件', 'error');
                 return;
             }
             
             const subtitleItems = document.querySelectorAll('.subtitle-item');
             if (subtitleItems.length === 0) {
-                alert('请先添加字幕');
+                showMessage('请先添加字幕', 'error');
                 return;
             }
             
@@ -1222,6 +1249,20 @@
                 }
             });
         });
+
+        // 显示消息函数
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
     </script>
 </body>
 </html>

@@ -149,6 +149,24 @@
             border-color: #007acc;
             box-shadow: 0 0 5px rgba(0, 122, 204, 0.3);
         }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3c3;
+        }
         
         .tool-controls input[type="checkbox"]:checked {
             background: #007acc;
@@ -465,9 +483,9 @@
         document.getElementById('copyInputBtn').addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(inputText.value);
-                alert('已复制到剪贴板');
+                showMessage('文本已复制到剪贴板！', 'success');
             } catch (err) {
-                alert('复制失败');
+                showMessage('复制失败，请手动复制', 'error');
             }
         });
 
@@ -568,7 +586,7 @@
                 }
                 showResult(result);
             } catch (err) {
-                alert('编码失败: ' + err.message);
+                showMessage('编码失败，请检查输入', 'error');
             }
         });
 
@@ -598,7 +616,7 @@
                 }
                 showResult(result);
             } catch (err) {
-                alert('解码失败: ' + err.message);
+                showMessage('解码失败，请检查输入格式', 'error');
             }
         });
 
@@ -608,7 +626,7 @@
             const newSep = document.getElementById('newSeparator').value;
             
             if (!oldSep) {
-                alert('请输入原分隔符');
+                showMessage('请输入原分隔符', 'error');
                 return;
             }
             
@@ -623,7 +641,7 @@
                 const result = JSON.stringify(obj, null, 2);
                 showResult(result);
             } catch (err) {
-                alert('JSON格式错误: ' + err.message);
+                showMessage('JSON格式错误，请检查输入', 'error');
             }
         });
 
@@ -633,7 +651,7 @@
                 const result = JSON.stringify(obj);
                 showResult(result);
             } catch (err) {
-                alert('JSON格式错误: ' + err.message);
+                showMessage('JSON格式错误，请检查输入', 'error');
             }
         });
 
@@ -644,7 +662,7 @@
             const text = inputText.value;
             
             if (!text.trim()) {
-                alert('请输入要翻译的文本');
+                showMessage('请输入要翻译的文本', 'error');
                 return;
             }
             
@@ -658,7 +676,7 @@
             const analysisResult = document.getElementById('analysisResult');
             
             if (!text.trim()) {
-                alert('请输入要分析的文本');
+                showMessage('请输入要分析的文本', 'error');
                 return;
             }
             
@@ -684,7 +702,7 @@
             const words = text.match(/\b\w+\b/g);
             
             if (!words) {
-                alert('未找到有效单词');
+                showMessage('未找到有效单词', 'error');
                 return;
             }
             
@@ -927,7 +945,7 @@
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const content = resultArea.textContent;
             if (content === '处理结果将在此显示...') {
-                alert('没有可下载的内容');
+                showMessage('没有可下载的内容', 'error');
                 return;
             }
             
@@ -941,6 +959,20 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         });
+
+        // 显示消息函数
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
 
         // 初始化
         updateStats();

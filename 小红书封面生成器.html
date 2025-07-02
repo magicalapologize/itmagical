@@ -860,6 +860,24 @@
             background: #fff5f8;
         }
 
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3c3;
+        }
+
         .upload-area.dragover {
             border-color: #ff6b9d;
             background: #fff5f8;
@@ -2597,7 +2615,7 @@
                 console.error('生成图片时出错:', err);
                 saveBtn.innerHTML = originalText;
                 saveBtn.disabled = false;
-                alert('生成图片失败，请重试');
+                showMessage('生成图片失败，请重试', 'error');
             });
         }
         
@@ -2667,15 +2685,15 @@
         
         function handleFile(file) {
             if (!file.type.startsWith('image/')) {
-                alert('请选择图片文件');
+                showMessage('请选择图片文件', 'error');
                 return;
             }
             
-            console.log('开始处理文件:', file.name, file.type, file.size);
+            // 开始处理文件
             
             // 检查文件大小，超过2MB需要压缩
             if (file.size > 2 * 1024 * 1024) {
-                console.log('文件过大，开始压缩...');
+                // 文件过大，开始压缩
                 
                 // 显示压缩提示
                 const uploadArea = document.getElementById('uploadArea');
@@ -2698,7 +2716,7 @@
                 
                 compressImage(file, (compressedDataUrl) => {
                     customBackgroundImage = compressedDataUrl;
-                    console.log('图片压缩完成，数据长度:', compressedDataUrl.length);
+                    // 图片压缩完成
                     
                     // 恢复原始内容
                     uploadArea.innerHTML = originalContent;
@@ -2711,14 +2729,14 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     customBackgroundImage = e.target.result;
-                    console.log('文件读取完成，数据长度:', e.target.result.length);
+                    // 文件读取完成
                     showImagePreview(e.target.result);
                     applyCustomBackground();
                     showImageControls();
                 };
                 reader.onerror = (e) => {
                     console.error('文件读取失败:', e);
-                    alert('文件读取失败，请重试');
+                    showMessage('文件读取失败，请重试', 'error');
                 };
                 reader.readAsDataURL(file);
             }
@@ -2751,22 +2769,19 @@
                     // 转换为DataURL
                     const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
                     
-                    console.log('压缩前尺寸:', img.width + 'x' + img.height);
-                    console.log('压缩后尺寸:', width + 'x' + height);
-                    console.log('压缩前大小:', file.size, '字节');
-                    console.log('压缩后大小:', Math.round(compressedDataUrl.length * 0.75), '字节');
+                    // 图片压缩处理完成
                     
                     callback(compressedDataUrl);
                 };
                 img.onerror = () => {
                     console.error('图片加载失败');
-                    alert('图片格式不支持或文件损坏');
+                    showMessage('图片格式不支持或文件损坏', 'error');
                 };
                 img.src = e.target.result;
             };
             reader.onerror = () => {
                 console.error('文件读取失败');
-                alert('文件读取失败，请重试');
+                showMessage('文件读取失败，请重试', 'error');
             };
             reader.readAsDataURL(file);
         }
@@ -2914,8 +2929,7 @@
             const card = document.querySelector('.card');
             const { position, scale, blur, opacity } = currentImageSettings;
             
-            console.log('应用自定义背景:', customBackgroundImage.substring(0, 50) + '...');
-            console.log('当前设置:', { position, scale, blur, opacity });
+            // 应用自定义背景
             
             // 添加自定义背景类并清除默认背景
             card.classList.add('has-custom-bg');
@@ -2962,26 +2976,31 @@
                 card.style.setProperty('--bg-filter', 'none');
             }
             
-            console.log('自定义背景已应用');
+            // 自定义背景已应用
             
-            // 调试：验证背景是否正确应用
-            setTimeout(() => {
-                const beforeStyle = getComputedStyle(card, '::before');
-                console.log('验证结果:', {
-                    'has-custom-bg类': card.classList.contains('has-custom-bg'),
-                    '背景图片': beforeStyle.backgroundImage !== 'none',
-                    '背景尺寸': beforeStyle.backgroundSize,
-                    '背景位置': beforeStyle.backgroundPosition
-                });
-            }, 100);
+            // 背景应用完成
         }
         
+        // 显示消息函数
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.input-section');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
         // 统一的背景更新函数
         function updateBackgroundWithCustom() {
             if (customBackgroundImage) {
                 // 如果有自定义背景图片，应用自定义背景
                 applyCustomBackground();
-                console.log('使用自定义背景图片');
+                // 使用自定义背景图片
             } else {
                 // 没有自定义背景时使用默认背景
                 updateBackground();
