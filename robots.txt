@@ -1,0 +1,47 @@
+# Robots.txt for ITMagical Tools
+# 云云工具箱 - 搜索引擎爬虫指引
+
+User-agent: *
+Allow: /
+
+# 允许所有主要搜索引擎访问
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# 禁止访问的目录（如果有的话）
+# Disallow: /admin/
+# Disallow: /private/
+# Disallow: /temp/
+
+# 网站地图位置
+Sitemap: https://itmagical.netlify.app/sitemap.xml
+
+# 爬取延迟（可选，避免服务器过载）
+Crawl-delay: 1
+
+# 允许访问所有工具页面
+Allow: /tools/
+Allow: /assets/
+Allow: /images/
+
+# 优先级页面（通过sitemap.xml定义）
+# 首页: https://itmagical.netlify.app/
+# 工具页面: https://itmagical.netlify.app/tools/
+
+# 联系信息（可选）
+# Contact: webmaster@itmagical.com

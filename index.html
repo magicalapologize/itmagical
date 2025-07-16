@@ -4,14 +4,337 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
+<html lang="zh-CN">
 	<head>
-		<title>云云的工具箱 - 在线工具集合</title>
+		<title>云云的工具箱 - 免费在线工具集合 | Free Online Tools Collection</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		
+		<!-- SEO Meta Tags -->
+		<meta name="description" content="云云工具箱提供31个免费在线工具，包括图片处理、文档转换、音视频编辑、编码转换等。无需下载，浏览器直接使用。Free online tools for image processing, document conversion, audio/video editing, and more." />
+		<meta name="keywords" content="在线工具,免费工具,图片压缩,PDF转换,音频处理,视频编辑,格式转换,online tools,free tools,image compression,PDF converter,audio processing,video editing" />
+		<meta name="author" content="云云工具箱" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+		<meta name="bingbot" content="index, follow" />
+		
+		<!-- Open Graph Meta Tags -->
+		<meta property="og:title" content="云云的工具箱 - 免费在线工具集合" />
+		<meta property="og:description" content="提供31个免费在线工具，包括图片处理、文档转换、音视频编辑等。无需下载，浏览器直接使用。" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://itmagical.netlify.app" />
+		<meta property="og:image" content="https://itmagical.netlify.app/images/og-image.jpg" />
+		<meta property="og:site_name" content="云云工具箱" />
+		<meta property="og:locale" content="zh_CN" />
+		<meta property="og:locale:alternate" content="en_US" />
+		
+		<!-- Twitter Card Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="云云的工具箱 - 免费在线工具集合" />
+		<meta name="twitter:description" content="提供31个免费在线工具，包括图片处理、文档转换、音视频编辑等。" />
+		<meta name="twitter:image" content="https://itmagical.netlify.app/images/og-image.jpg" />
+		
+		<!-- Canonical URL -->
+		<link rel="canonical" href="https://itmagical.netlify.app" />
+		
+		<!-- Alternate Language Links -->
+		<link rel="alternate" hreflang="zh-CN" href="https://itmagical.netlify.app" />
+		<link rel="alternate" hreflang="en" href="https://itmagical.netlify.app/en" />
+		<link rel="alternate" hreflang="ja" href="https://itmagical.netlify.app/ja" />
+		<link rel="alternate" hreflang="ko" href="https://itmagical.netlify.app/ko" />
+		<link rel="alternate" hreflang="x-default" href="https://itmagical.netlify.app" />
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		
+		<!-- Preconnect for Performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+			/* 侧边栏样式 */
+			.category-sidebar {
+				position: fixed;
+				top: 0;
+				left: -320px;
+				width: 320px;
+				height: 100vh;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+				transition: left 0.3s ease;
+				z-index: 10003;
+				overflow-y: auto;
+				color: white;
+			}
+			
+			.category-sidebar.active {
+				left: 0;
+			}
+			
+			.sidebar-header {
+				padding: 20px;
+				border-bottom: 1px solid rgba(255,255,255,0.2);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			
+			.sidebar-header h3 {
+				margin: 0;
+				color: white;
+				font-size: 1.3em;
+				font-weight: 600;
+			}
+			
+			.close-btn {
+				background: none;
+				border: none;
+				color: white;
+				font-size: 24px;
+				cursor: pointer;
+				padding: 5px;
+				border-radius: 50%;
+				transition: background 0.3s ease;
+			}
+			
+			.close-btn:hover {
+				background: rgba(255,255,255,0.2);
+			}
+			
+			.sidebar-content {
+				padding: 20px;
+			}
+			
+			.filter-controls {
+				margin-bottom: 25px;
+				padding-bottom: 20px;
+				border-bottom: 1px solid rgba(255,255,255,0.2);
+			}
+			
+			.multi-select-label {
+				display: flex;
+				align-items: center;
+				margin-bottom: 15px;
+				cursor: pointer;
+				font-weight: 500;
+			}
+			
+			.multi-select-label input[type="checkbox"] {
+				display: none;
+			}
+			
+			.checkmark {
+				width: 18px;
+				height: 18px;
+				border: 2px solid rgba(255,255,255,0.6);
+				border-radius: 3px;
+				margin-right: 10px;
+				position: relative;
+				transition: all 0.3s ease;
+			}
+			
+			.multi-select-label input[type="checkbox"]:checked + .checkmark {
+				background: white;
+				border-color: white;
+			}
+			
+			.multi-select-label input[type="checkbox"]:checked + .checkmark:after {
+				content: '✓';
+				position: absolute;
+				top: -2px;
+				left: 2px;
+				color: #667eea;
+				font-weight: bold;
+				font-size: 14px;
+			}
+			
+			.control-buttons {
+				display: flex;
+				gap: 10px;
+			}
+			
+			.control-btn {
+				flex: 1;
+				padding: 8px 12px;
+				border: 1px solid rgba(255,255,255,0.3);
+				background: rgba(255,255,255,0.1);
+				color: white;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 0.85em;
+				transition: all 0.3s ease;
+			}
+			
+			.control-btn:hover {
+				background: rgba(255,255,255,0.2);
+				border-color: rgba(255,255,255,0.5);
+			}
+			
+			.category-list {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			
+			.category-item {
+				display: flex;
+				align-items: center;
+				padding: 12px 15px;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				background: rgba(255,255,255,0.1);
+				border: 1px solid transparent;
+			}
+			
+			.category-item:hover {
+				background: rgba(255,255,255,0.2);
+				transform: translateX(5px);
+			}
+			
+			.category-item.active {
+				background: rgba(255,255,255,0.25);
+				border-color: rgba(255,255,255,0.4);
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			}
+			
+			.category-item.selected {
+				background: rgba(255,255,255,0.3);
+				border-color: rgba(255,255,255,0.6);
+			}
+			
+			.category-item i {
+				width: 20px;
+				margin-right: 12px;
+				font-size: 16px;
+				text-align: center;
+			}
+			
+			.category-item span:first-of-type {
+				flex: 1;
+				font-weight: 500;
+			}
+			
+			.category-item .count {
+				background: rgba(255,255,255,0.2);
+				padding: 2px 8px;
+				border-radius: 12px;
+				font-size: 0.8em;
+				font-weight: 600;
+				min-width: 24px;
+				text-align: center;
+			}
+			
+			.sidebar-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0,0,0,0.5);
+				z-index: 10002;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.3s ease;
+			}
+			
+			.sidebar-overlay.active {
+				opacity: 1;
+				visibility: visible;
+			}
+			
+			/* 响应式设计 */
+			@media screen and (max-width: 768px) {
+				.category-sidebar {
+					width: 280px;
+					left: -280px;
+				}
+				
+				.sidebar-content {
+					padding: 15px;
+				}
+				
+				.category-item {
+					padding: 10px 12px;
+				}
+				
+				.stats-section {
+					flex-direction: column !important;
+					gap: 15px;
+				}
+				
+				.stats-section > div {
+					flex: none !important;
+				}
+			}
+		</style>
 	</head>
 	<body class="homepage is-preload">
+		<!-- 左侧分类侧边栏 -->
+		<div id="categorySidebar" class="category-sidebar">
+			<div class="sidebar-header">
+				<h3>工具分类</h3>
+				<button id="closeSidebar" class="close-btn">&times;</button>
+			</div>
+			<div class="sidebar-content">
+				<div class="filter-controls">
+					<label class="multi-select-label">
+						<input type="checkbox" id="multiSelect">
+						<span class="checkmark"></span>
+						多选模式
+					</label>
+					<div class="control-buttons">
+						<button id="clearAll" class="control-btn clear-btn">清空选择</button>
+						<button id="selectAll" class="control-btn select-btn">全部选择</button>
+					</div>
+				</div>
+				<div class="category-list">
+					<div class="category-item active" data-category="all">
+						<i class="fas fa-th-large"></i>
+						<span>全部工具</span>
+						<span class="count">31</span>
+					</div>
+					<div class="category-item" data-category="image">
+						<i class="fas fa-image"></i>
+						<span>图片处理</span>
+						<span class="count">9</span>
+					</div>
+					<div class="category-item" data-category="document">
+						<i class="fas fa-file-alt"></i>
+						<span>文档处理</span>
+						<span class="count">5</span>
+					</div>
+					<div class="category-item" data-category="media">
+						<i class="fas fa-play-circle"></i>
+						<span>音视频处理</span>
+						<span class="count">5</span>
+					</div>
+					<div class="category-item" data-category="convert">
+						<i class="fas fa-exchange-alt"></i>
+						<span>编码转换</span>
+						<span class="count">5</span>
+					</div>
+					<div class="category-item" data-category="design">
+						<i class="fas fa-palette"></i>
+						<span>设计创作</span>
+						<span class="count">4</span>
+					</div>
+					<div class="category-item" data-category="utility">
+						<i class="fas fa-tools"></i>
+						<span>实用工具</span>
+						<span class="count">3</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 遮罩层 -->
+		<div id="sidebarOverlay" class="sidebar-overlay"></div>
+		
 		<div id="page-wrapper">
 
 			<!-- Header 页头部分 -->
@@ -27,17 +350,35 @@
 								<li>
 									<a href="#">工具分类</a>
 									<ul>
-										<li><a href="图片压缩工具.html">图片压缩</a></li>
-										<li><a href="文本处理工具.html">文本处理</a></li>
-										<li><a href="格式转换工具.html">格式转换</a></li>
+										<li><a href="tools/图片压缩工具.html">图片压缩</a></li>
+										<li><a href="tools/文本处理工具.html">文本处理</a></li>
+										<li><a href="tools/格式转换工具.html">格式转换</a></li>
 										<li>
 											<a href="#">更多工具</a>
 											<ul>
-												<li><a href="音频处理工具.html">音频处理</a></li>
-												<li><a href="视频处理工具.html">视频处理</a></li>
-												<li><a href="#">文件压缩</a></li>
-												<li><a href="#">PDF工具</a></li>
-												<li><a href="#">其他工具</a></li>
+												<li><a href="tools/音频处理工具.html">音频处理</a></li>
+												<li><a href="tools/视频处理工具.html">视频处理</a></li>
+												<li><a href="tools/pdf工具集.html">PDF工具</a></li>
+												<li><a href="tools/图片转Base64工具.html">图片转Base64</a></li>
+												<li><a href="tools/信息编码转换工具.html">信息编码转换</a></li>
+												<li><a href="tools/时间戳转换工具.html">时间戳转换</a></li>
+												<li><a href="tools/颜色转换工具.html">颜色转换</a></li>
+												<li><a href="tools/在线录屏工具.html">在线录屏</a></li>
+												<li><a href="tools/视频去水印工具.html">视频去水印</a></li>
+												<li><a href="tools/图片分割工具.html">图片分割</a></li>
+												<li><a href="tools/思维导图工具.html">思维导图</a></li>
+                        <li><a href="tools/图片水印工具.html">图片水印</a></li>
+                        <li><a href="tools/柱状图制作工具.html">柱状图制作</a></li>
+                        <li><a href="tools/图片OCR工具.html">图片OCR</a></li>
+                        <li><a href="tools/图片编辑工具.html">图片编辑</a></li>
+                        <li><a href="tools/Markdown编辑器.html">Markdown编辑器</a></li>
+                        <li><a href="tools/图片放大工具.html">图片放大</a></li>
+                        <li><a href="tools/图片转PDF工具.html">图片转PDF</a></li>
+                        <li><a href="tools/视频提取音频工具.html">视频提取音频</a></li>
+                        <li><a href="tools/番茄钟工具.html">番茄钟</a></li>
+                        <li><a href="tools/条形码生成工具.html">条形码生成</a></li>
+                        <li><a href="tools/智能抠图工具.html">智能抠图</a></li>
+                        <li><a href="tools/PDF转文本工具.html">PDF转文本</a></li>
 											</ul>
 										</li>
 										<li><a href="#">实用工具</a></li>
@@ -89,11 +430,21 @@
 								</div>
 							</div>
 							<footer>
-								<ul class="actions">
-									<li><a href="#" class="button large">开始使用</a></li>
-									<li><a href="#" class="button alt large">了解更多</a></li>
-								</ul>
-							</footer>
+							<div class="stats-section" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+								<div class="total-tools" style="text-align: center; flex: 1;">
+									<div style="font-size: 2.5em; font-weight: bold; color: #d52349; margin-bottom: 5px;" id="totalToolsCount">31</div>
+									<div style="color: #666; font-size: 1.1em;">总工具数量</div>
+								</div>
+								<div class="usage-stats" style="text-align: center; flex: 1;">
+									<div style="font-size: 2.5em; font-weight: bold; color: #28a745; margin-bottom: 5px;" id="totalUsageCount">0</div>
+									<div style="color: #666; font-size: 1.1em;">工具使用次数</div>
+								</div>
+								<div class="popular-tool" style="text-align: center; flex: 1;">
+									<div style="font-size: 1.2em; font-weight: bold; color: #6f42c1; margin-bottom: 5px;" id="popularToolName">暂无数据</div>
+									<div style="color: #666; font-size: 1.1em;">最受欢迎工具</div>
+								</div>
+							</div>
+						</footer>
 						</section>
 
 				</section>
@@ -108,11 +459,21 @@
 									<section>
 										<header class="major">
 											<h2>工具集</h2>
+											<div class="tools-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+												<button id="categoryToggle" class="button" style="background: #d52349; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+													<i class="fas fa-filter"></i>
+													工具分类
+												</button>
+												<div class="category-stats">
+													<span id="toolCount" style="color: #666; font-size: 0.9em;">显示 31 个工具</span>
+													<span id="selectedCategories" style="margin-left: 15px; color: #d52349; font-weight: bold;">全部工具</span>
+												</div>
+											</div>
 										</header>
 										<div class="row">
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-													<a href="图片压缩工具.html" class="image featured"><img src="images/pic02.jpg" alt="图片压缩工具" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+													<section class="box">
+														<a href="tools/图片压缩工具.html" class="image featured"><img src="images/pic02.jpg" alt="图片压缩工具" /></a>
 													<header>
 														<h3>图片压缩工具</h3>
 													</header>
@@ -121,14 +482,14 @@
 有效减小文件大小，同时保持图片质量不受损。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="图片压缩工具.html" class="button alt">立即使用</a></li>
+															<li><a href="tools/图片压缩工具.html" class="button alt">立即使用</a></li>
 														</ul>
 													</footer>
 												</section>
 											</div>
-											<div class="col-4 col-6-medium col-12-small">
-											<section class="box">
-												<a href="文本处理工具.html" class="image featured"><img src="images/pic03.jpg" alt="文本处理工具" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="document">
+													<section class="box">
+														<a href="tools/文本处理工具.html" class="image featured"><img src="images/pic03.jpg" alt="文本处理工具" /></a>
 												<header>
 													<h3>文本处理工具</h3>
 											</header>
@@ -137,14 +498,14 @@
 让文字工作更加轻松高效，提升文本处理效率。</p>
 												<footer>
 													<ul class="actions">
-														<li><a href="文本处理工具.html" class="button alt">立即使用</a></li>
+														<li><a href="tools/文本处理工具.html" class="button alt">立即使用</a></li>
 													</ul>
 												</footer>
 											</section>
 										</div>
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-													<a href="格式转换工具.html" class="image featured"><img src="images/pic04.jpg" alt="格式转换工具" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="convert">
+													<section class="box">
+														<a href="tools/格式转换工具.html" class="image featured"><img src="images/pic04.jpg" alt="格式转换工具" /></a>
 													<header>
 														<h3>格式转换工具</h3>
 												</header>
@@ -153,14 +514,14 @@
 支持批量处理，保证高质量输出和转换效率。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="格式转换工具.html" class="button alt">立即使用</a></li>
+															<li><a href="tools/格式转换工具.html" class="button alt">立即使用</a></li>
 														</ul>
 													</footer>
 												</section>
 											</div>
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-													<a href="音频处理工具.html" class="image featured"><img src="images/pic05.jpg" alt="音频处理工具" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="media">
+														<section class="box">
+															<a href="tools/音频处理工具.html" class="image featured"><img src="images/pic05.jpg" alt="音频处理工具" /></a>
 													<header>
 														<h3>音频处理工具</h3>
 												</header>
@@ -169,14 +530,14 @@
 操作简单直观，让音频处理变得高效便捷。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="音频处理工具.html" class="button alt">立即使用</a></li>
+															<li><a href="tools/音频处理工具.html" class="button alt">立即使用</a></li>
 														</ul>
 													</footer>
 												</section>
 											</div>
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-													<a href="视频处理工具.html" class="image featured"><img src="images/pic06.jpg" alt="视频处理工具" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="media">
+														<section class="box">
+															<a href="tools/视频处理工具.html" class="image featured"><img src="images/pic06.jpg" alt="视频处理工具" /></a>
 													<header>
 														<h3>视频处理工具</h3>
 												</header>
@@ -185,14 +546,14 @@
 界面友好易用，让视频处理变得简单快捷。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="视频处理工具.html" class="button alt">立即使用</a></li>
+															<li><a href="tools/视频处理工具.html" class="button alt">立即使用</a></li>
 														</ul>
 													</footer>
 												</section>
 											</div>
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-													<a href="pdf工具集.html" class="image featured"><img src="images/pic07.jpg" alt="PDF工具集" /></a>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="document">
+														<section class="box">
+															<a href="tools/pdf工具集.html" class="image featured"><img src="images/pic07.jpg" alt="PDF工具集" /></a>
 													<header>
 														<h3>PDF工具集</h3>
 												</header>
@@ -201,27 +562,382 @@
 操作简单高效，让PDF文件处理更加便捷。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="pdf工具集.html" class="button alt">立即使用</a></li>
+															<li><a href="tools/pdf工具集.html" class="button alt">立即使用</a></li>
 														</ul>
 													</footer>
 												</section>
 											</div>
-											<div class="col-4 col-6-medium col-12-small">
-												<section class="box">
-											<a href="小红书封面模板选择.html" class="image featured"><img src="images/pic01.jpg" alt="小红书封面生成器" /></a>
-											<header>
-												<h3>小红书封面生成器</h3>
-											</header>
-											<p>专业的小红书封面设计工具，提供12种精美模板。
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="design">
+														<section class="box">
+															<a href="tools/小红书封面模板选择.html" class="image featured"><img src="images/pic01.jpg" alt="小红书封面生成器" /></a>
+										<header>
+											<h3>小红书封面生成器</h3>
+										</header>
+										<p>专业的小红书封面设计工具，提供12种精美模板。
 支持自定义文字、颜色、背景和多种装饰元素。
 轻松制作吸引眼球的封面图片，提升内容曝光率。</p>
-											<footer>
-												<ul class="actions">
-													<li><a href="小红书封面模板选择.html" class="button alt">选择模板</a></li>
-												</ul>
-											</footer>
-										</section>
+										<footer>
+											<ul class="actions">
+												<li><a href="tools/小红书封面模板选择.html" class="button alt">选择模板</a></li>
+											</ul>
+										</footer>
+									</section>
 											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="convert">
+														<section class="box">
+															<a href="tools/图片转Base64工具.html" class="image featured"><img src="images/pic08.jpg" alt="图片转Base64工具" /></a>
+										<header>
+											<h3>图片转Base64工具</h3>
+										</header>
+										<p>支持多种模式的图片转Base64格式转换工具。
+支持文件上传、URL链接、截图粘贴等多种输入方式。
+同时支持Base64数据逆转为图片，满足各种开发需求。</p>
+										<footer>
+											<ul class="actions">
+												<li><a href="tools/图片转Base64工具.html" class="button alt">立即使用</a></li>
+											</ul>
+										</footer>
+									</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="convert">
+														<section class="box">
+															<a href="tools/信息编码转换工具.html" class="image featured"><img src="images/pic09.jpg" alt="信息编码转换工具" /></a>
+										<header>
+											<h3>信息编码转换工具</h3>
+										</header>
+										<p>支持多格式的信息编解码转换工具。
+包含Unicode、UTF-8、UTF-16、URL、Base64、MD5、Hex、Gzip等。
+开发者必备工具，支持批量转换和实时预览。</p>
+										<footer>
+											<ul class="actions">
+												<li><a href="tools/信息编码转换工具.html" class="button alt">立即使用</a></li>
+											</ul>
+										</footer>
+									</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="convert">
+														<section class="box">
+															<a href="tools/时间戳转换工具.html" class="image featured"><img src="images/pic10.jpg" alt="时间戳转换工具" /></a>
+										<header>
+											<h3>时间戳转换工具</h3>
+										</header>
+										<p>本地化时间与时间戳之间的相互转换工具。
+支持秒/毫秒时间戳，支持世界时区切换。
+提供各时区时钟展示，开发调试的得力助手。</p>
+										<footer>
+											<ul class="actions">
+												<li><a href="tools/时间戳转换工具.html" class="button alt">立即使用</a></li>
+											</ul>
+										</footer>
+									</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="design">
+														<section class="box">
+															<a href="tools/颜色转换工具.html" class="image featured"><img src="images/pic02.jpg" alt="颜色转换工具" /></a>
+							<header>
+								<h3>颜色转换工具</h3>
+							</header>
+							<p>支持HEX、RGB、HSL、CMYK等颜色格式互转。
+提供颜色选择器、调色板生成和配色方案推荐。
+设计师和开发者的专业颜色处理工具。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/颜色转换工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="media">
+														<section class="box">
+															<a href="tools/在线录屏工具.html" class="image featured"><img src="images/pic11.jpg" alt="在线录屏工具" /></a>
+							<header>
+								<h3>在线录屏工具</h3>
+							</header>
+							<p>无需客户端即可同时录制屏幕、人像、音频。
+支持高清录制，轻松录制个人演示、教学视频。
+操作简单直观，一键开始录制，满足各种录屏需求。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/在线录屏工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="media">
+														<section class="box">
+															<a href="tools/视频去水印工具.html" class="image featured"><img src="images/pic12.jpg" alt="视频去水印工具" /></a>
+							<header>
+								<h3>视频去水印工具</h3>
+							</header>
+							<p>在线去除视频动态或静态水印，支持自定义范围和时间。
+提供多种去水印算法，智能识别水印区域。
+操作简单高效，让视频处理更加便捷专业。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/视频去水印工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+														<section class="box">
+															<a href="tools/图片分割工具.html" class="image featured"><img src="images/pic13.jpg" alt="图片分割工具" /></a>
+							<header>
+								<h3>图片分割工具</h3>
+							</header>
+							<p>支持批量将图片分割成四宫格、九宫格、十六宫格。
+支持自定义行与列，灵活设置分割参数。
+适用于社交媒体发布、拼图制作等多种场景。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/图片分割工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="design">
+														<section class="box">
+															<a href="tools/思维导图工具.html" class="image featured"><img src="images/pic14.jpg" alt="思维导图工具" /></a>
+							<header>
+								<h3>思维导图工具</h3>
+							</header>
+							<p>在线免费思维导图，支持多种模板多种格式导出。
+提供丰富的节点样式和连接线类型。
+支持实时协作编辑，让思维整理更加高效便捷。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/思维导图工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="utility">
+														<section class="box">
+															<a href="tools/番茄钟工具.html" class="image featured"><img src="images/pic05.jpg" alt="番茄钟工具" /></a>
+							<header>
+								<h3>番茄钟工具</h3>
+							</header>
+							<p>国际公认的高效工作方法，在线番茄钟计时器。
+提升专注力和工作效率，支持自定义时间设置。
+简洁界面设计，让时间管理更加轻松高效。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/番茄钟工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="utility">
+														<section class="box">
+															<a href="tools/条形码生成工具.html" class="image featured"><img src="images/pic06.jpg" alt="条形码生成工具" /></a>
+							<header>
+								<h3>条形码生成工具</h3>
+							</header>
+							<p>支持数十种条形码格式在线生成，可批量生成。
+包含EAN、UPC、Code128等主流格式。
+满足各种商业需求，操作简单便捷高效。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/条形码生成工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+														<section class="box">
+															<a href="tools/智能抠图工具.html" class="image featured"><img src="images/pic07.jpg" alt="智能抠图工具" /></a>
+							<header>
+								<h3>智能抠图工具</h3>
+							</header>
+							<p>AI智能识别图像主体轮廓，自动分离背景。
+支持批量抠图处理，精确度高效果好。
+适用于电商、设计等多种应用场景。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/智能抠图工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+											</div>
+											<div class="col-4 col-6-medium col-12-small tool-item" data-category="document">
+														<section class="box">
+															<a href="tools/PDF转文本工具.html" class="image featured"><img src="images/pic08.jpg" alt="PDF转文本工具" /></a>
+							<header>
+								<h3>PDF转文本工具</h3>
+							</header>
+							<p>高精度OCR识别PDF文字，可导出为Word、TXT等格式。
+支持批量转换，保持原有格式和排版。
+文档处理的专业工具，提升办公效率。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/PDF转文本工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="document">
+												<section class="box">
+													<a href="tools/Markdown编辑器.html" class="image featured"><img src="images/pic09.jpg" alt="Markdown编辑器" /></a>
+							<header>
+								<h3>Markdown编辑器</h3>
+							</header>
+							<p>在线创建和编辑Markdown文档，实时预览效果。
+支持HTML/MD导入导出，语法高亮显示。
+写作者和开发者的专业文档编辑工具。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/Markdown编辑器.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+												<section class="box">
+													<a href="tools/图片放大工具.html" class="image featured"><img src="images/pic10.jpg" alt="图片放大工具" /></a>
+							<header>
+								<h3>图片放大工具</h3>
+							</header>
+							<p>采用waifu2x人工智能深度卷积神经网络技术。
+实现图片无损放大，支持多种格式处理。
+让低分辨率图片获得更清晰的效果。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/图片放大工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="convert">
+												<section class="box">
+													<a href="tools/图片转PDF工具.html" class="image featured"><img src="images/pic11.jpg" alt="图片转PDF工具" /></a>
+							<header>
+								<h3>图片转PDF工具</h3>
+							</header>
+							<p>多种图片格式转PDF，支持独立转换或合并。
+自定义页面设置和排版，批量处理高效。
+满足各种文档制作和归档需求。</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="tools/图片转PDF工具.html" class="button alt">立即使用</a></li>
+								</ul>
+							</footer>
+						</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="media">
+												<section class="box">
+													<a href="tools/视频提取音频工具.html" class="image featured"><img src="images/pic12.jpg" alt="视频提取音频工具" /></a>
+				<header>
+					<h3>视频提取音频工具</h3>
+				</header>
+				<p>支持主流视频格式在线提取音频轨道。
+可选择多种输出格式，批量处理高效便捷。
+音频制作和编辑的实用工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/视频提取音频工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+												<section class="box">
+													<a href="tools/图片水印工具.html" class="image featured"><img src="images/pic13.jpg" alt="图片水印工具" /></a>
+				<header>
+					<h3>图片水印工具</h3>
+				</header>
+				<p>为图片添加文字或图片水印，支持透明度、位置、旋转等多种自定义设置。
+保护图片版权，提升品牌识别度。
+操作简单直观，效果专业美观。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/图片水印工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+												<section class="box">
+													<a href="tools/图片OCR工具.html" class="image featured"><img src="images/pic01.jpg" alt="图片OCR工具" /></a>
+				<header>
+					<h3>图片OCR工具</h3>
+				</header>
+				<p>智能识别图片中的文字内容，支持多语言识别和批量处理功能。
+高精度文字提取，支持手写体和印刷体。
+文档数字化和文字提取的专业工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/图片OCR工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+												<section class="box">
+													<a href="tools/图片编辑工具.html" class="image featured"><img src="images/pic02.jpg" alt="图片编辑工具" /></a>
+				<header>
+					<h3>图片编辑工具</h3>
+				</header>
+				<p>专业的在线图片编辑器，支持裁剪、滤镜、调色、文字添加等全套编辑功能。
+无需安装软件，浏览器即可完成专业级图片编辑。
+设计师和内容创作者的必备工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/图片编辑工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+
+
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="image">
+												<section class="box">
+													<a href="tools/图片拼接工具.html" class="image featured"><img src="images/pic05.jpg" alt="图片拼接工具" /></a>
+				<header>
+					<h3>图片拼接工具</h3>
+				</header>
+				<p>在线图片拼接工具，支持横版、竖版、网格等多种布局。
+自由调整图片顺序和间距，支持批量处理。
+社交媒体发布和创意设计的实用工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/图片拼接工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="utility">
+												<section class="box">
+													<a href="tools/二维码生成工具.html" class="image featured"><img src="images/pic06.jpg" alt="二维码生成工具" /></a>
+				<header>
+					<h3>二维码生成工具</h3>
+				</header>
+				<p>支持生成文本、网址、邮箱、短信、WiFi、名片等多种类型二维码。
+自定义样式和颜色，支持批量生成和高清导出。
+商业推广和信息分享的必备工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/二维码生成工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
+							<div class="col-4 col-6-medium col-12-small tool-item" data-category="document">
+												<section class="box">
+													<a href="tools/标点符号纠错工具.html" class="image featured"><img src="images/pic07.jpg" alt="标点符号纠错工具" /></a>
+				<header>
+					<h3>标点符号纠错工具</h3>
+				</header>
+				<p>在线人工智能恢复文章或句子中文标点符号，支持多种文本类型。
+智能识别语境，精准纠错，提升文本质量。
+写作者和编辑人员的专业辅助工具。</p>
+				<footer>
+					<ul class="actions">
+						<li><a href="tools/标点符号纠错工具.html" class="button alt">立即使用</a></li>
+					</ul>
+				</footer>
+			</section>
+								</div>
 										</div>
 									</section>
 
@@ -233,19 +949,19 @@
 										<header class="major">
 											<h2>最新动态</h2>
 										</header>
-										<div class="row">
+										<div class="row" id="latestUpdates">
+											<!-- 最新动态内容将通过JavaScript动态加载 -->
 											<div class="col-6 col-12-small">
 												<section class="box">
 													<a href="#" class="image featured"><img src="images/pic08.jpg" alt="" /></a>
 													<header>
-														<h3>新功能上线公告</h3>
-													<p>发布于 45 分钟前</p>
-												</header>
-												<p>我们很高兴地宣布，云云工具箱新增了多项实用功能，包括图片批量处理、PDF在线编辑、音视频格式转换等。这些新功能都经过精心设计和优化，旨在为用户提供更好的使用体验。欢迎大家试用并提供宝贵意见。</p>
+														<h3>加载中...</h3>
+														<p>正在获取最新动态</p>
+													</header>
+													<p>正在加载最新功能更新信息...</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="#" class="button icon solid fa-file-alt">继续阅读</a></li>
-													<li><a href="#" class="button alt icon solid fa-comment">33 条评论</a></li>
+															<li><a href="update-log.html" class="button icon solid fa-file-alt">查看详情</a></li>
 														</ul>
 													</footer>
 												</section>
@@ -254,14 +970,15 @@
 												<section class="box">
 													<a href="#" class="image featured"><img src="images/pic09.jpg" alt="" /></a>
 													<header>
-														<h3>系统更新维护通知</h3>
-													<p>发布于 45 分钟前</p>
-												</header>
-												<p>为了提供更好的服务，我们将于本周末进行系统升级维护。维护期间，部分功能可能暂时无法使用。我们将尽量缩短维护时间，给您带来的不便敬请谅解。预计维护完成后，系统性能将得到显著提升。</p>
+														<h3>版本历史</h3>
+														<p>持续更新，不断进步</p>
+													</header>
+													<p>云云的AI工具箱经历多个版本迭代，从基础工具集合发展为功能全面的专业平台。
+													每次更新带来新工具和功能优化，涵盖图片处理、文档转换、音视频编辑等领域。
+													我们持续完善用户体验，不断添加实用新功能。</p>
 													<footer>
 														<ul class="actions">
-															<li><a href="#" class="button icon solid fa-file-alt">继续阅读</a></li>
-														<li><a href="#" class="button alt icon solid fa-comment">33 条评论</a></li>
+															<li><a href="update-log.html" class="button icon solid fa-history">完整日志</a></li>
 														</ul>
 													</footer>
 												</section>
@@ -283,31 +1000,12 @@
 									<header>
 										<h2>更新日志</h2>
 									</header>
-									<ul class="dates">
+									<ul class="dates" id="footerUpdateLog">
+										<!-- 更新日志内容将通过JavaScript动态加载 -->
 										<li>
-											<span class="date">1月 <strong>27</strong></span>
-													<h3><a href="#">新增批量图片处理功能</a></h3>
-													<p>支持多张图片同时处理，包括调整大小、格式转换、添加水印等功能，大幅提升工作效率。</p>
-										</li>
-										<li>
-											<span class="date">1月 <strong>23</strong></span>
-													<h3><a href="#">优化PDF转换工具</a></h3>
-													<p>提升PDF转Word的转换质量，优化表格和图片识别效果，支持批量转换功能。</p>
-										</li>
-										<li>
-											<span class="date">1月 <strong>15</strong></span>
-													<h3><a href="#">新增在线音频剪辑工具</a></h3>
-													<p>支持音频剪辑、合并、转换格式等功能，操作简单直观，满足基础音频处理需求。</p>
-										</li>
-										<li>
-											<span class="date">1月 <strong>12</strong></span>
-													<h3><a href="#">界面设计优化更新</a></h3>
-													<p>全新的界面设计，更加简洁直观，优化用户操作流程，提升整体使用体验。</p>
-										</li>
-										<li>
-											<span class="date">1月 <strong>10</strong></span>
-													<h3><a href="#">系统性能优化</a></h3>
-													<p>全面优化系统性能，提升工具处理速度，改善服务器响应时间，带来更流畅的使用体验。</p>
+											<span class="date">加载中...</span>
+												<h3><a href="update-log.html">正在加载更新日志</a></h3>
+												<p>请稍候，正在获取最新的更新信息...</p>
 										</li>
 									</ul>
 								</section>
@@ -384,6 +1082,450 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			
+			<!-- 工具分类筛选功能 -->
+			<script>
+			$(document).ready(function() {
+				// 分类配置
+				const categories = {
+					all: '全部工具',
+					image: '图片处理',
+					document: '文档处理',
+					media: '音视频处理',
+					convert: '编码转换',
+					design: '设计创作',
+					utility: '实用工具'
+				};
+				
+				// 当前选中的分类
+				let selectedCategories = ['all'];
+				let isMultiSelect = false;
+				
+				// 工具使用统计
+				let toolUsageStats = JSON.parse(localStorage.getItem('toolUsageStats') || '{}');
+				let totalUsage = Object.values(toolUsageStats).reduce((sum, count) => sum + count, 0);
+				
+				// 侧边栏控制
+				function openSidebar() {
+					$('#categorySidebar').addClass('active');
+					$('#sidebarOverlay').addClass('active');
+					$('body').css('overflow', 'hidden');
+				}
+				
+				function closeSidebar() {
+					$('#categorySidebar').removeClass('active');
+					$('#sidebarOverlay').removeClass('active');
+					$('body').css('overflow', 'auto');
+				}
+				
+				// 更新工具显示
+				function updateToolDisplay() {
+					const $toolItems = $('.tool-item');
+					let visibleCount = 0;
+					
+					if (selectedCategories.includes('all')) {
+						$toolItems.show();
+						visibleCount = $toolItems.length;
+					} else {
+						$toolItems.each(function() {
+							const category = $(this).data('category');
+							if (selectedCategories.includes(category)) {
+								$(this).show();
+								visibleCount++;
+							} else {
+								$(this).hide();
+							}
+						});
+					}
+					
+					// 更新统计信息
+					$('#toolCount').text(`显示 ${visibleCount} 个工具`);
+					
+					// 更新选中分类显示
+					const categoryNames = selectedCategories.map(cat => categories[cat]);
+					$('#selectedCategories').text(categoryNames.join(', '));
+				}
+				
+				// 更新侧边栏分类项状态
+				function updateCategoryStates() {
+					$('.category-item').each(function() {
+						const category = $(this).data('category');
+						$(this).removeClass('active selected');
+						
+						if (selectedCategories.includes(category)) {
+							if (selectedCategories.length === 1 || category === 'all') {
+								$(this).addClass('active');
+							} else {
+								$(this).addClass('selected');
+							}
+						}
+					});
+				}
+				
+				// 侧边栏事件绑定
+				$('#categoryToggle').click(function() {
+					openSidebar();
+				});
+				
+				$('#closeSidebar, #sidebarOverlay').click(function() {
+					closeSidebar();
+				});
+				
+				// 分类项点击事件
+				$('.category-item').click(function() {
+					const category = $(this).data('category');
+					
+					if (isMultiSelect) {
+						// 多选模式
+						if (category === 'all') {
+							selectedCategories = ['all'];
+						} else {
+							// 移除"全部"选项
+							selectedCategories = selectedCategories.filter(cat => cat !== 'all');
+							
+							if (selectedCategories.includes(category)) {
+								// 取消选择
+								selectedCategories = selectedCategories.filter(cat => cat !== category);
+								if (selectedCategories.length === 0) {
+									selectedCategories = ['all'];
+								}
+							} else {
+								// 添加选择
+								selectedCategories.push(category);
+							}
+						}
+					} else {
+						// 单选模式
+						selectedCategories = [category];
+						closeSidebar(); // 单选模式下选择后自动关闭侧边栏
+					}
+					
+					updateCategoryStates();
+					updateToolDisplay();
+				});
+				
+				// 多选模式切换
+				$('#multiSelect').change(function() {
+					isMultiSelect = $(this).is(':checked');
+					if (!isMultiSelect) {
+						// 切换到单选模式时，只保留第一个选中的分类
+						selectedCategories = [selectedCategories[0] || 'all'];
+						updateCategoryStates();
+						updateToolDisplay();
+					}
+				});
+				
+				// 清空选择
+				$('#clearAll').click(function() {
+					selectedCategories = ['all'];
+					updateCategoryStates();
+					updateToolDisplay();
+				});
+				
+				// 全部选择
+				$('#selectAll').click(function() {
+					if (isMultiSelect) {
+						selectedCategories = Object.keys(categories).filter(cat => cat !== 'all');
+					} else {
+						selectedCategories = ['all'];
+					}
+					updateCategoryStates();
+					updateToolDisplay();
+				});
+				
+				// ESC键关闭侧边栏
+				$(document).keydown(function(e) {
+					if (e.keyCode === 27 && $('#categorySidebar').hasClass('active')) {
+						closeSidebar();
+					}
+				});
+				
+				// 更新统计显示
+				function updateStatsDisplay() {
+					$('#totalUsageCount').text(totalUsage);
+					
+					// 找出最受欢迎的工具
+					let popularTool = '暂无数据';
+					let maxUsage = 0;
+					for (let tool in toolUsageStats) {
+						if (toolUsageStats[tool] > maxUsage) {
+							maxUsage = toolUsageStats[tool];
+							popularTool = tool;
+						}
+					}
+					$('#popularToolName').text(popularTool);
+				}
+				
+				// 记录工具使用
+				function recordToolUsage(toolName) {
+					toolUsageStats[toolName] = (toolUsageStats[toolName] || 0) + 1;
+					totalUsage++;
+					localStorage.setItem('toolUsageStats', JSON.stringify(toolUsageStats));
+					updateStatsDisplay();
+				}
+				
+				// 为所有工具链接添加点击跟踪
+				$('.tool-item a[href*="tools/"]').on('click', function(e) {
+					const toolName = $(this).closest('.tool-item').find('h3').text().trim();
+					recordToolUsage(toolName);
+				});
+				
+				// 加载最新动态
+				loadLatestUpdates();
+				
+				// 初始化显示
+				updateCategoryStates();
+				updateToolDisplay();
+				updateStatsDisplay();
+			});
+			
+			// 硬编码的更新日志数据
+			const updateData = {
+				"project": {
+					"name": "云云的AI工具箱",
+					"version": "2.5.1",
+					"description": "云云的AI工具箱是一个功能强大的在线工具集合平台，提供34种实用工具",
+					"lastUpdated": "2025-01-27"
+				},
+				"updates": [
+					{
+						"version": "2.5.1",
+						"date": "2025-01-27",
+						"type": "工具优化",
+						"title": "精简工具列表，优化用户体验",
+						"description": "本次更新删除了重复功能的工具，精简了工具列表，提升了网站性能和用户体验。删除重复的柱状图制作工具，避免功能冗余；移除雷达图制作工具，功能将整合到其他图表工具中；优化主页布局，提升加载速度。",
+						"highlights": [
+							"删除重复的柱状图制作工具，避免功能冗余",
+							"移除雷达图制作工具，功能将整合到其他图表工具中",
+							"优化主页布局，提升加载速度",
+							"更新项目统计数据和描述信息"
+						]
+					},
+					{
+						"version": "2.5.0",
+						"date": "2025-01-27",
+						"type": "feature",
+						"title": "新增五大专业工具，打造全方位创作平台",
+						"description": "本次重大更新新增雷达图制作、柱状图制作2、图片拼接、二维码生成、标点符号纠错五个专业工具，进一步完善平台功能生态，为用户提供更全面的创作和办公解决方案。",
+						"highlights": [
+							"新增雷达图制作工具，支持多维度数据可视化",
+							"升级版柱状图制作工具，提供更丰富的图表类型",
+							"图片拼接工具，支持多种布局和自定义设置",
+							"二维码生成工具，支持多种数据类型和样式",
+							"标点符号纠错工具，基于AI算法智能纠错"
+						]
+					},
+					{
+						"version": "2.4.0",
+						"date": "2025-01-27",
+						"type": "feature",
+						"title": "新增四大专业工具，提升创作效率",
+						"description": "本次更新新增图片水印、柱状图制作、图片OCR和图片编辑四个专业工具，进一步完善平台功能生态。图片水印工具支持文字和图片水印；柱状图制作工具提供专业数据可视化；图片OCR工具实现智能文字识别。",
+						"highlights": [
+							"图片水印工具，支持文字和图片水印",
+							"柱状图制作工具，专业数据可视化",
+							"图片OCR工具，智能文字识别",
+							"图片编辑工具，功能全面的在线编辑器"
+						]
+					},
+					{
+						"version": "2.3.0",
+						"date": "2025-01-26",
+						"type": "feature",
+						"title": "新增三大实用工具，完善功能生态",
+						"description": "本次更新新增图片分割、图片放大和思维导图三个实用工具，进一步丰富平台功能。图片分割工具支持智能切割；图片放大工具采用AI算法；思维导图工具提供专业绘制功能。",
+						"highlights": [
+							"图片分割工具，支持智能切割和自定义分割",
+							"图片放大工具，采用AI算法无损放大",
+							"思维导图工具，专业的在线绘制功能",
+							"优化用户界面，提升操作体验"
+						]
+					},
+					{
+						"version": "2.2.0",
+						"date": "2025-01-25",
+						"type": "feature",
+						"title": "新增多媒体处理工具",
+						"description": "本次更新新增视频处理、音频处理和在线录屏三个多媒体工具，扩展平台在音视频领域的功能覆盖。视频处理工具支持格式转换和压缩；音频处理工具提供多种编辑功能。",
+						"highlights": [
+							"视频处理工具，支持格式转换和压缩",
+							"音频处理工具，提供剪切、合并等功能",
+							"在线录屏工具，支持屏幕和摄像头录制",
+							"优化移动端适配，提升用户体验"
+						]
+					}
+				]
+			};
+
+			// 加载最新动态功能
+			function loadLatestUpdates() {
+				console.log('使用硬编码数据加载更新日志...');
+				
+				if (updateData.updates && updateData.updates.length > 0) {
+					const latestUpdate = updateData.updates[0]; // 获取最新的更新
+					console.log('最新更新:', latestUpdate);
+					renderLatestUpdate(latestUpdate);
+					renderFooterUpdateLog(updateData.updates.slice(0, 5)); // 显示最新5条更新
+				} else {
+					console.log('没有找到更新数据');
+				}
+			}
+			
+			function renderLatestUpdate(update) {
+				// 计算发布时间差
+				const publishTime = getTimeAgo(update.date);
+				
+				// 获取更新描述（截取前100个字符）
+				let description = update.description;
+				if (description.length > 100) {
+					description = description.substring(0, 100) + '...';
+				}
+				
+				// 更新第一个卡片内容
+				const firstCard = $('#latestUpdates .col-6:first-child .box');
+				firstCard.find('header h3').text(update.title);
+				firstCard.find('header p').text(publishTime);
+				firstCard.find('p:not(header p)').text(description);
+				
+				// 添加版本标识
+				const versionBadge = `<span style="display: inline-block; padding: 0.2em 0.6em; background: #667eea; color: white; border-radius: 15px; font-size: 0.8em; margin-right: 0.5em;">v${update.version}</span>`;
+				firstCard.find('header h3').prepend(versionBadge);
+			}
+			
+			function renderFooterUpdateLog(updates) {
+				let html = '';
+				
+				updates.forEach(function(update) {
+					const updateDate = new Date(update.date);
+					const month = updateDate.toLocaleDateString('zh-CN', { month: 'long' }).replace('月', '');
+					const day = updateDate.getDate();
+					
+					// 获取简短描述
+					let shortDesc = update.description;
+					if (shortDesc.length > 60) {
+						shortDesc = shortDesc.substring(0, 60) + '...';
+					}
+					
+					html += `
+						<li>
+							<span class="date">${month}月 <strong>${day}</strong></span>
+							<h3><a href="update-log.html">${update.title}</a></h3>
+							<p>${shortDesc}</p>
+						</li>
+					`;
+				});
+				
+				$('#footerUpdateLog').html(html);
+			}
+			
+			function getTimeAgo(dateStr) {
+				// 当前时间设置为2025年7月16日
+				const currentDate = new Date('2025-07-16');
+				const updateDate = new Date(dateStr);
+				const diffTime = currentDate - updateDate;
+				const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+				
+				if (diffDays === 0) {
+					return '今天发布';
+				} else if (diffDays === 1) {
+					return '昨天发布';
+				} else if (diffDays < 7) {
+					return `${diffDays}天前发布`;
+				} else if (diffDays < 30) {
+					const weeks = Math.floor(diffDays / 7);
+					return `${weeks}周前发布`;
+				} else if (diffDays < 365) {
+					const months = Math.floor(diffDays / 30);
+					return `${months}个月前发布`;
+				} else {
+					const years = Math.floor(diffDays / 365);
+					return `${years}年前发布`;
+				}
+			}
+			</script>
+			
+			<!-- Structured Data (JSON-LD) -->
+			<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "云云工具箱",
+				"alternateName": "ITMagical Tools",
+				"url": "https://itmagical.netlify.app",
+				"description": "提供31个免费在线工具，包括图片处理、文档转换、音视频编辑、编码转换等专业工具",
+				"inLanguage": ["zh-CN", "en", "ja", "ko"],
+				"potentialAction": {
+					"@type": "SearchAction",
+					"target": "https://itmagical.netlify.app/search?q={search_term_string}",
+					"query-input": "required name=search_term_string"
+				},
+				"publisher": {
+					"@type": "Organization",
+					"name": "云云工具箱",
+					"url": "https://itmagical.netlify.app",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "https://itmagical.netlify.app/images/logo.png"
+					}
+				},
+				"mainEntity": {
+					"@type": "ItemList",
+					"name": "在线工具集合",
+					"description": "专业的在线工具集合，涵盖图片处理、文档转换、音视频编辑等多个领域",
+					"numberOfItems": 31,
+					"itemListElement": [
+						{
+							"@type": "SoftwareApplication",
+							"name": "图片压缩工具",
+							"description": "专业的图片压缩工具，支持JPEG、PNG等主流格式",
+							"url": "https://itmagical.netlify.app/tools/图片压缩工具.html",
+							"applicationCategory": "MultimediaApplication",
+							"operatingSystem": "Web Browser",
+							"offers": {
+								"@type": "Offer",
+								"price": "0",
+								"priceCurrency": "USD"
+							}
+						},
+						{
+							"@type": "SoftwareApplication",
+							"name": "PDF工具集",
+							"description": "专业的PDF处理工具，支持多种格式互相转换",
+							"url": "https://itmagical.netlify.app/tools/pdf工具集.html",
+							"applicationCategory": "ProductivityApplication",
+							"operatingSystem": "Web Browser",
+							"offers": {
+								"@type": "Offer",
+								"price": "0",
+								"priceCurrency": "USD"
+							}
+						},
+						{
+							"@type": "SoftwareApplication",
+							"name": "格式转换工具",
+							"description": "强大的多媒体格式转换工具，支持图片、文档互转",
+							"url": "https://itmagical.netlify.app/tools/格式转换工具.html",
+							"applicationCategory": "MultimediaApplication",
+							"operatingSystem": "Web Browser",
+							"offers": {
+								"@type": "Offer",
+								"price": "0",
+								"priceCurrency": "USD"
+							}
+						}
+					]
+				}
+			}
+			</script>
+			
+			<!-- Google Analytics (Replace with your tracking ID) -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'GA_TRACKING_ID');
+			</script>
 
 	</body>
 </html>

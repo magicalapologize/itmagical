@@ -1,10 +1,17 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>格式转换工具 - 云云的AI工具箱</title>
+    <title>格式转换工具 - 在线文件格式转换器 | 支持图片、文档、音频、视频转换</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <meta name="description" content="专业的在线格式转换工具，支持图片、文档、音频、视频等多种文件格式转换。免费、快速、安全的文件格式转换服务，无需安装软件。" />
+    <meta name="keywords" content="格式转换,文件转换,图片转换,文档转换,音频转换,视频转换,在线转换器,免费转换工具" />
+    <meta name="author" content="云云的AI工具箱" />
+    <meta property="og:title" content="格式转换工具 - 在线文件格式转换器" />
+    <meta property="og:description" content="专业的在线格式转换工具，支持图片、文档、音频、视频等多种文件格式转换" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://itmagical.com/tools/格式转换工具.html" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
     <style>
         .converter-tool {
             max-width: 1200px;
@@ -224,33 +231,151 @@
                 border-radius: 4px;
             }
         }
+
+        /* 新增内容区域样式 */
+        .tool-intro {
+            font-size: 1.1em;
+            color: #666;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .tool-keywords {
+            margin: 20px 0;
+        }
+        .keyword {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #007acc;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            border: 1px solid #bbdefb;
+        }
+        .tool-guide, .tool-description, .tool-promotion, .tool-advantages, .tool-scenarios, .tool-faq {
+            background: #fff;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tool-guide h2, .tool-description h2, .tool-promotion h2, .tool-advantages h2, .tool-scenarios h2, .tool-faq h2 {
+            color: #007acc;
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        .guide-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .guide-step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #007acc;
+        }
+        .guide-step h3 {
+            color: #007acc;
+            margin-bottom: 10px;
+        }
+        .feature-grid, .advantages-grid, .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-item, .advantage-item, .scenario-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover, .advantage-item:hover, .scenario-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .feature-item h3, .advantage-item h3, .scenario-item h3 {
+            color: #007acc;
+            margin-bottom: 10px;
+        }
+        .promotion-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid #007acc;
+        }
+        .faq-list {
+            margin-top: 20px;
+        }
+        .faq-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #007acc;
+        }
+        .faq-item h3 {
+            color: #007acc;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .faq-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .copyright {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid #e9ecef;
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .tool-guide, .tool-description, .tool-promotion, .tool-advantages, .tool-scenarios, .tool-faq {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            .guide-content, .feature-grid, .advantages-grid, .scenarios-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .keyword {
+                font-size: 0.8em;
+                padding: 4px 10px;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
     <div id="page-wrapper">
-        <!-- Header -->
-        <section id="header">
-            <h1><a href="index.html">云云的AI工具箱</a></h1>
-            <nav id="nav">
-                <ul>
-                    <li><a href="index.html">主页</a></li>
-                    <li><a href="文本处理工具.html">文本处理</a></li>
-                    <li><a href="图片压缩工具.html">图片处理</a></li>
-                    <li class="current"><a href="格式转换工具.html">格式转换</a></li>
-                    <li><a href="音频处理工具.html">音频处理</a></li>
-                    <li><a href="视频处理工具.html">视频处理</a></li>
-                    <li><a href="pdf工具集.html">PDF工具</a></li>
-                </ul>
-            </nav>
-        </section>
+        <!-- 导航栏组件 -->
+        <div id="navbar-container"></div>
 
         <!-- Main -->
         <section id="main">
             <div class="container">
                 <div class="converter-tool">
+                    <!-- 工具名称和介绍 -->
                     <header class="major">
-                        <h2>格式转换工具</h2>
-                        <p>支持图片、文档、音频、视频等多种文件格式之间的转换（欢迎反馈bug）</p>
+                        <h1>格式转换工具</h1>
+                        <p class="tool-intro">专业的在线文件格式转换器，支持图片、文档、音频、视频等多种格式互转，免费快速安全</p>
+                        <div class="tool-keywords">
+                            <span class="keyword">格式转换</span>
+                            <span class="keyword">图片转换</span>
+                            <span class="keyword">文档转换</span>
+                            <span class="keyword">音频转换</span>
+                            <span class="keyword">视频转换</span>
+                            <span class="keyword">批量转换</span>
+                        </div>
                     </header>
                     
                     <!-- 文件上传区域 -->
@@ -1292,6 +1417,196 @@
             selectedFiles = [];
             document.getElementById('fileInput').value = '';
         }
+    </script>
+
+    <!-- 使用指南 -->
+    <section class="tool-guide">
+        <h2>使用指南</h2>
+        <div class="guide-content">
+            <div class="guide-step">
+                <h3>1. 选择文件</h3>
+                <p>点击上传区域或拖拽文件到指定位置，支持多种格式文件</p>
+            </div>
+            <div class="guide-step">
+                <h3>2. 选择转换类型</h3>
+                <p>根据文件类型选择对应的转换选项卡：图片、文档、音频或视频</p>
+            </div>
+            <div class="guide-step">
+                <h3>3. 设置转换参数</h3>
+                <p>选择目标格式，调整质量、尺寸等转换参数</p>
+            </div>
+            <div class="guide-step">
+                <h3>4. 开始转换</h3>
+                <p>点击转换按钮，等待处理完成后下载转换后的文件</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工具详细介绍 -->
+    <section class="tool-description">
+        <h2>工具详细介绍</h2>
+        <p>格式转换工具是一个功能强大的在线文件格式转换平台，支持图片、文档、音频、视频等多种文件类型的格式转换。无论您需要将图片转换为不同格式、压缩文档、转换音频编码还是调整视频格式，都能在这里找到完美的解决方案。</p>
+        
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>图片转换</h3>
+                <p>支持JPG、PNG、WebP、GIF、BMP、TIFF、SVG、ICO等格式互转，可调整质量和尺寸</p>
+            </div>
+            <div class="feature-item">
+                <h3>文档转换</h3>
+                <p>支持PDF、DOCX、TXT、RTF、HTML、Markdown等格式转换，保持原有格式</p>
+            </div>
+            <div class="feature-item">
+                <h3>音频转换</h3>
+                <p>支持MP3、WAV、FLAC、AAC、OGG等音频格式转换，可调整比特率和采样率</p>
+            </div>
+            <div class="feature-item">
+                <h3>视频转换</h3>
+                <p>支持MP4、AVI、MOV、WMV、FLV、MKV等视频格式转换，可调整分辨率和质量</p>
+            </div>
+            <div class="feature-item">
+                <h3>批量处理</h3>
+                <p>支持多文件同时转换，提高工作效率，节省宝贵时间</p>
+            </div>
+            <div class="feature-item">
+                <h3>高级工具</h3>
+                <p>提供背景去除、图片压缩、水印添加等专业功能</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 推广语 -->
+    <section class="tool-promotion">
+        <h2>为什么选择我们的格式转换工具？</h2>
+        <p class="promotion-text">在数字化时代，文件格式转换是日常工作中不可避免的需求。我们的格式转换工具不仅支持多种格式，更注重转换质量和用户体验。无需安装任何软件，无需注册账号，打开浏览器即可享受专业级的文件转换服务。选择我们，让文件格式转换变得简单高效！</p>
+    </section>
+
+    <!-- 工具优势与核心功能 -->
+    <section class="tool-advantages">
+        <h2>工具优势与核心功能</h2>
+        <div class="advantages-grid">
+            <div class="advantage-item">
+                <h3>🔄 格式全面</h3>
+                <p>支持50+种文件格式转换，覆盖图片、文档、音频、视频等主流格式</p>
+            </div>
+            <div class="advantage-item">
+                <h3>⚡ 转换快速</h3>
+                <p>采用先进的转换算法，处理速度快，大文件也能快速完成转换</p>
+            </div>
+            <div class="advantage-item">
+                <h3>🎯 质量保证</h3>
+                <p>智能优化转换参数，确保转换后文件质量，支持自定义设置</p>
+            </div>
+            <div class="advantage-item">
+                <h3>📱 多端兼容</h3>
+                <p>完美支持PC、平板、手机等设备，随时随地进行文件转换</p>
+            </div>
+            <div class="advantage-item">
+                <h3>🔒 隐私安全</h3>
+                <p>本地处理技术，文件不上传服务器，保护您的隐私和数据安全</p>
+            </div>
+            <div class="advantage-item">
+                <h3>💰 完全免费</h3>
+                <p>所有功能完全免费使用，无隐藏费用，无使用限制</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 应用场景 -->
+    <section class="tool-scenarios">
+        <h2>应用场景</h2>
+        <div class="scenarios-grid">
+            <div class="scenario-item">
+                <h3>设计工作</h3>
+                <p>图片格式转换、尺寸调整、背景去除、格式优化</p>
+            </div>
+            <div class="scenario-item">
+                <h3>办公文档</h3>
+                <p>PDF转换、文档格式统一、批量处理、格式兼容</p>
+            </div>
+            <div class="scenario-item">
+                <h3>媒体制作</h3>
+                <p>音频格式转换、视频压缩、编码调整、格式适配</p>
+            </div>
+            <div class="scenario-item">
+                <h3>网站开发</h3>
+                <p>图片优化、格式标准化、文件压缩、性能优化</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section class="tool-faq">
+        <h2>常见问题</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <h3>Q: 支持哪些文件格式转换？</h3>
+                <p>A: 支持图片（JPG、PNG、WebP等）、文档（PDF、DOCX、TXT等）、音频（MP3、WAV、FLAC等）、视频（MP4、AVI、MOV等）等50+种格式。</p>
+            </div>
+            <div class="faq-item">
+                <h3>Q: 转换后的文件质量如何？</h3>
+                <p>A: 采用专业的转换算法，支持自定义质量设置，确保转换后文件质量满足您的需求。</p>
+            </div>
+            <div class="faq-item">
+                <h3>Q: 是否支持批量转换？</h3>
+                <p>A: 是的，支持多文件同时上传和批量转换，大大提高工作效率。</p>
+            </div>
+            <div class="faq-item">
+                <h3>Q: 文件大小有限制吗？</h3>
+                <p>A: 建议单个文件不超过100MB，以确保最佳的转换速度和用户体验。</p>
+            </div>
+            <div class="faq-item">
+                <h3>Q: 转换过程是否安全？</h3>
+                <p>A: 完全安全，所有转换都在您的浏览器本地完成，文件不会上传到服务器。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚组件 -->
+    <div id="footer-container"></div>
+    
+    <!-- 版权信息 -->
+    <div class="copyright">
+        <p>@2025 专业的在线格式转换工具 - 让文件格式转换更简单便捷</p>
+    </div>
+
+    <!-- 加载导航栏和页脚组件 -->
+    <script>
+        // 加载导航栏
+        fetch('../components/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.log('导航栏加载失败，使用默认导航');
+                document.getElementById('navbar-container').innerHTML = `
+                    <section id="header">
+                        <h1><a href="../index.html">云云的工具箱</a></h1>
+                        <nav id="nav">
+                            <ul>
+                                <li><a href="../index.html">首页</a></li>
+                                <li><a href="文本处理工具.html">文本处理</a></li>
+                                <li><a href="图片压缩工具.html">图片压缩</a></li>
+                                <li class="current"><a href="格式转换工具.html">格式转换</a></li>
+                                <li><a href="音频处理工具.html">音频处理</a></li>
+                                <li><a href="视频处理工具.html">视频处理</a></li>
+                                <li><a href="pdf工具集.html">PDF工具</a></li>
+                            </ul>
+                        </nav>
+                    </section>
+                `;
+            });
+        
+        // 加载页脚
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.log('页脚加载失败');
+            });
     </script>
 </body>
 </html>

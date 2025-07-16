@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>文本处理工具 - 云云的AI工具箱</title>
+    <title>文本处理工具 - 在线免费文本编辑器 | 格式化/转换/翻译 | 云云的工具箱</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <meta name="description" content="免费在线文本处理工具，支持文本格式化、编码转换、翻译、正则匹配、文本分析等功能，提供密码生成、UUID生成等实用工具。" />
+    <meta name="keywords" content="文本处理,在线编辑器,文本格式化,编码转换,文本翻译,正则表达式,文本分析,密码生成" />
+    <meta name="author" content="云云的工具箱" />
+    <meta property="og:title" content="文本处理工具 - 在线免费文本编辑器" />
+    <meta property="og:description" content="免费在线文本处理工具，支持多种文本操作和转换功能" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="canonical" href="https://itmagical.com/tools/文本处理工具.html" />
     <style>
         .text-tool {
             max-width: 1200px;
@@ -201,34 +208,197 @@
             color: #007acc;
             font-weight: 500;
         }
+
+        /* 新增内容样式 */
+        .tool-intro {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .tool-intro h1 {
+            margin: 0 0 1rem 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .tool-intro p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .tool-guide, .tool-description, .tool-promotion, .tool-advantages, .tool-scenarios, .tool-faq {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tool-guide h2, .tool-description h2, .tool-promotion h2, .tool-advantages h2, .tool-scenarios h2, .tool-faq h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .guide-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .guide-step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .guide-step h3 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-grid, .advantages-grid, .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item, .advantage-item, .scenario-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover, .advantage-item:hover, .scenario-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-item h3, .advantage-item h3, .scenario-item h3 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .promotion-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            color: #555;
+            font-style: italic;
+        }
+
+        .faq-list {
+            margin-top: 1.5rem;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .faq-item h3 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .copyright p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .tool-intro h1 {
+                font-size: 2rem;
+            }
+            
+            .tool-intro p {
+                font-size: 1rem;
+            }
+            
+            .keywords {
+                justify-content: center;
+            }
+            
+            .guide-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid, .advantages-grid, .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tool-guide, .tool-description, .tool-promotion, .tool-advantages, .tool-scenarios, .tool-faq {
+                padding: 1rem;
+                margin: 2rem 0;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
     <div id="page-wrapper">
-        <!-- Header -->
-        <section id="header">
-            <h1><a href="index.html">云云的AI工具箱</a></h1>
-            <nav id="nav">
-                <ul>
-                    <li><a href="index.html">主页</a></li>
-                    <li class="current"><a href="文本处理工具.html">文本处理工具</a></li>
-                    <li><a href="图片压缩工具.html">图片压缩</a></li>
-                    <li><a href="格式转换工具.html">格式转换</a></li>
-                    <li><a href="音频处理工具.html">音频处理</a></li>
-                    <li><a href="视频处理工具.html">视频处理</a></li>
-                    <li><a href="pdf工具集.html">PDF工具</a></li>
-                </ul>
-            </nav>
-        </section>
+        <!-- 导航栏组件 -->
+        <div id="navbar-container"></div>
 
         <!-- Main -->
         <section id="main">
             <div class="container">
+                <!-- 工具名称和介绍 -->
+                <header class="major">
+                    <h1>文本处理工具</h1>
+                    <p class="tool-intro">强大的在线文本编辑器，支持格式化、转换、翻译、分析等多种文本处理功能</p>
+                    <div class="tool-keywords">
+                        <span class="keyword">文本处理</span>
+                        <span class="keyword">格式化</span>
+                        <span class="keyword">编码转换</span>
+                        <span class="keyword">文本翻译</span>
+                        <span class="keyword">正则匹配</span>
+                        <span class="keyword">密码生成</span>
+                    </div>
+                </header>
+
+                <!-- 工具功能实现区域 -->
                 <div class="text-tool">
-                    <header class="major">
-                        <h2>文本处理工具</h2>
-                        <p>提供文本格式化、转换、翻译等多种文本处理功能</p>
-                    </header>
                     
                     <!-- 输入区域 -->
                     <div class="tool-section">
@@ -418,6 +588,157 @@
                 </div>
             </div>
         </section>
+
+        <!-- 使用指南 -->
+        <section class="tool-guide">
+            <h2>使用指南</h2>
+            <div class="guide-content">
+                <div class="guide-step">
+                    <h3>1. 输入文本</h3>
+                    <p>在左侧文本框中输入或粘贴需要处理的文本内容</p>
+                </div>
+                <div class="guide-step">
+                    <h3>2. 选择功能</h3>
+                    <p>点击上方选项卡选择所需功能：格式化、转换、翻译、分析、正则匹配或生成工具</p>
+                </div>
+                <div class="guide-step">
+                    <h3>3. 执行操作</h3>
+                    <p>点击相应的功能按钮执行文本处理操作</p>
+                </div>
+                <div class="guide-step">
+                    <h3>4. 查看结果</h3>
+                    <p>处理结果将显示在右侧结果区域，可直接复制使用</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具详细介绍 -->
+        <section class="tool-description">
+            <h2>工具详细介绍</h2>
+            <p>文本处理工具是一个功能强大的在线文本编辑和处理平台，集成了多种常用的文本操作功能。无论您是开发者、编辑、学生还是办公人员，都能在这里找到适合的文本处理解决方案。</p>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>格式化功能</h3>
+                    <p>提供文本大小写转换、去除空格、添加行号等基础格式化操作</p>
+                </div>
+                <div class="feature-item">
+                    <h3>编码转换</h3>
+                    <p>支持Base64、URL编码、HTML实体等多种编码格式的相互转换</p>
+                </div>
+                <div class="feature-item">
+                    <h3>文本分析</h3>
+                    <p>实时统计字符数、词数、行数，分析文本可读性和复杂度</p>
+                </div>
+                <div class="feature-item">
+                    <h3>正则匹配</h3>
+                    <p>强大的正则表达式工具，支持模式匹配、替换和数据提取</p>
+                </div>
+                <div class="feature-item">
+                    <h3>内容生成</h3>
+                    <p>生成随机密码、UUID、Lorem Ipsum文本和时间戳</p>
+                </div>
+                <div class="feature-item">
+                    <h3>翻译功能</h3>
+                    <p>集成多语言翻译服务，支持实时文本翻译</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推广语 -->
+        <section class="tool-promotion">
+            <h2>为什么选择我们的文本处理工具？</h2>
+            <p class="promotion-text">在信息时代，高效的文本处理能力是提升工作效率的关键。我们的文本处理工具不仅功能全面，更注重用户体验，让复杂的文本操作变得简单直观。选择我们，就是选择专业、高效、可靠的文本处理解决方案。</p>
+        </section>
+
+        <!-- 工具优势与核心功能 -->
+        <section class="tool-advantages">
+            <h2>工具优势与核心功能</h2>
+            <div class="advantages-grid">
+                <div class="advantage-item">
+                    <h3>🚀 高效便捷</h3>
+                    <p>一站式文本处理，无需安装软件，打开浏览器即可使用</p>
+                </div>
+                <div class="advantage-item">
+                    <h3>🔧 功能丰富</h3>
+                    <p>集成6大类30+种文本处理功能，满足各种使用场景</p>
+                </div>
+                <div class="advantage-item">
+                    <h3>🎯 精准处理</h3>
+                    <p>支持正则表达式和批量操作，处理结果准确可靠</p>
+                </div>
+                <div class="advantage-item">
+                    <h3>📱 跨平台兼容</h3>
+                    <p>完美支持PC、平板、手机等各种设备和浏览器</p>
+                </div>
+                <div class="advantage-item">
+                    <h3>🔒 安全可靠</h3>
+                    <p>本地处理，数据不上传服务器，保护您的隐私安全</p>
+                </div>
+                <div class="advantage-item">
+                    <h3>⚡ 实时预览</h3>
+                    <p>即时显示处理结果，支持实时编辑和调整</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 应用场景 -->
+        <section class="tool-scenarios">
+            <h2>应用场景</h2>
+            <div class="scenarios-grid">
+                <div class="scenario-item">
+                    <h3>开发编程</h3>
+                    <p>代码格式化、编码转换、正则调试、数据生成</p>
+                </div>
+                <div class="scenario-item">
+                    <h3>内容编辑</h3>
+                    <p>文章排版、格式统一、字数统计、可读性分析</p>
+                </div>
+                <div class="scenario-item">
+                    <h3>数据处理</h3>
+                    <p>批量替换、数据清洗、格式转换、信息提取</p>
+                </div>
+                <div class="scenario-item">
+                    <h3>学习研究</h3>
+                    <p>文本分析、语言学习、翻译辅助、资料整理</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题 -->
+        <section class="tool-faq">
+            <h2>常见问题</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>Q: 工具是否免费使用？</h3>
+                    <p>A: 是的，我们的文本处理工具完全免费，无需注册即可使用所有功能。</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q: 处理的文本数据是否安全？</h3>
+                    <p>A: 绝对安全。所有文本处理都在您的浏览器本地完成，数据不会上传到服务器。</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q: 支持处理多大的文本文件？</h3>
+                    <p>A: 理论上没有大小限制，但建议单次处理文本不超过10MB以确保最佳性能。</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q: 正则表达式功能如何使用？</h3>
+                    <p>A: 在正则匹配选项卡中输入正则表达式模式，工具会自动匹配并高亮显示结果。</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q: 翻译功能支持哪些语言？</h3>
+                    <p>A: 支持中英文互译，以及其他主流语言的翻译服务。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚组件 -->
+        <div id="footer-container"></div>
+        
+        <!-- 版权信息 -->
+        <div class="copyright">
+            <p>@2025 专业的在线文本处理工具 - 让文本处理更简单高效</p>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -976,6 +1297,45 @@
 
         // 初始化
         updateStats();
+    </script>
+
+    <!-- 加载导航栏和页脚组件 -->
+    <script>
+        // 加载导航栏
+        fetch('../components/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.log('导航栏加载失败，使用默认导航');
+                document.getElementById('navbar-container').innerHTML = `
+                    <section id="header">
+                        <h1><a href="../index.html">云云的工具箱</a></h1>
+                        <nav id="nav">
+                            <ul>
+                                <li><a href="../index.html">首页</a></li>
+                                <li class="current"><a href="文本处理工具.html">文本处理工具</a></li>
+                                <li><a href="图片压缩工具.html">图片压缩</a></li>
+                                <li><a href="格式转换工具.html">格式转换</a></li>
+                                <li><a href="音频处理工具.html">音频处理</a></li>
+                                <li><a href="视频处理工具.html">视频处理</a></li>
+                                <li><a href="pdf工具集.html">PDF工具</a></li>
+                            </ul>
+                        </nav>
+                    </section>
+                `;
+            });
+        
+        // 加载页脚
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.log('页脚加载失败');
+            });
     </script>
 </body>
 </html>
