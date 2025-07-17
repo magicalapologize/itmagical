@@ -606,8 +606,14 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn" onclick="generateQR()">🎯 生成二维码</button>
+                    <button class="btn" onclick="generateQR()" id="generateBtn">
+                        <span id="generateBtnText">🎯 生成二维码</span>
+                        <span id="loadingIndicator" style="display: none;">⏳ 库加载中...</span>
+                    </button>
                     <button class="btn btn-secondary" onclick="clearForm()">🗑️ 清空表单</button>
+                </div>
+                <div id="libraryStatus" style="margin-top: 15px; padding: 12px; border-radius: 8px; display: none; text-align: center; font-size: 14px;">
+                    <span id="statusText"></span>
                 </div>
             </div>
             
@@ -648,6 +654,28 @@
                             <input type="color" id="backgroundColor" value="#ffffff">
                             <div class="color-preview" style="background-color: #ffffff;"></div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="logoUpload">中心图标 (可选)</label>
+                        <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)">
+                        <small style="color: #666; font-size: 12px;">支持PNG、JPG格式，建议尺寸不超过二维码的20%</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="logoSize">图标大小</label>
+                        <select id="logoSize">
+                            <option value="0.1">小 (10%)</option>
+                            <option value="0.15" selected>中 (15%)</option>
+                            <option value="0.2">大 (20%)</option>
+                            <option value="0.25">超大 (25%)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="logoPreview" style="display: none; text-align: center; margin-top: 10px;">
+                    <img id="logoImage" style="max-width: 100px; max-height: 100px; border: 1px solid #ddd; border-radius: 5px;">
+                    <div style="margin-top: 5px;">
+                        <button type="button" class="btn btn-danger" onclick="removeLogo()" style="font-size: 12px; padding: 5px 10px;">移除图标</button>
                     </div>
                 </div>
             </div>
@@ -805,7 +833,7 @@
                     <span class="faq-icon">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>目前我们的工具暂不支持添加Logo功能。如果需要带Logo的二维码，建议使用专业的图像编辑软件在生成后添加。</p>
+                    <p>是的！我们的工具支持在二维码中心添加自定义图标。在自定义设置中上传您的图标文件，系统会自动将其放置在二维码中心。建议使用清晰的PNG或JPG格式图片，尺寸不要过大以免影响扫码效果。</p>
                 </div>
             </div>
             
@@ -843,19 +871,164 @@
     <div id="notification" class="notification"></div>
     
     <!-- QR码生成库 -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // QRCode库加载管理
+        let qrCodeLibLoaded = false;
+        let loadAttempts = 0;
+        const maxAttempts = 4;
+        
+        // 备用CDN列表
+        const cdnList = [
+            'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js',
+            'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js',
+            'https://cdn.bootcdn.net/ajax/libs/qrcode/1.5.3/qrcode.min.js'
+        ];
+        
+        // 加载QRCode库
+        function loadQRCodeLib(index = 0) {
+            if (index >= cdnList.length) {
+                 console.error('所有CDN都加载失败');
+                 if (document.readyState === 'loading') {
+                     document.addEventListener('DOMContentLoaded', function() {
+                         showNotification('二维码库加载失败，请检查网络连接后刷新页面', 'error');
+                         updateLibraryStatus();
+                     });
+                 } else {
+                     showNotification('二维码库加载失败，请检查网络连接后刷新页面', 'error');
+                     updateLibraryStatus();
+                 }
+                 return;
+             }
+            
+            loadAttempts++;
+             console.log(`尝试加载QRCode库 (${loadAttempts}/${maxAttempts}): ${cdnList[index]}`);
+             
+             // 更新加载状态
+             if (document.readyState !== 'loading') {
+                 updateLibraryStatus();
+             }
+             
+             const script = document.createElement('script');
+             script.src = cdnList[index];
+            
+            script.onload = function() {
+                // 延迟检查，确保库完全加载
+                setTimeout(() => {
+                    if (typeof QRCode !== 'undefined') {
+                        qrCodeLibLoaded = true;
+                         console.log('QRCode库加载成功');
+                         // 更新状态显示
+                         if (document.readyState === 'loading') {
+                             document.addEventListener('DOMContentLoaded', function() {
+                                 showNotification('二维码库加载成功', 'success');
+                                 updateLibraryStatus();
+                             });
+                         } else {
+                             showNotification('二维码库加载成功', 'success');
+                             updateLibraryStatus();
+                         }
+                    } else {
+                        console.warn('QRCode对象未定义，尝试下一个CDN');
+                        loadQRCodeLib(index + 1);
+                    }
+                }, 100);
+            };
+            
+            script.onerror = function() {
+                console.error(`CDN ${index + 1} 加载失败: ${cdnList[index]}`);
+                loadQRCodeLib(index + 1);
+            };
+            
+            // 设置超时
+            setTimeout(() => {
+                if (!qrCodeLibLoaded && loadAttempts <= index + 1) {
+                    console.warn(`CDN ${index + 1} 加载超时`);
+                    loadQRCodeLib(index + 1);
+                }
+            }, 5000);
+            
+            document.head.appendChild(script);
+        }
+        
+        // 开始加载
+        loadQRCodeLib();
+    </script>
     
     <script>
         // 全局变量
         let currentType = 'text';
         let currentQRData = '';
+        let logoImage = null;
+        let logoDataUrl = null;
         
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadComponents();
             initializeEventListeners();
             updateColorPreviews();
+            updateLibraryStatus();
         });
+        
+        // 更新库加载状态显示
+        function updateLibraryStatus() {
+            const statusDiv = document.getElementById('libraryStatus');
+            const statusText = document.getElementById('statusText');
+            const generateBtn = document.getElementById('generateBtn');
+            const generateBtnText = document.getElementById('generateBtnText');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            
+            if (!statusDiv || !statusText || !generateBtn) {
+                // 如果元素还没有加载，稍后重试
+                setTimeout(updateLibraryStatus, 500);
+                return;
+            }
+            
+            if (typeof QRCode !== 'undefined' && qrCodeLibLoaded) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.style.border = '1px solid #c3e6cb';
+                statusText.textContent = '✅ 二维码库已就绪，可以开始生成二维码';
+                generateBtn.disabled = false;
+                generateBtn.style.opacity = '1';
+                if (generateBtnText) generateBtnText.style.display = 'inline';
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+                
+                // 3秒后隐藏成功提示
+                setTimeout(() => {
+                    if (statusDiv.style.backgroundColor === 'rgb(212, 237, 218)') {
+                        statusDiv.style.display = 'none';
+                    }
+                }, 3000);
+            } else if (loadAttempts > 0 && loadAttempts < maxAttempts) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.style.border = '1px solid #ffeaa7';
+                statusText.textContent = `⏳ 正在加载二维码库... (尝试 ${loadAttempts}/${maxAttempts})`;
+                generateBtn.disabled = true;
+                generateBtn.style.opacity = '0.6';
+                if (generateBtnText) generateBtnText.style.display = 'none';
+                if (loadingIndicator) loadingIndicator.style.display = 'inline';
+                
+                // 继续检查状态
+                setTimeout(updateLibraryStatus, 1000);
+            } else if (loadAttempts >= maxAttempts && !qrCodeLibLoaded) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.style.border = '1px solid #f5c6cb';
+                statusText.innerHTML = '❌ 二维码库加载失败，请 <a href="javascript:location.reload()" style="color: #721c24; text-decoration: underline;">刷新页面</a> 重试';
+                generateBtn.disabled = true;
+                generateBtn.style.opacity = '0.6';
+                if (generateBtnText) generateBtnText.style.display = 'inline';
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+            } else {
+                // 初始状态，继续检查
+                setTimeout(updateLibraryStatus, 1000);
+            }
+        }
         
         // 初始化事件监听器
         function initializeEventListeners() {
@@ -976,6 +1149,22 @@
         
         // 生成二维码
         function generateQR() {
+            // 检查QRCode库是否可用
+            if (typeof QRCode === 'undefined' || !qrCodeLibLoaded) {
+                if (loadAttempts < maxAttempts) {
+                    showNotification('二维码库正在加载中，请稍后重试...', 'warning');
+                    // 3秒后自动重试
+                    setTimeout(() => {
+                        if (typeof QRCode !== 'undefined') {
+                            generateQR();
+                        }
+                    }, 3000);
+                } else {
+                    showNotification('二维码库加载失败，请刷新页面重试', 'error');
+                }
+                return;
+            }
+            
             const data = generateQRData();
             
             if (!data) {
@@ -996,13 +1185,20 @@
                 color: {
                     dark: fgColor,
                     light: bgColor
-                }
+                },
+                margin: 2
             };
             
             QRCode.toCanvas(canvas, data, options, function(error) {
                 if (error) {
+                    console.error('QRCode generation error:', error);
                     showNotification('二维码生成失败：' + error.message, 'error');
                     return;
+                }
+                
+                // 如果有logo，添加到二维码中心
+                if (logoDataUrl) {
+                    addLogoToQR(canvas, size);
                 }
                 
                 currentQRData = data;
@@ -1119,6 +1315,65 @@
             });
         }
         
+        // 处理logo上传
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // 检查文件类型
+            if (!file.type.startsWith('image/')) {
+                showNotification('请选择图片文件', 'error');
+                return;
+            }
+            
+            // 检查文件大小（限制5MB）
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('图片文件过大，请选择小于5MB的图片', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                logoDataUrl = e.target.result;
+                const logoImg = document.getElementById('logoImage');
+                logoImg.src = logoDataUrl;
+                document.getElementById('logoPreview').style.display = 'block';
+                showNotification('图标上传成功');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 移除logo
+        function removeLogo() {
+            logoDataUrl = null;
+            document.getElementById('logoUpload').value = '';
+            document.getElementById('logoPreview').style.display = 'none';
+            showNotification('图标已移除');
+        }
+        
+        // 添加logo到二维码
+        function addLogoToQR(canvas, qrSize) {
+            if (!logoDataUrl) return;
+            
+            const ctx = canvas.getContext('2d');
+            const logoSizeRatio = parseFloat(document.getElementById('logoSize').value);
+            const logoSize = qrSize * logoSizeRatio;
+            
+            const img = new Image();
+            img.onload = function() {
+                const x = (qrSize - logoSize) / 2;
+                const y = (qrSize - logoSize) / 2;
+                
+                // 在logo位置绘制白色背景（增加对比度）
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(x - 5, y - 5, logoSize + 10, logoSize + 10);
+                
+                // 绘制logo
+                ctx.drawImage(img, x, y, logoSize, logoSize);
+            };
+            img.src = logoDataUrl;
+        }
+        
         // 清空表单
         function clearForm() {
             document.querySelectorAll('input, textarea, select').forEach(element => {
@@ -1131,6 +1386,9 @@
                     element.value = '';
                 }
             });
+            
+            // 清空logo
+            removeLogo();
             
             document.getElementById('qrPreview').style.display = 'none';
             updateColorPreviews();

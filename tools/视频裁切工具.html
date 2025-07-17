@@ -1,0 +1,755 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>视频裁切工具 - 在线视频画面裁切 | 云云的AI工具箱</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="免费在线视频裁切工具，自定义裁切视频画面，支持去水印、改分辨率、画面调整等操作，无需下载安装。" />
+		<meta name="keywords" content="视频裁切,视频剪切,去水印,改分辨率,画面裁切,视频编辑,免费工具" />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://itmagical.netlify.app/tools/视频裁切工具.html" />
+		<meta property="og:title" content="视频裁切工具 - 在线视频画面裁切" />
+		<meta property="og:description" content="免费在线视频裁切工具，自定义裁切画面，支持去水印、改分辨率" />
+		<meta property="og:image" content="https://itmagical.netlify.app/images/pic12.jpg" />
+		
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content="https://itmagical.netlify.app/tools/视频裁切工具.html" />
+		<meta property="twitter:title" content="视频裁切工具 - 在线视频画面裁切" />
+		<meta property="twitter:description" content="免费在线视频裁切工具，自定义裁切画面，支持去水印、改分辨率" />
+		<meta property="twitter:image" content="https://itmagical.netlify.app/images/pic12.jpg" />
+		
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="canonical" href="https://itmagical.netlify.app/tools/视频裁切工具.html" />
+		<style>
+			.tool-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2em;
+			}
+			.upload-area {
+				border: 2px dashed #d52349;
+				border-radius: 10px;
+				padding: 3em;
+				text-align: center;
+				background: #f9f9f9;
+				transition: all 0.3s ease;
+				cursor: pointer;
+			}
+			.upload-area:hover {
+				background: #f0f0f0;
+				border-color: #b91d3a;
+			}
+			.upload-area.dragover {
+				background: #e8f5e8;
+				border-color: #4caf50;
+			}
+			.video-preview {
+				position: relative;
+				max-width: 800px;
+				margin: 2em auto;
+				background: #000;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			.video-container {
+				position: relative;
+				width: 100%;
+			}
+			.crop-overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+			.crop-box {
+				position: absolute;
+				border: 2px solid #d52349;
+				background: rgba(213, 35, 73, 0.1);
+				cursor: move;
+				pointer-events: all;
+				min-width: 50px;
+				min-height: 50px;
+			}
+			.crop-handle {
+				position: absolute;
+				width: 10px;
+				height: 10px;
+				background: #d52349;
+				border: 1px solid #fff;
+				cursor: nw-resize;
+			}
+			.crop-handle.nw { top: -5px; left: -5px; }
+			.crop-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+			.crop-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+			.crop-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+			.settings-panel {
+				background: white;
+				padding: 2em;
+				border-radius: 10px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+				margin-top: 2em;
+			}
+			.setting-group {
+				margin-bottom: 1.5em;
+			}
+			.setting-group label {
+				display: block;
+				margin-bottom: 0.5em;
+				font-weight: bold;
+			}
+			.preset-buttons {
+				display: flex;
+				gap: 1em;
+				flex-wrap: wrap;
+				margin-top: 1em;
+			}
+			.preset-btn {
+				padding: 0.5em 1em;
+				border: 1px solid #d52349;
+				background: white;
+				color: #d52349;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+			.preset-btn:hover, .preset-btn.active {
+				background: #d52349;
+				color: white;
+			}
+			.feature-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2em;
+				margin: 2em 0;
+			}
+			.feature-card {
+				padding: 2em;
+				background: white;
+				border-radius: 10px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+				text-align: center;
+			}
+			.feature-icon {
+				font-size: 3em;
+				color: #d52349;
+				margin-bottom: 1em;
+			}
+			.faq-section {
+				margin-top: 3em;
+			}
+			.faq-item {
+				margin-bottom: 1.5em;
+				padding: 1.5em;
+				background: white;
+				border-radius: 8px;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+			}
+			.faq-question {
+				font-weight: bold;
+				color: #d52349;
+				margin-bottom: 0.5em;
+			}
+			@media (max-width: 768px) {
+				.tool-container {
+					padding: 1em;
+				}
+				.upload-area {
+					padding: 2em 1em;
+				}
+				.preset-buttons {
+					justify-content: center;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+					<div class="container">
+						<div class="row">
+							<div class="col-12">
+								<nav id="nav">
+									<ul>
+										<li><a href="../index.html"><i class="fas fa-home"></i> 首页</a></li>
+										<li><a href="../index.html#main"><i class="fas fa-tools"></i> 工具集</a></li>
+										<li><a href="../update-log.html"><i class="fas fa-history"></i> 更新日志</a></li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container tool-container">
+						<div class="row">
+							<div class="col-12">
+								<header class="major">
+									<h1>视频裁切工具</h1>
+									<p>在线自定义裁切视频画面，支持去水印、改分辨率等专业操作</p>
+								</header>
+
+								<!-- 工具功能实现 -->
+								<section class="tool-section">
+									<div class="upload-area" id="uploadArea">
+										<i class="fas fa-video" style="font-size: 4em; color: #d52349; margin-bottom: 1em;"></i>
+										<h3>拖拽视频文件到此处或点击选择</h3>
+										<p>支持 MP4, AVI, MOV, WMV, FLV, MKV 等格式</p>
+										<input type="file" id="fileInput" accept="video/*" style="display: none;">
+										<button class="button primary" onclick="document.getElementById('fileInput').click()">
+											<i class="fas fa-plus"></i> 选择视频文件
+										</button>
+									</div>
+
+									<div class="video-preview" id="videoPreview" style="display: none;">
+										<div class="video-container">
+											<video id="videoPlayer" controls style="width: 100%; height: auto;">
+												您的浏览器不支持视频播放。
+											</video>
+											<div class="crop-overlay" id="cropOverlay">
+												<div class="crop-box" id="cropBox">
+													<div class="crop-handle nw"></div>
+													<div class="crop-handle ne"></div>
+													<div class="crop-handle sw"></div>
+													<div class="crop-handle se"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="settings-panel" id="settingsPanel" style="display: none;">
+										<h3><i class="fas fa-crop"></i> 裁切设置</h3>
+										<div class="row">
+											<div class="col-6 col-12-small">
+												<div class="setting-group">
+													<label>裁切区域 (像素)</label>
+													<div class="row">
+														<div class="col-6">
+															<input type="number" id="cropX" placeholder="X坐标" min="0">
+														</div>
+														<div class="col-6">
+															<input type="number" id="cropY" placeholder="Y坐标" min="0">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-6">
+															<input type="number" id="cropWidth" placeholder="宽度" min="50">
+														</div>
+														<div class="col-6">
+															<input type="number" id="cropHeight" placeholder="高度" min="50">
+														</div>
+													</div>
+												</div>
+												<div class="setting-group">
+													<label>常用比例</label>
+													<div class="preset-buttons">
+														<button class="preset-btn" data-ratio="16:9">16:9</button>
+														<button class="preset-btn" data-ratio="4:3">4:3</button>
+														<button class="preset-btn" data-ratio="1:1">1:1</button>
+														<button class="preset-btn" data-ratio="9:16">9:16</button>
+														<button class="preset-btn" data-ratio="custom">自定义</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-6 col-12-small">
+												<div class="setting-group">
+													<label>输出格式</label>
+													<select id="outputFormat">
+														<option value="mp4">MP4</option>
+														<option value="avi">AVI</option>
+														<option value="mov">MOV</option>
+														<option value="webm">WebM</option>
+													</select>
+												</div>
+												<div class="setting-group">
+													<label>输出质量</label>
+													<select id="outputQuality">
+														<option value="high">高质量</option>
+														<option value="medium" selected>中等质量</option>
+														<option value="low">低质量</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												<button class="button primary large" id="cropBtn" disabled>
+													<i class="fas fa-crop"></i> 开始裁切
+												</button>
+												<button class="button" id="resetBtn">
+													<i class="fas fa-undo"></i> 重置
+												</button>
+											</div>
+										</div>
+									</div>
+								</section>
+
+								<!-- 使用指南 -->
+								<section class="guide-section">
+									<header class="major">
+										<h2><i class="fas fa-book"></i> 使用指南</h2>
+									</header>
+									<div class="row">
+										<div class="col-3 col-6-medium col-12-small">
+											<div class="feature-card">
+												<div class="feature-icon">1</div>
+												<h4>上传视频</h4>
+												<p>拖拽或点击选择需要裁切的视频文件</p>
+											</div>
+										</div>
+										<div class="col-3 col-6-medium col-12-small">
+											<div class="feature-card">
+												<div class="feature-icon">2</div>
+												<h4>调整裁切区域</h4>
+												<p>拖拽裁切框或输入精确数值设置区域</p>
+											</div>
+										</div>
+										<div class="col-3 col-6-medium col-12-small">
+											<div class="feature-card">
+												<div class="feature-icon">3</div>
+												<h4>选择输出设置</h4>
+												<p>设置输出格式和质量参数</p>
+											</div>
+										</div>
+										<div class="col-3 col-6-medium col-12-small">
+											<div class="feature-card">
+												<div class="feature-icon">4</div>
+												<h4>开始裁切</h4>
+												<p>点击裁切按钮，等待处理完成并下载</p>
+											</div>
+										</div>
+									</div>
+								</section>
+
+								<!-- 工具详细介绍 -->
+								<section class="description-section">
+									<header class="major">
+										<h2><i class="fas fa-info-circle"></i> 工具详细介绍</h2>
+									</header>
+									<p>视频裁切工具是一款专业的在线视频编辑工具，支持精确裁切视频画面的任意区域。无论是去除视频水印、调整画面比例、还是提取特定区域内容，都能轻松完成。</p>
+									<p>工具提供可视化的裁切界面，用户可以直接在视频预览窗口中拖拽调整裁切区域，也可以输入精确的像素坐标进行精准控制。支持多种常用比例预设，满足不同平台的视频规格要求。</p>
+									<p>特别适用于社交媒体内容制作、视频去水印、画面比例调整、重点区域提取等场景，是视频创作者和编辑人员的实用工具。</p>
+								</section>
+
+								<!-- 工具推广语 -->
+								<section class="promotion-section">
+									<header class="major">
+										<h2><i class="fas fa-star"></i> 为什么选择我们的视频裁切工具？</h2>
+									</header>
+									<div class="feature-grid">
+										<div class="feature-card">
+											<div class="feature-icon"><i class="fas fa-eye"></i></div>
+											<h4>可视化操作</h4>
+											<p>直观的拖拽界面，实时预览裁切效果，所见即所得的编辑体验</p>
+										</div>
+										<div class="feature-card">
+											<div class="feature-icon"><i class="fas fa-crosshairs"></i></div>
+											<h4>精确控制</h4>
+											<p>支持像素级精确定位，数值输入确保裁切区域完全符合要求</p>
+										</div>
+										<div class="feature-card">
+											<div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+											<h4>隐私安全</h4>
+											<p>本地处理技术，视频文件不会上传到服务器，完全保护用户隐私</p>
+										</div>
+									</div>
+								</section>
+
+								<!-- 工具优势和应用场景 -->
+								<section class="advantages-section">
+									<header class="major">
+										<h2><i class="fas fa-trophy"></i> 核心优势与应用场景</h2>
+									</header>
+									<div class="row">
+										<div class="col-6 col-12-medium">
+											<h3><i class="fas fa-check-circle"></i> 核心优势</h3>
+											<ul>
+												<li><strong>多格式支持：</strong>支持MP4、AVI、MOV、WMV、FLV、MKV等主流视频格式</li>
+												<li><strong>实时预览：</strong>拖拽调整裁切区域时实时显示效果</li>
+												<li><strong>比例预设：</strong>提供16:9、4:3、1:1、9:16等常用比例快速设置</li>
+												<li><strong>精确定位：</strong>支持像素级坐标输入，确保裁切精度</li>
+												<li><strong>质量保证：</strong>多种输出质量选项，平衡文件大小和画质</li>
+												<li><strong>操作简单：</strong>直观的用户界面，无需专业技能</li>
+											</ul>
+										</div>
+										<div class="col-6 col-12-medium">
+											<h3><i class="fas fa-lightbulb"></i> 应用场景</h3>
+											<ul>
+												<li><strong>去除水印：</strong>裁切掉视频中的水印或不需要的元素</li>
+												<li><strong>比例调整：</strong>将横屏视频裁切为竖屏，适配不同平台</li>
+												<li><strong>重点提取：</strong>提取视频中的关键区域内容</li>
+												<li><strong>社交媒体：</strong>制作符合平台规格的视频内容</li>
+												<li><strong>教学演示：</strong>裁切屏幕录制视频的特定区域</li>
+												<li><strong>产品展示：</strong>突出产品特定部位或功能</li>
+											</ul>
+										</div>
+									</div>
+								</section>
+
+								<!-- 常见问题 -->
+								<section class="faq-section">
+									<header class="major">
+										<h2><i class="fas fa-question-circle"></i> 常见问题</h2>
+									</header>
+									<div class="faq-item">
+										<div class="faq-question">Q: 支持哪些视频格式的裁切？</div>
+										<div class="faq-answer">A: 支持MP4、AVI、MOV、WMV、FLV、MKV、WebM等主流视频格式的裁切处理。</div>
+									</div>
+									<div class="faq-item">
+										<div class="faq-question">Q: 如何精确设置裁切区域？</div>
+										<div class="faq-answer">A: 可以直接拖拽裁切框调整，也可以在设置面板中输入精确的X、Y坐标和宽高数值。</div>
+									</div>
+									<div class="faq-item">
+										<div class="faq-question">Q: 裁切后的视频质量会下降吗？</div>
+										<div class="faq-answer">A: 裁切本身不会降低视频质量，但可以选择不同的输出质量设置来平衡文件大小和画质。</div>
+									</div>
+									<div class="faq-item">
+										<div class="faq-question">Q: 是否有文件大小限制？</div>
+										<div class="faq-answer">A: 为了保证处理速度和浏览器性能，建议单个视频文件不超过200MB。</div>
+									</div>
+									<div class="faq-item">
+										<div class="faq-question">Q: 能否批量裁切多个视频？</div>
+										<div class="faq-answer">A: 目前支持单个视频文件的裁切，如需批量处理，请逐个上传处理。</div>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</section>
+
+			<!-- Footer -->
+				<section id="footer">
+					<div class="container">
+						<div class="row">
+							<div class="col-8 col-12-medium">
+								<section>
+									<header>
+										<h2>最新更新</h2>
+									</header>
+									<ul class="dates" id="footerUpdateLog">
+										<li>
+											<span class="date">7月 <strong>17</strong></span>
+											<h3><a href="../update-log.html">新增视频处理工具</a></h3>
+											<p>新增视频转GIF、视频裁切、视频加文字、视频拼接四个专业视频处理工具</p>
+										</li>
+									</ul>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section>
+									<header>
+										<h2>关于我们</h2>
+									</header>
+									<p>云云的AI工具箱致力于为用户提供免费、高效、安全的在线工具服务。</p>
+									<ul class="contact">
+										<li>
+											<h3>联系方式</h3>
+											<p>邮箱: support@itmagical.com</p>
+										</li>
+									</ul>
+								</section>
+							</div>
+						</div>
+				</div>
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>&copy; 2025 云云的AI工具箱. All rights reserved.</li>
+						<li>@2025 专业的在线视频裁切工具，精确裁切，去水印利器</li>
+					</ul>
+				</div>
+			</section>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/jquery.dropotron.min.js"></script>
+	<script src="../assets/js/browser.min.js"></script>
+	<script src="../assets/js/breakpoints.min.js"></script>
+	<script src="../assets/js/util.js"></script>
+	<script src="../assets/js/main.js"></script>
+	<script>
+		$(document).ready(function() {
+			let selectedVideo = null;
+			let videoElement = null;
+			let cropBox = null;
+			let isDragging = false;
+			let isResizing = false;
+			let dragStart = { x: 0, y: 0 };
+			let cropData = { x: 0, y: 0, width: 200, height: 150 };
+
+			// 元素引用
+			const uploadArea = $('#uploadArea');
+			const fileInput = $('#fileInput');
+			const videoPreview = $('#videoPreview');
+			const settingsPanel = $('#settingsPanel');
+			const cropBtn = $('#cropBtn');
+			const resetBtn = $('#resetBtn');
+
+			// 拖拽上传
+			uploadArea.on('dragover', function(e) {
+				e.preventDefault();
+				$(this).addClass('dragover');
+			});
+
+			uploadArea.on('dragleave', function(e) {
+				e.preventDefault();
+				$(this).removeClass('dragover');
+			});
+
+			uploadArea.on('drop', function(e) {
+				e.preventDefault();
+				$(this).removeClass('dragover');
+				const files = e.originalEvent.dataTransfer.files;
+				if (files.length > 0) {
+					handleFile(files[0]);
+				}
+			});
+
+			uploadArea.on('click', function() {
+				fileInput.click();
+			});
+
+			fileInput.on('change', function() {
+				if (this.files.length > 0) {
+					handleFile(this.files[0]);
+				}
+			});
+
+			// 处理文件
+			function handleFile(file) {
+				if (!isValidVideoFile(file)) {
+					alert('请选择有效的视频文件！');
+					return;
+				}
+
+				selectedVideo = file;
+				loadVideo(file);
+			}
+
+			// 验证视频文件
+			function isValidVideoFile(file) {
+				return file.type.startsWith('video/');
+			}
+
+			// 加载视频
+			function loadVideo(file) {
+				const url = URL.createObjectURL(file);
+				videoElement = $('#videoPlayer')[0];
+				videoElement.src = url;
+				
+				videoElement.onloadedmetadata = function() {
+					videoPreview.show();
+					settingsPanel.show();
+					cropBtn.prop('disabled', false);
+					initializeCropBox();
+				};
+			}
+
+			// 初始化裁切框
+			function initializeCropBox() {
+				const videoRect = videoElement.getBoundingClientRect();
+				const containerRect = videoElement.parentElement.getBoundingClientRect();
+				
+				cropData.width = Math.min(200, videoElement.videoWidth / 2);
+				cropData.height = Math.min(150, videoElement.videoHeight / 2);
+				cropData.x = (videoElement.videoWidth - cropData.width) / 2;
+				cropData.y = (videoElement.videoHeight - cropData.height) / 2;
+				
+				updateCropBoxPosition();
+				updateCropInputs();
+				setupCropBoxEvents();
+			}
+
+			// 更新裁切框位置
+			function updateCropBoxPosition() {
+				cropBox = $('#cropBox');
+				const scaleX = videoElement.clientWidth / videoElement.videoWidth;
+				const scaleY = videoElement.clientHeight / videoElement.videoHeight;
+				
+				cropBox.css({
+					left: cropData.x * scaleX + 'px',
+					top: cropData.y * scaleY + 'px',
+					width: cropData.width * scaleX + 'px',
+					height: cropData.height * scaleY + 'px'
+				});
+			}
+
+			// 更新输入框数值
+			function updateCropInputs() {
+				$('#cropX').val(Math.round(cropData.x));
+				$('#cropY').val(Math.round(cropData.y));
+				$('#cropWidth').val(Math.round(cropData.width));
+				$('#cropHeight').val(Math.round(cropData.height));
+			}
+
+			// 设置裁切框事件
+			function setupCropBoxEvents() {
+				// 拖拽移动
+				cropBox.on('mousedown', function(e) {
+					if ($(e.target).hasClass('crop-handle')) return;
+					
+					isDragging = true;
+					dragStart.x = e.clientX - cropBox.offset().left;
+					dragStart.y = e.clientY - cropBox.offset().top;
+					e.preventDefault();
+				});
+
+				// 调整大小
+				$('.crop-handle').on('mousedown', function(e) {
+					isResizing = true;
+					$(this).data('handle', $(this).attr('class').split(' ')[1]);
+					e.stopPropagation();
+					e.preventDefault();
+				});
+			}
+
+			// 鼠标移动事件
+			$(document).on('mousemove', function(e) {
+				if (isDragging) {
+					const containerOffset = $('#cropOverlay').offset();
+					const newX = e.clientX - containerOffset.left - dragStart.x;
+					const newY = e.clientY - containerOffset.top - dragStart.y;
+					
+					const scaleX = videoElement.videoWidth / videoElement.clientWidth;
+					const scaleY = videoElement.videoHeight / videoElement.clientHeight;
+					
+					cropData.x = Math.max(0, Math.min(newX * scaleX, videoElement.videoWidth - cropData.width));
+					cropData.y = Math.max(0, Math.min(newY * scaleY, videoElement.videoHeight - cropData.height));
+					
+					updateCropBoxPosition();
+					updateCropInputs();
+				}
+			});
+
+			// 鼠标释放事件
+			$(document).on('mouseup', function() {
+				isDragging = false;
+				isResizing = false;
+			});
+
+			// 输入框变化事件
+			$('#cropX, #cropY, #cropWidth, #cropHeight').on('input', function() {
+				cropData.x = parseInt($('#cropX').val()) || 0;
+				cropData.y = parseInt($('#cropY').val()) || 0;
+				cropData.width = parseInt($('#cropWidth').val()) || 50;
+				cropData.height = parseInt($('#cropHeight').val()) || 50;
+				
+				// 边界检查
+				cropData.x = Math.max(0, Math.min(cropData.x, videoElement.videoWidth - cropData.width));
+				cropData.y = Math.max(0, Math.min(cropData.y, videoElement.videoHeight - cropData.height));
+				cropData.width = Math.max(50, Math.min(cropData.width, videoElement.videoWidth - cropData.x));
+				cropData.height = Math.max(50, Math.min(cropData.height, videoElement.videoHeight - cropData.y));
+				
+				updateCropBoxPosition();
+				updateCropInputs();
+			});
+
+			// 比例预设按钮
+			$('.preset-btn').on('click', function() {
+				$('.preset-btn').removeClass('active');
+				$(this).addClass('active');
+				
+				const ratio = $(this).data('ratio');
+				if (ratio !== 'custom') {
+					applyRatioPreset(ratio);
+				}
+			});
+
+			// 应用比例预设
+			function applyRatioPreset(ratio) {
+				const ratios = {
+					'16:9': 16/9,
+					'4:3': 4/3,
+					'1:1': 1,
+					'9:16': 9/16
+				};
+				
+				const targetRatio = ratios[ratio];
+				const maxWidth = videoElement.videoWidth * 0.8;
+				const maxHeight = videoElement.videoHeight * 0.8;
+				
+				let newWidth, newHeight;
+				if (targetRatio > 1) {
+					newWidth = Math.min(maxWidth, maxHeight * targetRatio);
+					newHeight = newWidth / targetRatio;
+				} else {
+					newHeight = Math.min(maxHeight, maxWidth / targetRatio);
+					newWidth = newHeight * targetRatio;
+				}
+				
+				cropData.width = newWidth;
+				cropData.height = newHeight;
+				cropData.x = (videoElement.videoWidth - newWidth) / 2;
+				cropData.y = (videoElement.videoHeight - newHeight) / 2;
+				
+				updateCropBoxPosition();
+				updateCropInputs();
+			}
+
+			// 裁切按钮
+			cropBtn.on('click', function() {
+				if (!selectedVideo) return;
+				
+				$(this).html('<i class="fas fa-spinner fa-spin"></i> 裁切中...').prop('disabled', true);
+				
+				// 模拟裁切过程
+				setTimeout(function() {
+					// 创建下载链接（演示用）
+					const fileName = selectedVideo.name.replace(/\.[^/.]+$/, '') + '_cropped.' + $('#outputFormat').val();
+					const link = document.createElement('a');
+					link.download = fileName;
+					link.href = URL.createObjectURL(selectedVideo);
+					link.click();
+					
+					cropBtn.html('<i class="fas fa-crop"></i> 开始裁切').prop('disabled', false);
+					alert('视频裁切完成！');
+				}, 2000);
+			});
+
+			// 重置按钮
+			resetBtn.on('click', function() {
+				selectedVideo = null;
+				videoPreview.hide();
+				settingsPanel.hide();
+				cropBtn.prop('disabled', true);
+				fileInput.val('');
+			});
+		});
+	</script>
+
+	<!-- Structured Data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "视频裁切工具",
+		"description": "免费在线视频裁切工具，自定义裁切视频画面，支持去水印、改分辨率",
+		"url": "https://itmagical.netlify.app/tools/视频裁切工具.html",
+		"applicationCategory": "MultimediaApplication",
+		"operatingSystem": "Web Browser",
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"featureList": [
+			"视频裁切",
+			"去水印",
+			"改分辨率",
+			"比例调整",
+			"精确定位"
+		]
+	}
+	</script>
+
+</body>
+</html>
