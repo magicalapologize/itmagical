@@ -902,34 +902,51 @@
             }
             
             make(text, options = {}) {
-                const typeNumber = options.typeNumber || this.getTypeNumber(text);
-                const errorCorrectLevel = this.errorCorrectLevel[options.correctLevel || 'M'];
+                const startTime = performance.now();
                 
-                this.moduleCount = typeNumber * 4 + 17;
-                this.modules = new Array(this.moduleCount);
-                
-                for (let row = 0; row < this.moduleCount; row++) {
-                    this.modules[row] = new Array(this.moduleCount);
-                    for (let col = 0; col < this.moduleCount; col++) {
-                        this.modules[row][col] = null;
+                try {
+                    // 参数验证
+                    if (!text || typeof text !== 'string') {
+                        throw new Error('文本内容不能为空且必须是字符串类型');
                     }
+                    
+                    if (text.length > 2953) {
+                        throw new Error('文本内容过长，最大支持2953个字符');
+                    }
+                    
+                    // 获取最优的类型编号和纠错级别
+                    const typeNumber = options.typeNumber || this.getOptimalTypeNumber(text, options.correctLevel || 'M');
+                    const errorCorrectLevel = this.errorCorrectLevel[options.correctLevel || 'M'];
+                    
+                    if (typeNumber > 40) {
+                        throw new Error('文本内容过长，无法生成二维码');
+                    }
+                    
+                    // 存储当前配置
+                    this.typeNumber = typeNumber;
+                    this.errorCorrectionLevel = errorCorrectLevel;
+                    this.moduleCount = typeNumber * 4 + 17;
+                    
+                    // 优化的模块初始化
+                    this.initializeModules();
+                    
+                    // 设置二维码结构
+                    this.setupQRStructure(typeNumber, errorCorrectLevel);
+                    
+                    // 创建和映射数据
+                    const data = this.createData(typeNumber, errorCorrectLevel, text);
+                    const bestMask = this.findBestMask(data);
+                    this.mapData(data, bestMask);
+                    
+                    // 记录性能统计
+                    this.stats.generationTime = performance.now() - startTime;
+                    this.stats.lastGenerated = new Date();
+                    
+                    return this;
+                } catch (error) {
+                    console.error('二维码生成失败:', error.message);
+                    throw error;
                 }
-                
-                this.setupPositionProbePattern(0, 0);
-                this.setupPositionProbePattern(this.moduleCount - 7, 0);
-                this.setupPositionProbePattern(0, this.moduleCount - 7);
-                this.setupPositionAdjustPattern();
-                this.setupTimingPattern();
-                this.setupTypeInfo(errorCorrectLevel, 0);
-                
-                if (typeNumber >= 7) {
-                    this.setupTypeNumber(typeNumber);
-                }
-                
-                const data = this.createData(typeNumber, errorCorrectLevel, text);
-                this.mapData(data, 0);
-                
-                return this;
             }
             
             getTypeNumber(text) {
@@ -944,6 +961,154 @@
                 if (length <= 152) return 8;
                 if (length <= 180) return 9;
                 return 10;
+            }
+            
+            // 优化的类型编号计算，考虑纠错级别
+            getOptimalTypeNumber(text, errorLevel = 'M') {
+                const byteLength = new TextEncoder().encode(text).length;
+                const capacityTable = {
+                    'L': [17, 32, 53, 78, 106, 134, 154, 192, 230, 271, 321, 367, 425, 458, 520, 586, 644, 718, 792, 858],
+                    'M': [14, 26, 42, 62, 84, 106, 122, 152, 180, 213, 251, 287, 331, 362, 412, 450, 504, 560, 624, 666],
+                    'Q': [11, 20, 32, 46, 60, 74, 86, 108, 130, 151, 177, 203, 241, 258, 292, 322, 364, 394, 442, 482],
+                    'H': [7, 14, 24, 34, 44, 58, 64, 84, 98, 119, 137, 155, 177, 194, 220, 250, 280, 310, 338, 382]
+                };
+                
+                const capacities = capacityTable[errorLevel] || capacityTable['M'];
+                
+                for (let i = 0; i < capacities.length; i++) {
+                    if (byteLength <= capacities[i]) {
+                        return i + 1;
+                    }
+                }
+                
+                // 如果超出范围，返回更大的类型编号
+                return Math.min(40, Math.ceil(byteLength / 20));
+            }
+            
+            // 优化的模块初始化
+            initializeModules() {
+                this.modules = new Array(this.moduleCount);
+                for (let row = 0; row < this.moduleCount; row++) {
+                    this.modules[row] = new Array(this.moduleCount).fill(null);
+                }
+            }
+            
+            // 统一的二维码结构设置
+            setupQRStructure(typeNumber, errorCorrectLevel) {
+                this.setupPositionProbePattern(0, 0);
+                this.setupPositionProbePattern(this.moduleCount - 7, 0);
+                this.setupPositionProbePattern(0, this.moduleCount - 7);
+                this.setupPositionAdjustPattern();
+                this.setupTimingPattern();
+                this.setupTypeInfo(errorCorrectLevel, 0);
+                
+                if (typeNumber >= 7) {
+                    this.setupTypeNumber(typeNumber);
+                }
+            }
+            
+            // 寻找最佳掩码模式
+            findBestMask(data) {
+                let bestMask = 0;
+                let bestScore = Infinity;
+                
+                for (let mask = 0; mask < 8; mask++) {
+                    // 创建临时模块副本
+                    const tempModules = this.modules.map(row => [...row]);
+                    
+                    // 应用掩码并映射数据
+                    this.mapDataWithMask(data, mask, tempModules);
+                    
+                    // 计算掩码评分
+                    const score = this.calculateMaskScore(tempModules);
+                    
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMask = mask;
+                    }
+                }
+                
+                return bestMask;
+            }
+            
+            // 计算掩码评分
+            calculateMaskScore(modules) {
+                let score = 0;
+                const size = modules.length;
+                
+                // 规则1: 连续相同颜色的模块
+                for (let row = 0; row < size; row++) {
+                    let count = 1;
+                    for (let col = 1; col < size; col++) {
+                        if (modules[row][col] === modules[row][col - 1]) {
+                            count++;
+                        } else {
+                            if (count >= 5) score += count - 2;
+                            count = 1;
+                        }
+                    }
+                    if (count >= 5) score += count - 2;
+                }
+                
+                // 规则2: 2x2相同颜色块
+                for (let row = 0; row < size - 1; row++) {
+                    for (let col = 0; col < size - 1; col++) {
+                        const color = modules[row][col];
+                        if (modules[row][col + 1] === color &&
+                            modules[row + 1][col] === color &&
+                            modules[row + 1][col + 1] === color) {
+                            score += 3;
+                        }
+                    }
+                }
+                
+                return score;
+            }
+            
+            // 带掩码的数据映射
+            mapDataWithMask(data, maskPattern, targetModules) {
+                let inc = -1;
+                let row = this.moduleCount - 1;
+                let bitIndex = 7;
+                let byteIndex = 0;
+                
+                for (let col = this.moduleCount - 1; col > 0; col -= 2) {
+                    if (col == 6) col--;
+                    
+                    while (true) {
+                        for (let c = 0; c < 2; c++) {
+                            const currentCol = col - c;
+                            if (row >= 0 && row < this.moduleCount && currentCol >= 0 && currentCol < this.moduleCount) {
+                                if (targetModules[row][currentCol] == null) {
+                                    let dark = false;
+                                    if (byteIndex < data.length) {
+                                        dark = (((data[byteIndex] >>> bitIndex) & 1) == 1);
+                                    }
+                                    
+                                    if (this.getMask(maskPattern, row, currentCol)) {
+                                        dark = !dark;
+                                    }
+                                    
+                                    targetModules[row][currentCol] = dark;
+                                    bitIndex--;
+                                    
+                                    if (bitIndex == -1) {
+                                        byteIndex++;
+                                        bitIndex = 7;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        row += inc;
+                        
+                        if (row < 0 || this.moduleCount <= row) {
+                            row -= inc;
+                            inc = -inc;
+                            break;
+                        }
+                    }
+                }
             }
             
             setupPositionProbePattern(row, col) {
@@ -987,20 +1152,29 @@
             }
             
             getPositionAdjustPattern() {
-                const patterns = {
-                    1: [],
-                    2: [6, 18],
-                    3: [6, 22],
-                    4: [6, 26],
-                    5: [6, 30],
-                    6: [6, 34],
-                    7: [6, 22, 38],
-                    8: [6, 24, 42],
-                    9: [6, 26, 46],
-                    10: [6, 28, 50]
-                };
                 const typeNumber = Math.floor((this.moduleCount - 17) / 4);
-                return patterns[typeNumber] || [];
+                
+                // 使用缓存提高性能
+                if (this._positionAdjustCache.has(typeNumber)) {
+                    return this._positionAdjustCache.get(typeNumber);
+                }
+                
+                const patterns = {
+                    1: [], 2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30],
+                    6: [6, 34], 7: [6, 22, 38], 8: [6, 24, 42], 9: [6, 26, 46], 10: [6, 28, 50],
+                    11: [6, 30, 54], 12: [6, 32, 58], 13: [6, 34, 62], 14: [6, 26, 46, 66], 15: [6, 26, 48, 70],
+                    16: [6, 26, 50, 74], 17: [6, 30, 54, 78], 18: [6, 30, 56, 82], 19: [6, 30, 58, 86], 20: [6, 34, 62, 90],
+                    21: [6, 28, 50, 72, 94], 22: [6, 26, 50, 74, 98], 23: [6, 30, 54, 78, 102], 24: [6, 28, 54, 80, 106],
+                    25: [6, 32, 58, 84, 110], 26: [6, 30, 58, 86, 114], 27: [6, 34, 62, 90, 118], 28: [6, 26, 50, 74, 98, 122],
+                    29: [6, 30, 54, 78, 102, 126], 30: [6, 26, 52, 78, 104, 130], 31: [6, 30, 56, 82, 108, 134],
+                    32: [6, 34, 60, 86, 112, 138], 33: [6, 30, 58, 86, 114, 142], 34: [6, 34, 62, 90, 118, 146],
+                    35: [6, 30, 54, 78, 102, 126, 150], 36: [6, 24, 50, 76, 102, 128, 154], 37: [6, 28, 54, 80, 106, 132, 158],
+                    38: [6, 32, 58, 84, 110, 136, 162], 39: [6, 26, 54, 82, 110, 138, 166], 40: [6, 30, 58, 86, 114, 142, 170]
+                };
+                
+                const pattern = patterns[typeNumber] || [];
+                this._positionAdjustCache.set(typeNumber, pattern);
+                return pattern;
             }
             
             setupTimingPattern() {
@@ -1194,17 +1368,20 @@
             }
             
             gfExp(exp) {
-                const expTable = [
-                    1,2,4,8,16,32,64,128,29,58,116,232,205,135,19,38,76,152,45,90,180,117,234,201,143,3,6,12,24,48,96,192,
-                    157,39,78,156,37,74,148,53,106,212,181,119,238,193,159,35,70,140,5,10,20,40,80,160,93,186,105,210,185,111,222,161,
-                    95,190,97,194,153,47,94,188,101,202,137,15,30,60,120,240,253,231,211,187,107,214,177,127,254,225,223,163,91,182,113,
-                    226,217,175,67,134,17,34,68,136,13,26,52,104,208,189,103,206,129,31,62,124,248,237,199,147,59,118,236,197,151,51,102,
-                    204,133,23,46,92,184,109,218,169,79,158,33,66,132,21,42,84,168,77,154,41,82,164,85,170,73,146,57,114,228,213,183,115,
-                    230,209,191,99,198,145,63,126,252,229,215,179,123,246,241,255,227,219,171,75,150,49,98,196,149,55,110,220,165,87,174,
-                    65,130,25,50,100,200,141,7,14,28,56,112,224,221,167,83,166,81,162,89,178,121,242,249,239,195,155,43,86,172,69,138,9,
-                    18,36,72,144,61,122,244,245,247,243,251,235,203,139,11,22,44,88,176,125,250,233,207,131,27,54,108,216,173,71,142,1
-                ];
-                return expTable[exp % 255];
+                // 使用缓存提高性能
+                if (!this._expTableCache) {
+                    this._expTableCache = [
+                        1,2,4,8,16,32,64,128,29,58,116,232,205,135,19,38,76,152,45,90,180,117,234,201,143,3,6,12,24,48,96,192,
+                        157,39,78,156,37,74,148,53,106,212,181,119,238,193,159,35,70,140,5,10,20,40,80,160,93,186,105,210,185,111,222,161,
+                        95,190,97,194,153,47,94,188,101,202,137,15,30,60,120,240,253,231,211,187,107,214,177,127,254,225,223,163,91,182,113,
+                        226,217,175,67,134,17,34,68,136,13,26,52,104,208,189,103,206,129,31,62,124,248,237,199,147,59,118,236,197,151,51,102,
+                        204,133,23,46,92,184,109,218,169,79,158,33,66,132,21,42,84,168,77,154,41,82,164,85,170,73,146,57,114,228,213,183,115,
+                        230,209,191,99,198,145,63,126,252,229,215,179,123,246,241,255,227,219,171,75,150,49,98,196,149,55,110,220,165,87,174,
+                        65,130,25,50,100,200,141,7,14,28,56,112,224,221,167,83,166,81,162,89,178,121,242,249,239,195,155,43,86,172,69,138,9,
+                        18,36,72,144,61,122,244,245,247,243,251,235,203,139,11,22,44,88,176,125,250,233,207,131,27,54,108,216,173,71,142,1
+                    ];
+                }
+                return this._expTableCache[exp % 255];
             }
             
             gfPow(base, exp) {
@@ -1215,17 +1392,57 @@
             
             gfLog(n) {
                 if (n < 1) return 0;
-                const logTable = [
-                    0,0,1,25,2,50,26,198,3,223,51,238,27,104,199,75,4,100,224,14,52,141,239,129,28,193,105,248,200,8,76,113,
-                    5,138,101,47,225,36,15,33,53,147,142,218,240,18,130,69,29,181,194,125,106,39,249,185,201,154,9,120,77,228,114,166,
-                    6,191,139,98,102,221,48,253,226,152,37,179,16,145,34,136,54,208,148,206,143,150,219,189,241,210,19,92,131,56,70,64,
-                    30,66,182,163,195,72,126,110,107,58,40,84,250,133,186,61,202,94,155,159,10,21,121,43,78,212,229,172,115,243,167,87,
-                    7,112,192,247,140,128,99,13,103,74,222,237,49,197,254,24,227,165,153,119,38,184,180,124,17,68,146,217,35,32,137,46,
-                    55,63,209,91,149,188,207,205,144,135,151,178,220,252,190,97,242,86,211,171,20,42,93,158,132,60,57,83,71,109,65,162,
-                    31,45,67,216,183,123,164,118,196,23,73,236,127,12,111,246,108,161,59,82,41,157,85,170,251,96,134,177,187,204,62,90,
-                    203,89,95,176,156,169,160,81,11,245,22,235,122,117,44,215,79,174,213,233,230,231,173,232,116,214,244,234,168,80,88,175
-                ];
-                return logTable[n];
+                
+                // 使用缓存提高性能
+                if (!this._logTableCache) {
+                    this._logTableCache = [
+                        0,0,1,25,2,50,26,198,3,223,51,238,27,104,199,75,4,100,224,14,52,141,239,129,28,193,105,248,200,8,76,113,
+                        5,138,101,47,225,36,15,33,53,147,142,218,240,18,130,69,29,181,194,125,106,39,249,185,201,154,9,120,77,228,114,166,
+                        6,191,139,98,102,221,48,253,226,152,37,179,16,145,34,136,54,208,148,206,143,150,219,189,241,210,19,92,131,56,70,64,
+                        30,66,182,163,195,72,126,110,107,58,40,84,250,133,186,61,202,94,155,159,10,21,121,43,78,212,229,172,115,243,167,87,
+                        7,112,192,247,140,128,99,13,103,74,222,237,49,197,254,24,227,165,153,119,38,184,180,124,17,68,146,217,35,32,137,46,
+                        55,63,209,91,149,188,207,205,144,135,151,178,220,252,190,97,242,86,211,171,20,42,93,158,132,60,57,83,71,109,65,162,
+                        31,45,67,216,183,123,164,118,196,23,73,236,127,12,111,246,108,161,59,82,41,157,85,170,251,96,134,177,187,204,62,90,
+                        203,89,95,176,156,169,160,81,11,245,22,235,122,117,44,215,79,174,213,233,230,231,173,232,116,214,244,234,168,80,88,175
+                    ];
+                }
+                return this._logTableCache[n];
+            }
+            
+            // 获取性能统计信息
+            getStats() {
+                return {
+                    ...this.stats,
+                    moduleCount: this.moduleCount,
+                    typeNumber: this.typeNumber,
+                    errorCorrectionLevel: Object.keys(this.errorCorrectLevel).find(key => this.errorCorrectLevel[key] === this.errorCorrectionLevel) || 'M'
+                };
+            }
+            
+            // 清除缓存（用于内存管理）
+            clearCache() {
+                this._expTableCache = null;
+                this._logTableCache = null;
+                this._positionAdjustCache.clear();
+            }
+            
+            // 验证二维码完整性
+            validate() {
+                if (!this.modules || this.modules.length === 0) {
+                    return { valid: false, error: '二维码模块未初始化' };
+                }
+                
+                if (this.moduleCount !== this.modules.length) {
+                    return { valid: false, error: '模块数量不匹配' };
+                }
+                
+                for (let i = 0; i < this.modules.length; i++) {
+                    if (!this.modules[i] || this.modules[i].length !== this.moduleCount) {
+                        return { valid: false, error: `第${i}行模块长度不正确` };
+                    }
+                }
+                
+                return { valid: true };
             }
             
             mapData(data, maskPattern) {
@@ -1331,22 +1548,50 @@
             }
         }
         
-        // 创建全局QRCode对象以兼容原有代码
+        // 优化的全局QRCode对象
         window.QRCode = {
+            // 版本信息
+            version: '2.0.0-optimized',
+            
+            // 全局统计
+            globalStats: {
+                totalGenerated: 0,
+                totalErrors: 0,
+                averageGenerationTime: 0
+            },
+            
             toCanvas: function(canvas, text, options, callback) {
+                const startTime = performance.now();
+                
                 if (typeof options === 'function') {
                     callback = options;
                     options = {};
                 }
                 
                 try {
+                    // 参数验证
+                    if (!canvas || !canvas.getContext) {
+                        throw new Error('无效的canvas元素');
+                    }
+                    
+                    if (!text || typeof text !== 'string') {
+                        throw new Error('文本内容不能为空');
+                    }
+                    
                     const qr = new QRCodeGenerator();
-                    // 修复容错级别参数映射
+                    // 优化的参数映射
                     const qrOptions = {
                         ...options,
-                        correctLevel: options.errorCorrectionLevel || 'M'
+                        correctLevel: options.errorCorrectionLevel || options.correctLevel || 'M'
                     };
+                    
                     qr.make(text, qrOptions);
+                    
+                    // 验证二维码
+                    const validation = qr.validate();
+                    if (!validation.valid) {
+                        throw new Error(`二维码验证失败: ${validation.error}`);
+                    }
                     
                     // 设置canvas尺寸
                     const size = options.width || options.height || 300;
@@ -1379,27 +1624,49 @@
                         }
                     }
                     
-                    if (callback) callback(null);
+                    // 更新全局统计
+                    const generationTime = performance.now() - startTime;
+                    this.globalStats.totalGenerated++;
+                    this.globalStats.averageGenerationTime = 
+                        (this.globalStats.averageGenerationTime * (this.globalStats.totalGenerated - 1) + generationTime) / this.globalStats.totalGenerated;
+                    
+                    if (callback) callback(null, canvas);
                 } catch (error) {
+                    this.globalStats.totalErrors++;
+                    console.error('QR码生成失败:', error);
                     if (callback) callback(error);
                     else throw error;
                 }
             },
             
             toString: function(text, options, callback) {
+                const startTime = performance.now();
+                
                 if (typeof options === 'function') {
                     callback = options;
                     options = {};
                 }
                 
                 try {
+                    // 参数验证
+                    if (!text || typeof text !== 'string') {
+                        throw new Error('文本内容不能为空');
+                    }
+                    
                     const qr = new QRCodeGenerator();
-                    // 修复容错级别参数映射
+                    // 优化的参数映射
                     const qrOptions = {
                         ...options,
-                        correctLevel: options.errorCorrectionLevel || 'M'
+                        correctLevel: options.errorCorrectionLevel || options.correctLevel || 'M'
                     };
+                    
                     qr.make(text, qrOptions);
+                    
+                    // 验证二维码
+                    const validation = qr.validate();
+                    if (!validation.valid) {
+                        throw new Error(`二维码验证失败: ${validation.error}`);
+                    }
                     
                     const moduleCount = qr.getModuleCount();
                     const cellSize = 10;
@@ -1421,12 +1688,39 @@
                     
                     svg += '</svg>';
                     
+                    // 更新全局统计
+                    const generationTime = performance.now() - startTime;
+                    this.globalStats.totalGenerated++;
+                    this.globalStats.averageGenerationTime = 
+                        (this.globalStats.averageGenerationTime * (this.globalStats.totalGenerated - 1) + generationTime) / this.globalStats.totalGenerated;
+                    
                     if (callback) callback(null, svg);
                     return svg;
                 } catch (error) {
+                    this.globalStats.totalErrors++;
+                    console.error('QR码SVG生成失败:', error);
                     if (callback) callback(error);
                     else throw error;
                 }
+            },
+            
+            // 获取全局统计信息
+            getGlobalStats: function() {
+                return { ...this.globalStats };
+            },
+            
+            // 重置全局统计
+            resetGlobalStats: function() {
+                this.globalStats = {
+                    totalGenerated: 0,
+                    totalErrors: 0,
+                    averageGenerationTime: 0
+                };
+            },
+            
+            // 获取版本信息
+            getVersion: function() {
+                return this.version;
             }
         };
         
