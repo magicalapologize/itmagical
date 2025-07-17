@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成调试测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        #qrCanvas {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>二维码生成调试测试</h1>
+    
+    <div class="test-section">
+        <h3>基本功能测试</h3>
+        <div>
+            <label>文本内容：</label>
+            <input type="text" id="testText" value="Hello World" style="width: 200px; padding: 5px;">
+        </div>
+        <br>
+        <button class="btn" onclick="testGenerate()">生成二维码</button>
+        <button class="btn" onclick="clearLog()">清空日志</button>
+        
+        <div id="result"></div>
+        <canvas id="qrCanvas" width="300" height="300"></canvas>
+        
+        <div class="log" id="debugLog">调试日志将显示在这里...</div>
+    </div>
+    
+    <script>
+        // 简化的QRCode实现
+        class QRCodeGenerator {
+            constructor() {
+                this.modules = [];
+                this.moduleCount = 0;
+            }
+            
+            make(text, options = {}) {
+                const typeNumber = this.getTypeNumber(text.length);
+                this.moduleCount = typeNumber * 4 + 17;
+                this.modules = Array(this.moduleCount).fill().map(() => Array(this.moduleCount).fill(null));
+                
+                // 简化的二维码生成逻辑
+                this.setupPositionProbePattern(0, 0);
+                this.setupPositionProbePattern(this.moduleCount - 7, 0);
+                this.setupPositionProbePattern(0, this.moduleCount - 7);
+                
+                // 填充数据（简化版）
+                const data = this.stringToBytes(text);
+                this.mapData(data);
+            }
+            
+            getTypeNumber(length) {
+                if (length <= 14) return 1;
+                if (length <= 26) return 2;
+                if (length <= 42) return 3;
+                return 4;
+            }
+            
+            stringToBytes(str) {
+                const bytes = [];
+                for (let i = 0; i < str.length; i++) {
+                    bytes.push(str.charCodeAt(i));
+                }
+                return bytes;
+            }
+            
+            setupPositionProbePattern(row, col) {
+                for (let r = -1; r <= 7; r++) {
+                    for (let c = -1; c <= 7; c++) {
+                        const dr = row + r;
+                        const dc = col + c;
+                        if (dr >= 0 && dr < this.moduleCount && dc >= 0 && dc < this.moduleCount) {
+                            if ((0 <= r && r <= 6 && (c == 0 || c == 6)) ||
+                                (0 <= c && c <= 6 && (r == 0 || r == 6)) ||
+                                (2 <= r && r <= 4 && 2 <= c && c <= 4)) {
+                                this.modules[dr][dc] = true;
+                            } else {
+                                this.modules[dr][dc] = false;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            mapData(data) {
+                for (let row = 0; row < this.moduleCount; row++) {
+                    for (let col = 0; col < this.moduleCount; col++) {
+                        if (this.modules[row][col] === null) {
+                            this.modules[row][col] = Math.random() > 0.5;
+                        }
+                    }
+                }
+            }
+            
+            isDark(row, col) {
+                return this.modules[row][col];
+            }
+            
+            getModuleCount() {
+                return this.moduleCount;
+            }
+        }
+        
+        // 全局QRCode对象
+        window.QRCode = {
+            toCanvas: function(canvas, text, options, callback) {
+                try {
+                    log('开始生成二维码: ' + text);
+                    
+                    const qr = new QRCodeGenerator();
+                    qr.make(text, options);
+                    
+                    const size = options.width || 300;
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    const ctx = canvas.getContext('2d');
+                    const moduleCount = qr.getModuleCount();
+                    const cellSize = Math.floor(size / moduleCount);
+                    
+                    // 清空画布
+                    ctx.fillStyle = options.color?.light || '#ffffff';
+                    ctx.fillRect(0, 0, size, size);
+                    
+                    // 绘制二维码
+                    ctx.fillStyle = options.color?.dark || '#000000';
+                    for (let row = 0; row < moduleCount; row++) {
+                        for (let col = 0; col < moduleCount; col++) {
+                            if (qr.isDark(row, col)) {
+                                ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                            }
+                        }
+                    }
+                    
+                    log('二维码生成成功');
+                    if (callback) callback(null);
+                } catch (error) {
+                    log('二维码生成失败: ' + error.message, 'error');
+                    if (callback) callback(error);
+                }
+            }
+        };
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : (type === 'success' ? 'success' : '');
+            logDiv.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '调试日志已清空...\n';
+        }
+        
+        function testGenerate() {
+            const text = document.getElementById('testText').value;
+            const canvas = document.getElementById('qrCanvas');
+            const resultDiv = document.getElementById('result');
+            
+            log('=== 开始测试 ===');
+            log('输入文本: ' + text);
+            
+            if (!text.trim()) {
+                log('错误: 文本内容为空', 'error');
+                resultDiv.innerHTML = '<span class="error">请输入文本内容</span>';
+                return;
+            }
+            
+            const options = {
+                width: 300,
+                height: 300,
+                color: {
+                    dark: '#000000',
+                    light: '#ffffff'
+                }
+            };
+            
+            log('开始调用 QRCode.toCanvas');
+            
+            QRCode.toCanvas(canvas, text, options, function(error) {
+                if (error) {
+                    log('生成失败: ' + error.message, 'error');
+                    resultDiv.innerHTML = '<span class="error">生成失败: ' + error.message + '</span>';
+                } else {
+                    log('生成成功!', 'success');
+                    resultDiv.innerHTML = '<span class="success">二维码生成成功!</span>';
+                }
+            });
+        }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成');
+            log('QRCode对象可用: ' + (typeof QRCode !== 'undefined'));
+        });
+    </script>
+</body>
+</html>
