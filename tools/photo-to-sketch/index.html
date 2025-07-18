@@ -1,0 +1,1006 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>照片转铅笔画工具 - 在线批量照片转铅笔画艺术风格 | ITMagical</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="免费在线照片转铅笔画工具，支持批量转换，多种铅笔画风格，艺术效果处理，无需下载安装，即开即用。" />
+	<meta name="keywords" content="照片转铅笔画,铅笔画效果,艺术风格转换,素描效果,在线图片处理,批量转换,免费铅笔画工具" />
+	<meta name="author" content="ITMagical" />
+	<meta property="og:title" content="照片转铅笔画工具 - 在线批量照片转铅笔画艺术风格" />
+	<meta property="og:description" content="免费在线照片转铅笔画工具，支持批量转换，多种铅笔画风格，艺术效果处理。" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://tool.itmagical.top/tools/照片转铅笔画工具.html" />
+	<meta property="og:image" content="https://tool.itmagical.top/images/pic21.jpg" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="照片转铅笔画工具 - 在线批量照片转铅笔画艺术风格" />
+	<meta name="twitter:description" content="免费在线照片转铅笔画工具，支持批量转换，多种铅笔画风格，艺术效果处理。" />
+	<meta name="twitter:image" content="https://tool.itmagical.top/images/pic21.jpg" />
+	<link rel="canonical" href="https://tool.itmagical.top/tools/照片转铅笔画工具" />
+	<link rel="stylesheet" href="../../assets/css/main.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<noscript><link rel="stylesheet" href="../../assets/css/noscript.css" /></noscript>
+	<style>
+		/* 返回主页按钮样式 */
+		.home-btn {
+			position: fixed;
+			z-index: 1000;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 12px 20px;
+			background: linear-gradient(45deg, #007acc, #0056b3);
+			color: white;
+			text-decoration: none;
+			border-radius: 25px;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(0, 122, 204, 0.3);
+			font-size: 14px;
+		}
+		
+		.home-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0, 122, 204, 0.4);
+			color: white;
+			text-decoration: none;
+		}
+		
+		.home-btn-top {
+			top: 20px;
+		left: 20px;
+	}
+		.tool-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 2rem;
+			background: #fff;
+			border-radius: 10px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+		}
+		.upload-area {
+			border: 2px dashed #007acc;
+			border-radius: 10px;
+			padding: 3rem;
+			text-align: center;
+			background: #f8f9fa;
+			transition: all 0.3s ease;
+			cursor: pointer;
+			margin-bottom: 2rem;
+		}
+		.upload-area:hover {
+			border-color: #0056b3;
+			background: #e3f2fd;
+		}
+		.upload-area.dragover {
+			border-color: #28a745;
+			background: #d4edda;
+		}
+		.upload-icon {
+			font-size: 3rem;
+			color: #007acc;
+			margin-bottom: 1rem;
+		}
+		.settings-panel {
+			background: #f8f9fa;
+			padding: 1.5rem;
+			border-radius: 8px;
+			margin-bottom: 2rem;
+		}
+		.setting-group {
+			margin-bottom: 1rem;
+		}
+		.setting-group label {
+			display: block;
+			margin-bottom: 0.5rem;
+			font-weight: bold;
+			color: #333;
+		}
+		.setting-group input, .setting-group select {
+			width: 100%;
+			padding: 0.5rem;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
+		.style-preview {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+			gap: 1rem;
+			margin-top: 0.5rem;
+		}
+		.style-option {
+			border: 2px solid #ddd;
+			border-radius: 8px;
+			padding: 0.5rem;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			background: white;
+		}
+		.style-option:hover {
+			border-color: #007acc;
+		}
+		.style-option.selected {
+			border-color: #007acc;
+			background: #e3f2fd;
+		}
+		.style-option img {
+			width: 60px;
+			height: 60px;
+			object-fit: cover;
+			border-radius: 4px;
+			margin-bottom: 0.5rem;
+		}
+		.preview-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 1rem;
+			margin-bottom: 2rem;
+		}
+		.preview-item {
+			position: relative;
+			background: #fff;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 1rem;
+			text-align: center;
+		}
+		.preview-comparison {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.5rem;
+			margin-bottom: 1rem;
+		}
+		.preview-comparison img {
+			width: 100%;
+			height: auto;
+			border-radius: 4px;
+		}
+		.preview-label {
+			font-size: 0.9rem;
+			color: #666;
+			margin-bottom: 0.5rem;
+			font-weight: bold;
+		}
+		.preview-item .filename {
+			font-size: 0.9rem;
+			color: #666;
+			margin-bottom: 0.5rem;
+			word-break: break-all;
+		}
+		.remove-btn {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			background: #dc3545;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			cursor: pointer;
+			font-size: 0.8rem;
+		}
+		.action-buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			margin-bottom: 2rem;
+		}
+		.btn {
+			padding: 0.75rem 2rem;
+			border: none;
+			border-radius: 5px;
+			font-size: 1rem;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			text-decoration: none;
+			display: inline-block;
+			text-align: center;
+		}
+		.btn-primary {
+			background: #007acc;
+			color: white;
+		}
+		.btn-primary:hover {
+			background: #0056b3;
+		}
+		.btn-success {
+			background: #28a745;
+			color: white;
+		}
+		.btn-success:hover {
+			background: #1e7e34;
+		}
+		.btn-secondary {
+			background: #6c757d;
+			color: white;
+		}
+		.btn-secondary:hover {
+			background: #545b62;
+		}
+		.progress-bar {
+			width: 100%;
+			height: 20px;
+			background: #e9ecef;
+			border-radius: 10px;
+			overflow: hidden;
+			margin-bottom: 1rem;
+			display: none;
+		}
+		.progress-fill {
+			height: 100%;
+			background: linear-gradient(90deg, #007acc, #28a745);
+			width: 0%;
+			transition: width 0.3s ease;
+		}
+		.guide-section, .intro-section, .promo-section, .advantages-section, .faq-section {
+			margin: 3rem 0;
+			padding: 2rem;
+			background: #f8f9fa;
+			border-radius: 10px;
+		}
+		.guide-section h2, .intro-section h2, .promo-section h2, .advantages-section h2, .faq-section h2 {
+			color: #007acc;
+			margin-bottom: 1.5rem;
+			border-bottom: 2px solid #007acc;
+			padding-bottom: 0.5rem;
+		}
+		.guide-steps {
+			counter-reset: step-counter;
+		}
+		.guide-step {
+			counter-increment: step-counter;
+			margin-bottom: 1.5rem;
+			padding: 1rem;
+			background: white;
+			border-radius: 8px;
+			border-left: 4px solid #007acc;
+		}
+		.guide-step::before {
+			content: "步骤 " counter(step-counter);
+			font-weight: bold;
+			color: #007acc;
+			display: block;
+			margin-bottom: 0.5rem;
+		}
+		.feature-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 1.5rem;
+			margin-top: 1.5rem;
+		}
+		.feature-card {
+			background: white;
+			padding: 1.5rem;
+			border-radius: 8px;
+			text-align: center;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+		}
+		.feature-icon {
+			font-size: 2.5rem;
+			color: #007acc;
+			margin-bottom: 1rem;
+		}
+		.faq-item {
+			margin-bottom: 1.5rem;
+			background: white;
+			border-radius: 8px;
+			padding: 1rem;
+		}
+		.faq-question {
+			font-weight: bold;
+			color: #007acc;
+			margin-bottom: 0.5rem;
+		}
+		.faq-answer {
+			color: #666;
+			line-height: 1.6;
+		}
+		@media (max-width: 768px) {
+			.tool-container {
+				padding: 1rem;
+			}
+			.action-buttons {
+				flex-direction: column;
+			}
+			.preview-grid {
+				grid-template-columns: 1fr;
+			}
+			.preview-comparison {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body class="is-preload">
+	<!-- 返回主页按钮 -->
+	<a href="../../index" class="home-btn home-btn-top">
+		<i class="fas fa-home"></i>
+		返回首页
+	</a>
+	
+	
+	<!-- Wrapper -->
+	<div id="wrapper">
+		<!-- Header -->
+		<header id="header">
+			<h1><a href="../../index">ITMagical</a></h1>
+			<nav id="nav">
+				<ul>
+					<li><a href="../../index">首页</a></li>
+					<li>
+						<a href="#" class="icon solid fa-angle-down">工具分类</a>
+						<ul>
+							<li><a href="../index.html#image-tools">图片工具</a></li>
+							<li><a href="../index.html#convert-tools">格式转换</a></li>
+							<li><a href="../index.html#media-tools">媒体工具</a></li>
+							<li><a href="../index.html#utility-tools">实用工具</a></li>
+							<li><a href="../index.html#document-tools">文档工具</a></li>
+						</ul>
+					</li>
+					<li><a href="../update-log">更新日志</a></li>
+					<li><a href="../index.html#about">关于我们</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<div id="main" class="wrapper style1">
+			<div class="container">
+				<header class="major">
+					<h1>照片转铅笔画工具</h1>
+					<p>在线批量照片转铅笔画艺术风格，多种素描效果，专业艺术处理</p>
+				</header>
+
+				<div class="tool-container">
+					<!-- 文件上传区域 -->
+					<div class="upload-area" id="uploadArea">
+						<div class="upload-icon">🎨</div>
+						<h3>选择或拖拽照片文件</h3>
+						<p>支持 JPG、PNG、GIF、WebP 格式，最大 10MB</p>
+						<input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+						<button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">选择文件</button>
+					</div>
+
+					<!-- 铅笔画设置面板 -->
+					<div class="settings-panel" id="settingsPanel" style="display: none;">
+						<h3>铅笔画风格设置</h3>
+						<div class="setting-group">
+							<label>选择铅笔画风格：</label>
+							<div class="style-preview" id="stylePreview">
+								<div class="style-option selected" data-style="classic">
+									<div style="width: 60px; height: 60px; background: linear-gradient(45deg, #333, #666); border-radius: 4px; margin: 0 auto 0.5rem;"></div>
+									<div>经典素描</div>
+								</div>
+								<div class="style-option" data-style="detailed">
+									<div style="width: 60px; height: 60px; background: linear-gradient(45deg, #222, #555); border-radius: 4px; margin: 0 auto 0.5rem;"></div>
+									<div>细节素描</div>
+								</div>
+								<div class="style-option" data-style="soft">
+									<div style="width: 60px; height: 60px; background: linear-gradient(45deg, #666, #999); border-radius: 4px; margin: 0 auto 0.5rem;"></div>
+									<div>柔和素描</div>
+								</div>
+								<div class="style-option" data-style="artistic">
+									<div style="width: 60px; height: 60px; background: linear-gradient(45deg, #444, #777); border-radius: 4px; margin: 0 auto 0.5rem;"></div>
+									<div>艺术素描</div>
+								</div>
+							</div>
+						</div>
+						<div class="setting-group">
+							<label for="intensity">效果强度：<span id="intensityDisplay">70</span>%</label>
+							<input type="range" id="intensity" min="10" max="100" value="70">
+						</div>
+						<div class="setting-group">
+							<label for="contrast">对比度：<span id="contrastDisplay">50</span>%</label>
+							<input type="range" id="contrast" min="0" max="100" value="50">
+						</div>
+						<div class="setting-group">
+							<label for="outputFormat">输出格式：</label>
+							<select id="outputFormat">
+								<option value="jpg">JPG (推荐)</option>
+								<option value="png">PNG</option>
+								<option value="webp">WebP</option>
+							</select>
+						</div>
+						<div class="setting-group">
+							<label for="quality">图片质量：<span id="qualityDisplay">85</span>%</label>
+							<input type="range" id="quality" min="10" max="100" value="85">
+						</div>
+					</div>
+
+					<!-- 进度条 -->
+					<div class="progress-bar" id="progressBar">
+						<div class="progress-fill" id="progressFill"></div>
+					</div>
+
+					<!-- 预览区域 -->
+					<div class="preview-grid" id="previewGrid"></div>
+
+					<!-- 操作按钮 -->
+					<div class="action-buttons" id="actionButtons" style="display: none;">
+						<button class="btn btn-success" id="processBtn">开始转换</button>
+						<button class="btn btn-primary" id="downloadAllBtn" style="display: none;">下载全部</button>
+						<button class="btn btn-secondary" id="resetBtn">重新开始</button>
+					</div>
+				</div>
+
+				<!-- 使用指南 -->
+				<div class="guide-section">
+					<h2>使用指南</h2>
+					<div class="guide-steps">
+						<div class="guide-step">
+							<strong>上传照片：</strong>点击上传区域或拖拽照片文件到指定区域，支持批量上传多张照片。
+						</div>
+						<div class="guide-step">
+							<strong>选择风格：</strong>从经典素描、细节素描、柔和素描、艺术素描中选择您喜欢的铅笔画风格。
+						</div>
+						<div class="guide-step">
+							<strong>调整参数：</strong>根据需要调整效果强度、对比度等参数，实时预览效果变化。
+						</div>
+						<div class="guide-step">
+							<strong>开始转换：</strong>点击"开始转换"按钮，系统将自动为所有照片应用铅笔画效果。
+						</div>
+						<div class="guide-step">
+							<strong>下载结果：</strong>转换完成后，可以单独下载每张铅笔画或批量下载全部处理后的图片。
+						</div>
+					</div>
+				</div>
+
+				<!-- 工具详细介绍 -->
+				<div class="intro-section">
+					<h2>工具详细介绍</h2>
+					<p>照片转铅笔画工具是一款专业的艺术风格转换工具，能够将普通照片转换为具有艺术感的铅笔画效果。通过先进的图像处理算法，模拟真实铅笔绘画的纹理和质感，为您的照片增添独特的艺术魅力。</p>
+					<p>本工具提供多种铅笔画风格选择，包括经典素描、细节素描、柔和素描和艺术素描。每种风格都有其独特的特点：经典素描注重线条的清晰度，细节素描强调画面的精细程度，柔和素描营造温和的视觉效果，艺术素描则追求更强的艺术表现力。</p>
+					<p>工具支持实时参数调整，用户可以根据个人喜好和照片特点，调整效果强度、对比度等参数，获得最满意的铅笔画效果。批量处理功能让您能够同时转换多张照片，大大提高工作效率。</p>
+				</div>
+
+				<!-- 推广语 -->
+				<div class="promo-section">
+					<h2>为什么选择我们的照片转铅笔画工具？</h2>
+					<p>🎨 <strong>专业算法：</strong>采用先进的边缘检测和纹理分析算法，生成逼真的铅笔画效果。</p>
+					<p>🖼️ <strong>多种风格：</strong>提供4种不同的铅笔画风格，满足不同艺术需求和个人喜好。</p>
+					<p>⚡ <strong>批量处理：</strong>支持同时处理多张照片，节省时间，提高效率。</p>
+					<p>🎛️ <strong>参数可调：</strong>提供效果强度、对比度等多个参数调节，让您完全掌控艺术效果。</p>
+					<p>🔒 <strong>隐私保护：</strong>所有处理都在本地完成，照片不会上传到服务器，保护您的隐私。</p>
+					<p>💰 <strong>完全免费：</strong>无需注册登录，无水印添加，所有功能完全免费使用。</p>
+				</div>
+
+				<!-- 核心优势与应用场景 -->
+				<div class="advantages-section">
+					<h2>核心优势与应用场景</h2>
+					<div class="feature-grid">
+						<div class="feature-card">
+							<div class="feature-icon">🎭</div>
+							<h3>艺术创作</h3>
+							<p>为摄影作品增添艺术气息，创作独特的视觉效果和艺术风格。</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">📱</div>
+							<h3>社交分享</h3>
+							<p>制作有趣的社交媒体内容，让您的照片在朋友圈中脱颖而出。</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">🖼️</div>
+							<h3>装饰设计</h3>
+							<p>制作家居装饰画、个性化礼品，为空间增添艺术氛围。</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">📚</div>
+							<h3>教育用途</h3>
+							<p>用于美术教学、艺术欣赏，帮助学生理解素描艺术的魅力。</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">💼</div>
+							<h3>商业应用</h3>
+							<p>用于广告设计、品牌宣传，创造独特的视觉识别效果。</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">🎁</div>
+							<h3>个性礼品</h3>
+							<p>制作个性化的铅笔画肖像，作为特别的礼品送给亲朋好友。</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- 常见问题 -->
+				<div class="faq-section">
+					<h2>常见问题解答</h2>
+					<div class="faq-item">
+						<div class="faq-question">Q: 哪种类型的照片转换效果最好？</div>
+						<div class="faq-answer">A: 人像照片、风景照片、建筑照片都能获得很好的效果。建议选择对比度较高、细节丰富的照片，避免过于模糊或曝光不足的图片。</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">Q: 不同铅笔画风格有什么区别？</div>
+						<div class="faq-answer">A: 经典素描线条清晰锐利；细节素描保留更多细节信息；柔和素描效果温和自然；艺术素描具有更强的艺术表现力和创意效果。</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">Q: 如何调整参数获得最佳效果？</div>
+						<div class="faq-answer">A: 效果强度控制铅笔画的明显程度，对比度影响画面的层次感。建议先使用默认参数，然后根据预览效果进行微调。</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">Q: 处理时间需要多长？</div>
+						<div class="faq-answer">A: 处理时间取决于图片大小和数量。一般情况下，单张图片处理时间在2-10秒之间，批量处理会依次进行。</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">Q: 支持哪些图片格式？</div>
+						<div class="faq-answer">A: 支持JPG、PNG、GIF、WebP等主流图片格式输入，输出可选择JPG、PNG或WebP格式。</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">Q: 转换后的图片质量会下降吗？</div>
+						<div class="faq-answer">A: 本工具采用高质量的图像处理算法，可以保持良好的图片质量。您还可以调整输出质量参数来平衡文件大小和图片质量。</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+				<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+				<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+				<li><a href="mailto:contact@tool.itmagical.top" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+			</ul>
+			<ul class="copyright">
+				<li>&copy; 2025 ITMagical. All rights reserved.</li>
+				<li>照片转铅笔画工具 - 在线批量照片转铅笔画艺术风格专业工具</li>
+			</ul>
+		</footer>
+	</div>
+
+	<!-- Scripts -->
+	<script src="../../assets/js/jquery.min.js"></script>
+	<script src="../../assets/js/jquery.dropotron.min.js"></script>
+	<script src="../../assets/js/breakpoints.min.js"></script>
+	<script src="../../assets/js/util.js"></script>
+	<script src="../../assets/js/main.js"></script>
+
+	<script>
+		// 全局变量
+		let uploadedFiles = [];
+		let processedImages = [];
+		let currentStyle = 'classic';
+
+		// DOM元素
+		const uploadArea = document.getElementById('uploadArea');
+		const fileInput = document.getElementById('fileInput');
+		const settingsPanel = document.getElementById('settingsPanel');
+		const previewGrid = document.getElementById('previewGrid');
+		const actionButtons = document.getElementById('actionButtons');
+		const progressBar = document.getElementById('progressBar');
+		const progressFill = document.getElementById('progressFill');
+		const stylePreview = document.getElementById('stylePreview');
+		const intensity = document.getElementById('intensity');
+		const intensityDisplay = document.getElementById('intensityDisplay');
+		const contrast = document.getElementById('contrast');
+		const contrastDisplay = document.getElementById('contrastDisplay');
+		const outputFormat = document.getElementById('outputFormat');
+		const quality = document.getElementById('quality');
+		const qualityDisplay = document.getElementById('qualityDisplay');
+		const processBtn = document.getElementById('processBtn');
+		const downloadAllBtn = document.getElementById('downloadAllBtn');
+		const resetBtn = document.getElementById('resetBtn');
+
+		// 事件监听器
+		uploadArea.addEventListener('click', () => fileInput.click());
+		uploadArea.addEventListener('dragover', handleDragOver);
+		uploadArea.addEventListener('drop', handleDrop);
+		fileInput.addEventListener('change', handleFileSelect);
+		stylePreview.addEventListener('click', handleStyleSelect);
+		intensity.addEventListener('input', () => {
+			intensityDisplay.textContent = intensity.value;
+		});
+		contrast.addEventListener('input', () => {
+			contrastDisplay.textContent = contrast.value;
+		});
+		quality.addEventListener('input', () => {
+			qualityDisplay.textContent = quality.value;
+		});
+		processBtn.addEventListener('click', processImages);
+		downloadAllBtn.addEventListener('click', downloadAll);
+		resetBtn.addEventListener('click', resetTool);
+
+		// 拖拽处理
+		function handleDragOver(e) {
+			e.preventDefault();
+			uploadArea.classList.add('dragover');
+		}
+
+		function handleDrop(e) {
+			e.preventDefault();
+			uploadArea.classList.remove('dragover');
+			const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+			handleFiles(files);
+		}
+
+		// 文件选择处理
+		function handleFileSelect(e) {
+			const files = Array.from(e.target.files);
+			handleFiles(files);
+		}
+
+		// 处理文件
+		function handleFiles(files) {
+			if (files.length === 0) return;
+
+			// 验证文件
+			const validFiles = files.filter(file => {
+				if (!file.type.startsWith('image/')) {
+					alert(`文件 ${file.name} 不是有效的图片格式`);
+					return false;
+				}
+				if (file.size > 10 * 1024 * 1024) {
+					alert(`文件 ${file.name} 超过10MB大小限制`);
+					return false;
+				}
+				return true;
+			});
+
+			if (validFiles.length === 0) return;
+
+			uploadedFiles = [...uploadedFiles, ...validFiles];
+			displayPreviews();
+			showSettings();
+		}
+
+		// 显示预览
+		function displayPreviews() {
+			previewGrid.innerHTML = '';
+			uploadedFiles.forEach((file, index) => {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					const previewItem = document.createElement('div');
+					previewItem.className = 'preview-item';
+					previewItem.innerHTML = `
+						<button class="remove-btn" onclick="removeFile(${index})">&times;</button>
+						<img src="${e.target.result}" alt="原图">
+						<div class="filename">${file.name}</div>
+						<div class="file-info">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+					`;
+					previewGrid.appendChild(previewItem);
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+
+		// 移除文件
+		function removeFile(index) {
+			uploadedFiles.splice(index, 1);
+			if (uploadedFiles.length === 0) {
+				hideSettings();
+			} else {
+				displayPreviews();
+			}
+		}
+
+		// 显示设置面板
+		function showSettings() {
+			settingsPanel.style.display = 'block';
+			actionButtons.style.display = 'flex';
+		}
+
+		// 隐藏设置面板
+		function hideSettings() {
+			settingsPanel.style.display = 'none';
+			actionButtons.style.display = 'none';
+			previewGrid.innerHTML = '';
+		}
+
+		// 风格选择处理
+		function handleStyleSelect(e) {
+			const styleOption = e.target.closest('.style-option');
+			if (!styleOption) return;
+
+			// 更新选中状态
+			document.querySelectorAll('.style-option').forEach(option => {
+				option.classList.remove('selected');
+			});
+			styleOption.classList.add('selected');
+
+			// 更新当前风格
+			currentStyle = styleOption.dataset.style;
+		}
+
+		// 处理图片
+		async function processImages() {
+			if (uploadedFiles.length === 0) {
+				alert('请先上传照片文件');
+				return;
+			}
+
+			processBtn.disabled = true;
+			progressBar.style.display = 'block';
+			processedImages = [];
+
+			for (let i = 0; i < uploadedFiles.length; i++) {
+				const file = uploadedFiles[i];
+				try {
+					const processedImage = await processImage(file);
+					processedImages.push(processedImage);
+					updateProgress((i + 1) / uploadedFiles.length * 100);
+				} catch (error) {
+					console.error(`处理图片 ${file.name} 时出错:`, error);
+					alert(`处理图片 ${file.name} 时出错，请重试`);
+				}
+			}
+
+			processBtn.disabled = false;
+			progressBar.style.display = 'none';
+			downloadAllBtn.style.display = 'inline-block';
+			displayProcessedImages();
+		}
+
+		// 处理单张图片
+		function processImage(file) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.onload = () => {
+					try {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+
+						// 设置画布尺寸
+						canvas.width = img.width;
+						canvas.height = img.height;
+
+						// 绘制原图
+						ctx.drawImage(img, 0, 0);
+
+						// 获取图像数据
+						const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+						const data = imageData.data;
+
+						// 应用铅笔画效果
+						applyPencilEffect(data, canvas.width, canvas.height);
+
+						// 将处理后的数据放回画布
+						ctx.putImageData(imageData, 0, 0);
+
+						// 转换为blob
+						const format = outputFormat.value;
+						const qualityValue = quality.value / 100;
+						const mimeType = format === 'jpg' ? 'image/jpeg' : `image/${format}`;
+
+						canvas.toBlob((blob) => {
+							if (blob) {
+								const fileName = file.name.replace(/\.[^/.]+$/, '') + `_pencil.${format}`;
+								resolve({
+									blob: blob,
+									fileName: fileName,
+									originalName: file.name,
+									originalUrl: URL.createObjectURL(file)
+								});
+							} else {
+								reject(new Error('转换图片失败'));
+							}
+						}, mimeType, qualityValue);
+					} catch (error) {
+						reject(error);
+					}
+				};
+				img.onerror = () => reject(new Error('加载图片失败'));
+				img.src = URL.createObjectURL(file);
+			});
+		}
+
+		// 应用铅笔画效果
+		function applyPencilEffect(data, width, height) {
+			const intensityValue = intensity.value / 100;
+			const contrastValue = contrast.value / 100;
+
+			// 转换为灰度
+			for (let i = 0; i < data.length; i += 4) {
+				const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+				data[i] = gray;
+				data[i + 1] = gray;
+				data[i + 2] = gray;
+			}
+
+			// 边缘检测
+			const edges = detectEdges(data, width, height);
+
+			// 应用不同风格的效果
+			for (let i = 0; i < data.length; i += 4) {
+				let value = data[i];
+				const edgeValue = edges[i / 4];
+
+				// 根据风格调整
+				switch (currentStyle) {
+					case 'classic':
+						value = applyClassicStyle(value, edgeValue, intensityValue);
+						break;
+					case 'detailed':
+						value = applyDetailedStyle(value, edgeValue, intensityValue);
+						break;
+					case 'soft':
+						value = applySoftStyle(value, edgeValue, intensityValue);
+						break;
+					case 'artistic':
+						value = applyArtisticStyle(value, edgeValue, intensityValue);
+						break;
+				}
+
+				// 应用对比度
+				value = applyContrast(value, contrastValue);
+
+				// 确保值在有效范围内
+				value = Math.max(0, Math.min(255, value));
+
+				data[i] = value;
+				data[i + 1] = value;
+				data[i + 2] = value;
+			}
+		}
+
+		// 边缘检测
+		function detectEdges(data, width, height) {
+			const edges = new Array(width * height);
+			const sobelX = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
+			const sobelY = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
+
+			for (let y = 1; y < height - 1; y++) {
+				for (let x = 1; x < width - 1; x++) {
+					let gx = 0, gy = 0;
+
+					for (let i = 0; i < 9; i++) {
+						const dx = (i % 3) - 1;
+						const dy = Math.floor(i / 3) - 1;
+						const pixelIndex = ((y + dy) * width + (x + dx)) * 4;
+						const pixelValue = data[pixelIndex];
+
+						gx += pixelValue * sobelX[i];
+						gy += pixelValue * sobelY[i];
+					}
+
+					const magnitude = Math.sqrt(gx * gx + gy * gy);
+					edges[y * width + x] = magnitude;
+				}
+			}
+
+			return edges;
+		}
+
+		// 经典素描风格
+		function applyClassicStyle(value, edgeValue, intensity) {
+			const edgeThreshold = 50;
+			if (edgeValue > edgeThreshold) {
+				return Math.max(0, value - edgeValue * intensity * 0.8);
+			}
+			return value;
+		}
+
+		// 细节素描风格
+		function applyDetailedStyle(value, edgeValue, intensity) {
+			const edgeThreshold = 30;
+			if (edgeValue > edgeThreshold) {
+				return Math.max(0, value - edgeValue * intensity * 1.2);
+			}
+			return value * (1 - intensity * 0.1);
+		}
+
+		// 柔和素描风格
+		function applySoftStyle(value, edgeValue, intensity) {
+			const edgeThreshold = 70;
+			if (edgeValue > edgeThreshold) {
+				return Math.max(0, value - edgeValue * intensity * 0.5);
+			}
+			return value * (1 + intensity * 0.1);
+		}
+
+		// 艺术素描风格
+		function applyArtisticStyle(value, edgeValue, intensity) {
+			const edgeThreshold = 40;
+			if (edgeValue > edgeThreshold) {
+				const artistic = Math.sin(value / 255 * Math.PI) * 255;
+				return Math.max(0, artistic - edgeValue * intensity);
+			}
+			return value * (1 - intensity * 0.2);
+		}
+
+		// 应用对比度
+		function applyContrast(value, contrast) {
+			const factor = (259 * (contrast * 255 + 255)) / (255 * (259 - contrast * 255));
+			return factor * (value - 128) + 128;
+		}
+
+		// 更新进度
+		function updateProgress(percent) {
+			progressFill.style.width = percent + '%';
+		}
+
+		// 显示处理后的图片
+		function displayProcessedImages() {
+			previewGrid.innerHTML = '';
+			processedImages.forEach((processedImage, index) => {
+				const processedUrl = URL.createObjectURL(processedImage.blob);
+				const previewItem = document.createElement('div');
+				previewItem.className = 'preview-item';
+				previewItem.innerHTML = `
+					<div class="preview-comparison">
+						<div>
+							<div class="preview-label">原图</div>
+							<img src="${processedImage.originalUrl}" alt="原图">
+						</div>
+						<div>
+							<div class="preview-label">铅笔画</div>
+							<img src="${processedUrl}" alt="铅笔画">
+						</div>
+					</div>
+					<div class="filename">${processedImage.fileName}</div>
+					<div class="file-info">${(processedImage.blob.size / 1024 / 1024).toFixed(2)} MB</div>
+					<button class="btn btn-primary" onclick="downloadImage(${index})">下载</button>
+				`;
+				previewGrid.appendChild(previewItem);
+			});
+		}
+
+		// 下载单张图片
+		function downloadImage(index) {
+			const processedImage = processedImages[index];
+			const url = URL.createObjectURL(processedImage.blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = processedImage.fileName;
+			a.click();
+			URL.revokeObjectURL(url);
+		}
+
+		// 下载全部图片
+		function downloadAll() {
+			processedImages.forEach((processedImage, index) => {
+				setTimeout(() => {
+					downloadImage(index);
+				}, index * 100);
+			});
+		}
+
+		// 重置工具
+		function resetTool() {
+			uploadedFiles = [];
+			processedImages = [];
+			fileInput.value = '';
+			hideSettings();
+			progressBar.style.display = 'none';
+			downloadAllBtn.style.display = 'none';
+			updateProgress(0);
+			// 重置风格选择
+			document.querySelectorAll('.style-option').forEach(option => {
+				option.classList.remove('selected');
+			});
+			document.querySelector('.style-option[data-style="classic"]').classList.add('selected');
+			currentStyle = 'classic';
+		}
+	</script>
+
+	<!-- 结构化数据 -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "照片转铅笔画工具",
+		"description": "免费在线照片转铅笔画工具，支持批量转换，多种铅笔画风格，艺术效果处理。",
+		"url": "https://tool.itmagical.top/tools/照片转铅笔画工具.html",
+		"applicationCategory": "MultimediaApplication",
+		"operatingSystem": "Any",
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"featureList": [
+			"批量照片转铅笔画",
+			"多种素描风格",
+			"效果强度调节",
+			"对比度控制",
+			"高质量输出",
+			"实时预览对比",
+			"本地处理保护隐私"
+		]
+	}
+	</script>
+</body>
+</html>

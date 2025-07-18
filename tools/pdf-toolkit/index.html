@@ -1,0 +1,1285 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>PDF工具集 - 专业的PDF处理工具 | 云云的AI工具箱</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="专业的PDF工具集，支持PDF格式转换、合并、拆分、压缩、页面提取、水印添加、密码保护等功能。免费在线使用，无需下载安装，保护隐私安全。" />
+    <meta name="keywords" content="PDF工具,PDF转换,PDF合并,PDF拆分,PDF压缩,PDF提取,PDF水印,PDF密码,在线PDF处理,免费PDF工具" />
+    <meta name="author" content="云云的AI工具箱" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://itmagical.com/tools/pdf-toolkit.html" />
+    <meta property="og:title" content="PDF工具集 - 专业的PDF处理工具" />
+    <meta property="og:description" content="专业的PDF工具集，支持PDF格式转换、合并、拆分、压缩、页面提取、水印添加、密码保护等功能。免费在线使用，无需下载安装，保护隐私安全。" />
+    <meta property="og:image" content="https://itmagical.com/images/pdf-toolkit-preview.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://itmagical.com/tools/pdf-toolkit.html" />
+    <meta property="twitter:title" content="PDF工具集 - 专业的PDF处理工具" />
+    <meta property="twitter:description" content="专业的PDF工具集，支持PDF格式转换、合并、拆分、压缩、页面提取、水印添加、密码保护等功能。免费在线使用，无需下载安装，保护隐私安全。" />
+    <meta property="twitter:image" content="https://itmagical.com/images/pdf-toolkit-preview.jpg" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://itmagical.com/tools/pdf-toolkit" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PDF工具集",
+        "description": "专业的PDF处理工具，支持PDF格式转换、合并、拆分、压缩、页面提取、水印添加、密码保护等功能",
+        "url": "https://itmagical.com/tools/pdf-toolkit.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "permissions": "browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "云云的AI工具箱"
+        }
+    }
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="../../assets/css/noscript.css" /></noscript>
+    
+    <style>
+        /* PDF工具集专用样式 */
+        .tool-header {
+            text-align: center;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .tool-header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-header .keywords {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .pdf-tool {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        
+        .tool-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: #8e44ad;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .tab-button.active {
+            background: #f1c40f;
+            color: #2c3e50;
+            border-bottom-color: #f39c12;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area:hover {
+            border-color: #0056b3;
+            background: #e6f3ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #28a745;
+            background: #e6ffe6;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .pdf-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .input-field {
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        
+        .file-list {
+            margin: 2rem 0;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .file-icon {
+            background: #dc3545;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .file-details h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .file-details p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        
+        .button:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .button.secondary {
+            background: #6c757d;
+        }
+        
+        .button.secondary:hover {
+            background: #545b62;
+        }
+        
+        .button.small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .button.danger {
+            background: #dc3545;
+        }
+        
+        .button.danger:hover {
+            background: #c82333;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .info-section h2 {
+            color: #495057;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .info-section h3 {
+            color: #495057;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .info-section p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .info-section ul {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .info-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .advantage-item {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .advantage-item h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .advantage-item p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .faq-item h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-item p {
+            color: #6c757d;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .info-message {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .copyright-footer {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 2rem;
+            }
+            
+            .tool-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                text-align: left;
+                border-bottom: 1px solid #eee;
+                border-radius: 0;
+            }
+            
+            .pdf-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- 导航栏 -->
+    <div id="navbar-placeholder"></div>
+    
+    <!-- 工具标题区域 -->
+    <div class="tool-header">
+        <div class="container">
+            <h1>PDF工具集</h1>
+            <p class="subtitle">专业的PDF处理工具，让文档处理更加便捷高效</p>
+            <p class="keywords">PDF转换 • PDF合并 • PDF拆分 • PDF压缩 • 页面提取 • 水印添加 • 密码保护</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- 工具功能实现 -->
+        <div class="pdf-tool">
+            <div class="tool-tabs">
+                <button class="tab-button active" onclick="showTab('convert')">格式转换</button>
+                <button class="tab-button" onclick="showTab('merge')">合并PDF</button>
+                <button class="tab-button" onclick="showTab('split')">拆分PDF</button>
+                <button class="tab-button" onclick="showTab('compress')">压缩PDF</button>
+                <button class="tab-button" onclick="showTab('extract')">页面提取</button>
+                <button class="tab-button" onclick="showTab('watermark')">添加水印</button>
+                <button class="tab-button" onclick="showTab('protect')">密码保护</button>
+                <button class="tab-button" onclick="showTab('unlock')">解除保护</button>
+            </div>
+
+            <!-- 格式转换 -->
+            <div id="convert" class="tab-content active">
+                <h3>PDF格式转换</h3>
+                <div class="upload-area" onclick="document.getElementById('convertFile').click()">
+                    <div class="feature-icon">📄</div>
+                    <h4>选择PDF文件</h4>
+                    <p>支持转换为Word、Excel、PowerPoint、图片等格式</p>
+                    <input type="file" id="convertFile" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>转换格式:</label>
+                        <select id="convertFormat" class="input-field">
+                            <option value="docx">Word文档 (.docx)</option>
+                            <option value="xlsx">Excel表格 (.xlsx)</option>
+                            <option value="pptx">PowerPoint (.pptx)</option>
+                            <option value="jpg">JPEG图片 (.jpg)</option>
+                            <option value="png">PNG图片 (.png)</option>
+                            <option value="txt">纯文本 (.txt)</option>
+                            <option value="html">网页 (.html)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>页面范围:</label>
+                        <input type="text" id="convertPages" class="input-field" placeholder="例如: 1-5, 8, 10-12 (留空转换全部)">
+                    </div>
+                    <div class="control-group">
+                        <label>图片质量:</label>
+                        <input type="range" id="convertQuality" class="slider" min="50" max="100" value="85">
+                        <span id="convertQualityValue">85%</span>
+                    </div>
+                </div>
+                
+                <div class="file-list" id="convertFileList"></div>
+                
+                <button class="button" onclick="startConvert()">开始转换</button>
+                <button class="button secondary" onclick="clearFiles('convert')">清空文件</button>
+            </div>
+
+            <!-- 合并PDF -->
+            <div id="merge" class="tab-content">
+                <h3>合并PDF文件</h3>
+                <div class="upload-area" onclick="document.getElementById('mergeFiles').click()">
+                    <div class="feature-icon">📚</div>
+                    <h4>选择多个PDF文件</h4>
+                    <p>将多个PDF文件合并为一个文件</p>
+                    <input type="file" id="mergeFiles" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>合并方式:</label>
+                        <select id="mergeMode" class="input-field">
+                            <option value="order">按选择顺序</option>
+                            <option value="name">按文件名排序</option>
+                            <option value="size">按文件大小排序</option>
+                            <option value="date">按修改时间排序</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>输出文件名:</label>
+                        <input type="text" id="mergeFileName" class="input-field" placeholder="合并后的文件名" value="merged_document.pdf">
+                    </div>
+                </div>
+                
+                <div class="file-list" id="mergeFileList"></div>
+                
+                <button class="button" onclick="startMerge()">开始合并</button>
+                <button class="button secondary" onclick="clearFiles('merge')">清空文件</button>
+            </div>
+
+            <!-- 拆分PDF -->
+            <div id="split" class="tab-content">
+                <h3>拆分PDF文件</h3>
+                <div class="upload-area" onclick="document.getElementById('splitFile').click()">
+                    <div class="feature-icon">✂️</div>
+                    <h4>选择PDF文件</h4>
+                    <p>将PDF文件拆分为多个文件</p>
+                    <input type="file" id="splitFile" class="file-input" accept=".pdf">
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>拆分方式:</label>
+                        <select id="splitMode" class="input-field" onchange="toggleSplitOptions()">
+                            <option value="pages">按页数拆分</option>
+                            <option value="range">按页面范围</option>
+                            <option value="size">按文件大小</option>
+                            <option value="bookmark">按书签拆分</option>
+                        </select>
+                    </div>
+                    <div class="control-group" id="pagesPerFile">
+                        <label>每个文件页数:</label>
+                        <input type="number" id="splitPages" class="input-field" value="1" min="1">
+                    </div>
+                    <div class="control-group" id="pageRanges" style="display:none;">
+                        <label>页面范围:</label>
+                        <input type="text" id="splitRanges" class="input-field" placeholder="例如: 1-3, 5-8, 10-15">
+                    </div>
+                    <div class="control-group" id="maxSize" style="display:none;">
+                        <label>最大文件大小(MB):</label>
+                        <input type="number" id="splitSize" class="input-field" value="5" min="1">
+                    </div>
+                </div>
+                
+                <div class="file-list" id="splitFileList"></div>
+                
+                <button class="button" onclick="startSplit()">开始拆分</button>
+                <button class="button secondary" onclick="clearFiles('split')">清空文件</button>
+            </div>
+
+            <!-- 压缩PDF -->
+            <div id="compress" class="tab-content">
+                <h3>压缩PDF文件</h3>
+                <div class="upload-area" onclick="document.getElementById('compressFiles').click()">
+                    <div class="feature-icon">🗜️</div>
+                    <h4>选择PDF文件</h4>
+                    <p>减小PDF文件大小，保持良好的阅读质量</p>
+                    <input type="file" id="compressFiles" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>压缩级别:</label>
+                        <select id="compressLevel" class="input-field">
+                            <option value="low">低压缩 (高质量)</option>
+                            <option value="medium" selected>中等压缩 (平衡)</option>
+                            <option value="high">高压缩 (小文件)</option>
+                            <option value="extreme">极限压缩 (最小文件)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>图片质量:</label>
+                        <input type="range" id="compressQuality" class="slider" min="30" max="100" value="75">
+                        <span id="compressQualityValue">75%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>图片分辨率:</label>
+                        <select id="compressResolution" class="input-field">
+                            <option value="300">300 DPI (打印质量)</option>
+                            <option value="150" selected>150 DPI (屏幕质量)</option>
+                            <option value="72">72 DPI (网页质量)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="file-list" id="compressFileList"></div>
+                
+                <button class="button" onclick="startCompress()">开始压缩</button>
+                <button class="button secondary" onclick="clearFiles('compress')">清空文件</button>
+            </div>
+
+            <!-- 页面提取 -->
+            <div id="extract" class="tab-content">
+                <h3>提取PDF页面</h3>
+                <div class="upload-area" onclick="document.getElementById('extractFile').click()">
+                    <div class="feature-icon">📋</div>
+                    <h4>选择PDF文件</h4>
+                    <p>提取指定页面创建新的PDF文件</p>
+                    <input type="file" id="extractFile" class="file-input" accept=".pdf">
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>提取页面:</label>
+                        <input type="text" id="extractPages" class="input-field" placeholder="例如: 1, 3-5, 8, 10-12">
+                    </div>
+                    <div class="control-group">
+                        <label>输出文件名:</label>
+                        <input type="text" id="extractFileName" class="input-field" placeholder="提取的页面" value="extracted_pages.pdf">
+                    </div>
+                </div>
+                
+                <div class="file-list" id="extractFileList"></div>
+                
+                <button class="button" onclick="startExtract()">开始提取</button>
+                <button class="button secondary" onclick="clearFiles('extract')">清空文件</button>
+            </div>
+
+            <!-- 添加水印 -->
+            <div id="watermark" class="tab-content">
+                <h3>添加水印</h3>
+                <div class="upload-area" onclick="document.getElementById('watermarkFiles').click()">
+                    <div class="feature-icon">🏷️</div>
+                    <h4>选择PDF文件</h4>
+                    <p>为PDF文件添加文字或图片水印</p>
+                    <input type="file" id="watermarkFiles" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>水印类型:</label>
+                        <select id="watermarkType" class="input-field" onchange="toggleWatermarkOptions()">
+                            <option value="text">文字水印</option>
+                            <option value="image">图片水印</option>
+                        </select>
+                    </div>
+                    <div class="control-group" id="textWatermark">
+                        <label>水印文字:</label>
+                        <input type="text" id="watermarkText" class="input-field" placeholder="输入水印文字" value="机密文档">
+                    </div>
+                    <div class="control-group" id="imageWatermark" style="display:none;">
+                        <label>水印图片:</label>
+                        <input type="file" id="watermarkImage" class="input-field" accept="image/*">
+                    </div>
+                    <div class="control-group">
+                        <label>位置:</label>
+                        <select id="watermarkPosition" class="input-field">
+                            <option value="center">居中</option>
+                            <option value="top-left">左上角</option>
+                            <option value="top-right">右上角</option>
+                            <option value="bottom-left">左下角</option>
+                            <option value="bottom-right">右下角</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>透明度:</label>
+                        <input type="range" id="watermarkOpacity" class="slider" min="10" max="100" value="30">
+                        <span id="watermarkOpacityValue">30%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>大小:</label>
+                        <input type="range" id="watermarkSize" class="slider" min="10" max="100" value="50">
+                        <span id="watermarkSizeValue">50%</span>
+                    </div>
+                </div>
+                
+                <div class="file-list" id="watermarkFileList"></div>
+                
+                <button class="button" onclick="startWatermark()">添加水印</button>
+                <button class="button secondary" onclick="clearFiles('watermark')">清空文件</button>
+            </div>
+
+            <!-- 密码保护 -->
+            <div id="protect" class="tab-content">
+                <h3>密码保护</h3>
+                <div class="upload-area" onclick="document.getElementById('protectFiles').click()">
+                    <div class="feature-icon">🔒</div>
+                    <h4>选择PDF文件</h4>
+                    <p>为PDF文件添加密码保护</p>
+                    <input type="file" id="protectFiles" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>用户密码:</label>
+                        <input type="password" id="userPassword" class="input-field" placeholder="打开文档所需密码">
+                    </div>
+                    <div class="control-group">
+                        <label>所有者密码:</label>
+                        <input type="password" id="ownerPassword" class="input-field" placeholder="修改权限所需密码">
+                    </div>
+                    <div class="control-group">
+                        <label>权限设置:</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label><input type="checkbox" id="allowPrint" checked> 允许打印</label>
+                            <label><input type="checkbox" id="allowCopy" checked> 允许复制</label>
+                            <label><input type="checkbox" id="allowModify"> 允许修改</label>
+                            <label><input type="checkbox" id="allowAnnotate"> 允许注释</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="file-list" id="protectFileList"></div>
+                
+                <button class="button" onclick="startProtect()">添加保护</button>
+                <button class="button secondary" onclick="clearFiles('protect')">清空文件</button>
+            </div>
+
+            <!-- 解除保护 -->
+            <div id="unlock" class="tab-content">
+                <h3>解除密码保护</h3>
+                <div class="upload-area" onclick="document.getElementById('unlockFiles').click()">
+                    <div class="feature-icon">🔓</div>
+                    <h4>选择受保护的PDF文件</h4>
+                    <p>移除PDF文件的密码保护</p>
+                    <input type="file" id="unlockFiles" class="file-input" accept=".pdf" multiple>
+                </div>
+                
+                <div class="pdf-controls">
+                    <div class="control-group">
+                        <label>文档密码:</label>
+                        <input type="password" id="unlockPassword" class="input-field" placeholder="输入文档密码">
+                    </div>
+                </div>
+                
+                <div class="file-list" id="unlockFileList"></div>
+                
+                <button class="button" onclick="startUnlock()">解除保护</button>
+                <button class="button secondary" onclick="clearFiles('unlock')">清空文件</button>
+            </div>
+        </div>
+        
+        <!-- 使用指南 -->
+        <div class="info-section">
+            <h2>使用指南</h2>
+            <div class="advantages-grid">
+                <div class="advantage-item">
+                    <h4>📤 上传文件</h4>
+                    <p>点击上传区域或拖拽PDF文件到指定区域，支持批量上传</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>⚙️ 设置参数</h4>
+                    <p>根据需要调整转换格式、压缩级别、页面范围等参数</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>🚀 开始处理</h4>
+                    <p>点击对应的处理按钮，等待处理完成</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>📥 下载结果</h4>
+                    <p>处理完成后自动下载结果文件到本地</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 工具详细介绍 -->
+        <div class="info-section">
+            <h2>工具详细介绍</h2>
+            <p>PDF工具集是一款功能强大的在线PDF处理工具，集成了PDF格式转换、文件合并、页面拆分、文档压缩、页面提取、水印添加、密码保护等多种实用功能。</p>
+            
+            <h3>主要功能特色：</h3>
+            <ul>
+                <li><strong>格式转换</strong>：支持PDF转换为Word、Excel、PowerPoint、图片、文本等多种格式</li>
+                <li><strong>文件合并</strong>：将多个PDF文件快速合并为一个文档，支持自定义排序</li>
+                <li><strong>页面拆分</strong>：按页数、页面范围或文件大小拆分PDF文档</li>
+                <li><strong>文档压缩</strong>：智能压缩PDF文件大小，保持良好的视觉质量</li>
+                <li><strong>页面提取</strong>：精确提取指定页面，创建新的PDF文档</li>
+                <li><strong>水印添加</strong>：支持文字和图片水印，可调整位置、透明度和大小</li>
+                <li><strong>密码保护</strong>：为PDF文件添加密码保护，设置访问权限</li>
+                <li><strong>解除保护</strong>：移除PDF文件的密码保护限制</li>
+            </ul>
+            
+            <p>所有处理都在浏览器本地完成，无需上传到服务器，确保文档安全和隐私保护。支持现代浏览器，兼容Windows、Mac、Linux等操作系统。</p>
+        </div>
+        
+        <!-- 推广语 -->
+        <div class="info-section">
+            <h2>为什么选择我们的PDF工具集？</h2>
+            <p>在众多PDF处理工具中，我们的PDF工具集凭借其卓越的性能、完善的功能和优秀的用户体验脱颖而出。我们致力于为用户提供最专业、最便捷的PDF处理解决方案。</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>隐私安全</h3>
+                    <p>所有处理都在本地完成，文件不上传服务器，完全保护您的隐私和数据安全</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>高效快速</h3>
+                    <p>采用先进的处理算法，快速完成各种PDF操作，节省您的宝贵时间</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🆓</div>
+                    <h3>完全免费</h3>
+                    <p>所有功能完全免费使用，无需注册账号，无使用次数限制</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 工具优势 -->
+        <div class="info-section">
+            <h2>工具优势与应用场景</h2>
+            
+            <h3>核心优势：</h3>
+            <div class="advantages-grid">
+                <div class="advantage-item">
+                    <h4>🎯 功能全面</h4>
+                    <p>八大核心功能，满足各种PDF处理需求</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>🌐 跨平台兼容</h4>
+                    <p>支持Windows、Mac、Linux、iOS、Android等所有平台</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>📱 响应式设计</h4>
+                    <p>完美适配电脑、平板、手机等各种设备</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>🚀 无需安装</h4>
+                    <p>基于浏览器运行，无需下载安装任何软件</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>⚡ 处理快速</h4>
+                    <p>本地处理技术，处理速度快，不受网络影响</p>
+                </div>
+                <div class="advantage-item">
+                    <h4>🔧 操作简单</h4>
+                    <p>直观的用户界面，简单几步即可完成操作</p>
+                </div>
+            </div>
+            
+            <h3>应用场景：</h3>
+            <ul>
+                <li><strong>办公文档处理</strong>：合并会议资料、拆分大型文档、压缩文件大小</li>
+                <li><strong>学术研究</strong>：提取论文特定页面、转换格式便于编辑</li>
+                <li><strong>商务合作</strong>：添加水印保护商业机密、设置密码保护重要文档</li>
+                <li><strong>教育培训</strong>：制作教学材料、整理学习资源</li>
+                <li><strong>个人使用</strong>：整理电子书籍、处理扫描文档</li>
+            </ul>
+        </div>
+        
+        <!-- 常见问题 -->
+        <div class="info-section">
+            <h2>常见问题解答</h2>
+            
+            <div class="faq-item">
+                <h4>Q: 支持哪些PDF版本？</h4>
+                <p>A: 支持PDF 1.4到1.7版本，兼容绝大多数PDF文件。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 文件大小有限制吗？</h4>
+                <p>A: 单个文件建议不超过100MB，批量处理建议不超过20个文件，以确保最佳处理效果。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 处理后的文件质量如何？</h4>
+                <p>A: 我们采用高质量的处理算法，确保输出文件保持原有的清晰度和格式。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 是否支持加密的PDF文件？</h4>
+                <p>A: 对于有密码保护的PDF文件，需要先使用"解除保护"功能输入正确密码后才能进行其他操作。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 推荐使用哪些浏览器？</h4>
+                <p>A: 建议使用Chrome、Firefox、Safari、Edge等现代浏览器，以获得最佳的使用体验。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 文件安全性如何保障？</h4>
+                <p>A: 所有处理都在您的浏览器本地完成，文件不会上传到我们的服务器，完全保护您的隐私安全。</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: 如果遇到处理失败怎么办？</h4>
+                <p>A: 请检查文件是否损坏、格式是否正确，或尝试使用较小的文件。如问题持续存在，请联系我们获取技术支持。</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 版权信息 -->
+    <div class="copyright-footer">
+        <p>@2025 专业的PDF处理工具集，让文档处理更加便捷高效</p>
+    </div>
+    
+    <!-- 页脚 -->
+    <div id="footer-placeholder"></div>
+    
+    <!-- Scripts -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/jquery.dropotron.min.js"></script>
+    <script src="../../assets/js/browser.min.js"></script>
+    <script src="../../assets/js/breakpoints.min.js"></script>
+    <script src="../../assets/js/util.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- 导航栏和页脚组件加载 -->
+    <script>
+        // 加载导航栏
+        fetch('../../components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            })
+            .catch(error => console.log('导航栏加载失败:', error));
+        
+        // 加载页脚
+        fetch('../../components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.log('页脚加载失败:', error));
+    </script>
+    
+    <script>
+        // 全局变量
+        let currentFiles = {};
+        
+        // 动态加载PDF.js库
+        async function loadPDFJS() {
+            if (typeof pdfjsLib !== 'undefined') {
+                return;
+            }
+            
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = () => {
+                    if (typeof pdfjsLib !== 'undefined') {
+                        // 设置PDF.js worker
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                        resolve();
+                    } else {
+                        reject(new Error('PDF.js加载失败'));
+                    }
+                };
+                script.onerror = () => reject(new Error('无法加载PDF.js库'));
+                document.head.appendChild(script);
+            });
+        }
+        
+        // 标签页切换
+        function showTab(tabName) {
+            // 隐藏所有标签页内容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 移除所有按钮的激活状态
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 显示选中的标签页
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // 文件上传处理
+        function setupFileUpload() {
+            const fileInputs = document.querySelectorAll('.file-input');
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            fileInputs.forEach((input, index) => {
+                input.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    const tabName = this.id.replace(/Files?$/, '').replace(/File$/, '');
+                    handleFiles(files, tabName);
+                });
+            });
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    const files = Array.from(e.dataTransfer.files);
+                    const tabName = this.querySelector('.file-input').id.replace(/Files?$/, '').replace(/File$/, '');
+                    handleFiles(files, tabName);
+                });
+            });
+        }
+        
+        // 处理上传的文件
+        function handleFiles(files, tabName) {
+            if (!currentFiles[tabName]) {
+                currentFiles[tabName] = [];
+            }
+            
+            files.forEach(file => {
+                if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+                    currentFiles[tabName].push(file);
+                } else {
+                    showMessage('只支持PDF文件格式', 'error');
+                }
+            });
+            
+            updateFileList(tabName);
+        }
+        
+        // 更新文件列表显示
+        function updateFileList(tabName) {
+            const fileList = document.getElementById(tabName + 'FileList');
+            if (!fileList || !currentFiles[tabName]) return;
+            
+            fileList.innerHTML = '';
+            
+            currentFiles[tabName].forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">PDF</div>
+                        <div class="file-details">
+                            <h4>${file.name}</h4>
+                            <p>${formatFileSize(file.size)} • ${new Date(file.lastModified).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="button small danger" onclick="removeFile('${tabName}', ${index})">删除</button>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+        
+        // 移除文件
+        function removeFile(tabName, index) {
+            if (currentFiles[tabName]) {
+                currentFiles[tabName].splice(index, 1);
+                updateFileList(tabName);
+            }
+        }
+        
+        // 清空文件
+        function clearFiles(tabName) {
+            if (currentFiles[tabName]) {
+                currentFiles[tabName] = [];
+                updateFileList(tabName);
+            }
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 显示消息
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type + '-message message';
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.pdf-tool');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            // 自动滚动到消息位置
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, type === 'info' ? 3000 : 5000);
+        }
+        
+        // 滑块值更新
+        function setupSliders() {
+            const sliders = document.querySelectorAll('.slider');
+            sliders.forEach(slider => {
+                const valueSpan = document.getElementById(slider.id + 'Value');
+                if (valueSpan) {
+                    slider.addEventListener('input', function() {
+                        valueSpan.textContent = this.value + '%';
+                    });
+                }
+            });
+        }
+        
+        // 拆分选项切换
+        function toggleSplitOptions() {
+            const mode = document.getElementById('splitMode').value;
+            document.getElementById('pagesPerFile').style.display = mode === 'pages' ? 'flex' : 'none';
+            document.getElementById('pageRanges').style.display = mode === 'range' ? 'flex' : 'none';
+            document.getElementById('maxSize').style.display = mode === 'size' ? 'flex' : 'none';
+        }
+        
+        // 水印选项切换
+        function toggleWatermarkOptions() {
+            const type = document.getElementById('watermarkType').value;
+            document.getElementById('textWatermark').style.display = type === 'text' ? 'flex' : 'none';
+            document.getElementById('imageWatermark').style.display = type === 'image' ? 'flex' : 'none';
+        }
+        
+        // PDF处理函数
+        async function startConvert() {
+            if (!currentFiles.convert || currentFiles.convert.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('PDF格式转换功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startMerge() {
+            if (!currentFiles.merge || currentFiles.merge.length < 2) {
+                showMessage('请选择至少2个PDF文件进行合并', 'error');
+                return;
+            }
+            
+            try {
+                showMessage('正在合并PDF文件...', 'info');
+                const mergedPdf = await PDFLib.PDFDocument.create();
+                
+                for (const file of currentFiles.merge) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                    const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    pages.forEach((page) => mergedPdf.addPage(page));
+                }
+                
+                const pdfBytes = await mergedPdf.save();
+                const fileName = document.getElementById('mergeFileName').value || 'merged_document.pdf';
+                downloadFile(pdfBytes, fileName, 'application/pdf');
+                
+                showMessage('PDF合并完成！', 'success');
+            } catch (error) {
+                showMessage('合并失败：' + error.message, 'error');
+            }
+        }
+        
+        async function startSplit() {
+            if (!currentFiles.split || currentFiles.split.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('PDF拆分功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startCompress() {
+            if (!currentFiles.compress || currentFiles.compress.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('PDF压缩功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startExtract() {
+            if (!currentFiles.extract || currentFiles.extract.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('页面提取功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startWatermark() {
+            if (!currentFiles.watermark || currentFiles.watermark.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('水印添加功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startProtect() {
+            if (!currentFiles.protect || currentFiles.protect.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('密码保护功能正在开发中，敬请期待！', 'info');
+        }
+        
+        async function startUnlock() {
+            if (!currentFiles.unlock || currentFiles.unlock.length === 0) {
+                showMessage('请先选择PDF文件', 'error');
+                return;
+            }
+            
+            showMessage('解除保护功能正在开发中，敬请期待！', 'info');
+        }
+        
+        // 下载文件
+        function downloadFile(data, filename, mimeType) {
+            const blob = new Blob([data], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileUpload();
+            setupSliders();
+            
+            // 初始化PDF.js
+            if (typeof pdfjsLib !== 'undefined') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+        });
+    </script>
+</body>
+</html>
