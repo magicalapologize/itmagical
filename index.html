@@ -1314,21 +1314,7 @@
 				
 				// 工具使用统计
 				let toolUsageStats = JSON.parse(localStorage.getItem('toolUsageStats') || '{}');
-				
-				// 基础使用次数和每日增长
-				const baseUsageCount = 1314;
-				const dailyIncrement = 22;
-				const startDate = new Date('2025-01-28'); // 设置起始日期
-				
-				// 计算从起始日期到今天的天数
-				const today = new Date();
-				const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-				
-				// 计算实际点击次数
-				let actualClickCount = Object.values(toolUsageStats).reduce((sum, count) => sum + count, 0);
-				
-				// 总使用次数 = 基础次数 + 天数增长 + 实际点击次数
-				let totalUsage = baseUsageCount + (daysDiff * dailyIncrement) + actualClickCount;
+				let totalUsage = Object.values(toolUsageStats).reduce((sum, count) => sum + count, 0);
 				
 				// 侧边栏控制
 				function openSidebar() {
@@ -1484,10 +1470,7 @@
 				// 记录工具使用
 				function recordToolUsage(toolName) {
 					toolUsageStats[toolName] = (toolUsageStats[toolName] || 0) + 1;
-					// 重新计算实际点击次数
-					actualClickCount = Object.values(toolUsageStats).reduce((sum, count) => sum + count, 0);
-					// 重新计算总使用次数
-					totalUsage = baseUsageCount + (daysDiff * dailyIncrement) + actualClickCount;
+					totalUsage++;
 					localStorage.setItem('toolUsageStats', JSON.stringify(toolUsageStats));
 					updateStatsDisplay();
 				}
