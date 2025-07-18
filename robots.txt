@@ -29,7 +29,7 @@ Allow: /
 # Disallow: /temp/
 
 # 网站地图位置
-Sitemap: https://itmagical.netlify.app/sitemap.xml
+Sitemap: https://tool.itmagical.top/sitemap.xml
 
 # 爬取延迟（可选，避免服务器过载）
 Crawl-delay: 1
@@ -40,8 +40,8 @@ Allow: /assets/
 Allow: /images/
 
 # 优先级页面（通过sitemap.xml定义）
-# 首页: https://itmagical.netlify.app/
-# 工具页面: https://itmagical.netlify.app/tools/
+# 首页: https://tool.itmagical.top/
+# 工具页面: https://tool.itmagical.top/tools/
 
 # 联系信息（可选）
-# Contact: webmaster@itmagical.com
+# Contact: webmaster@tool.itmagical.top

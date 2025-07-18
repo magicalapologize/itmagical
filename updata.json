@@ -3,7 +3,7 @@
     "name": "云云的AI工具箱",
     "version": "2.8.0",
     "description": "云云的AI工具箱是一个功能强大的在线工具集合平台，提供37种实用工具，包括图片处理（压缩、格式转换、裁剪、分割、去背景、放大、转PDF、水印添加、OCR识别、在线编辑、拼接、圆角、转铅笔画、加边框、头像挂饰、毛玻璃效果）、GIF处理（分割、裁切、合并）、视频处理（压缩、格式转换、去水印、提取音频、转GIF、裁切、加文字、拼接）、文档处理（PDF转换、合并、分割、加密）、文本工具（Markdown编辑、格式化、加密、标点符号纠错）、开发工具（JSON格式化、Base64编码、二维码生成、思维导图）等多个领域。所有工具均可在浏览器中直接使用，无需下载安装，支持批量处理，保护用户隐私。",
-    "website": "https://itmagical.netlify.app/",
+    "website": "https://tool.itmagical.top/",
     "repository": "https://github.com/itmagical",
     "lastUpdated": "2025-07-17"
   },
@@ -637,8 +637,8 @@
     "performance": "高性能"
   },
   "contact": {
-    "support": "support@itmagical.com",
-    "website": "https://itmagical.com",
+    "support": "support@tool.itmagical.top",
+        "website": "https://tool.itmagical.top",
     "github": "https://github.com/itmagical"
   }
 }

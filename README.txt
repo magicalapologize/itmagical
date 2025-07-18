@@ -158,8 +158,8 @@
 
 联系方式：
 - 项目地址：https://github.com/itmagical
-- 技术支持：support@itmagical.com
-- 官方网站：https://itmagical.com
+- 技术支持：support@tool.itmagical.top
+- 官方网站：https://tool.itmagical.top
 
 版权信息：
 © 2025 IT魔法师工具箱. All rights reserved.
