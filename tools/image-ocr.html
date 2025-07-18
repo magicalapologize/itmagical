@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -16,8 +16,38 @@
     <meta name="twitter:description" content="专业的在线图片OCR文字识别工具，支持简体中文、繁体中文、英文批量识别">
     <link rel="canonical" href="https://tool.itmagical.top/tools/图片OCR工具.html">
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            right: 20px;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -456,6 +486,11 @@
     </style>
 </head>
 <body>
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top" title="返回主页">
+        <i class="fas fa-home"></i>
+    </a>
+    
     <div id="navbar-placeholder"></div>
     
     <div class="container">

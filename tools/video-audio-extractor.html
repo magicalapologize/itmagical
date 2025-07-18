@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,10 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tool.itmagical.top/tools/视频提取音频工具.html">
     <link rel="canonical" href="https://tool.itmagical.top/tools/视频提取音频工具.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/fontawesome-all.min.css">
     <script src="../assets/js/jquery.min.js"></script>
@@ -196,6 +200,37 @@
             margin-top: 10px;
             font-weight: bold;
         }
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .home-btn:hover {
+            background: #0056b3;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            right: 20px;
+        }
+        
+
+        
         .audio-result {
             background: white;
             border: 1px solid #ddd;
@@ -376,6 +411,12 @@
     </style>
 </head>
 <body class="is-preload">
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top" title="返回首页">
+        <i class="fas fa-home"></i>
+    </a>
+    
+    
     <!-- 导航栏容器 -->
     <div id="navbar-container"></div>
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,8 +15,40 @@
     <link rel="canonical" href="https://tool.itmagical.top/tools/Markdown编辑器.html">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../assets/js/jquery.min.js"></script>
     <style>
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            font-size: 14px;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            left: 20px;
+        }
+        
+
         .markdown-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -228,6 +260,12 @@
     </style>
 </head>
 <body class="is-preload">
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top">
+        <i class="fas fa-home"></i>
+        返回首页
+    </a>
+    
     <!-- 导航栏容器 -->
     <div id="navbar-container"></div>
 

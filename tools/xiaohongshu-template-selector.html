@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff3366, #ff7b54);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 51, 102, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            right: 20px;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -1609,6 +1638,11 @@
     </style>
 </head>
 <body>
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top" title="返回主页">
+        <i class="fas fa-home"></i>
+    </a>
+    
     <div class="header">
         <h1>小红书封面模板选择</h1>
         <p>选择您喜欢的模板风格，快速开始创作专业的小红书封面</p>
@@ -2138,7 +2172,7 @@
     <div class="footer">
         <p>小红书封面模板选择 © 2025 | 多样化模板，满足不同创作需求</p>
         <div class="footer-nav">
-            <a href="小红书封面生成器.html" class="footer-back-btn">
+            <a href="xiaohongshu-cover-generator.html" class="footer-back-btn">
                 <i class="fas fa-tools"></i> 直接使用生成器
             </a>
         </div>
@@ -2382,7 +2416,7 @@
                     localStorage.setItem('selectedTemplate', JSON.stringify(config));
                     
                     // 直接跳转到生成器页面
-                    window.location.href = '小红书封面生成器.html';
+                    window.location.href = 'xiaohongshu-cover-generator.html';
                 }
             });
         });
@@ -2395,7 +2429,7 @@
                 localStorage.setItem('selectedTemplate', JSON.stringify(config));
                 
                 // 跳转到生成器页面
-                window.location.href = '小红书封面生成器.html';
+                window.location.href = 'xiaohongshu-cover-generator.html';
             }
         });
 

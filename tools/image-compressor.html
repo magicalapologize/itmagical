@@ -12,7 +12,44 @@
     <meta property="og:type" content="website" />
     <link rel="stylesheet" href="../assets/css/main.css" />
     <link rel="canonical" href="https://tool.itmagical.top/tools/图片压缩工具.html" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        body {
+            position: relative;
+        }
+        
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-size: 14px;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            left: 20px;
+        }
+        
+
+        
         .compress-tool {
             max-width: 1200px;
             margin: 0 auto;
@@ -533,6 +570,12 @@
     </style>
 </head>
 <body class="is-preload">
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top">
+        <i class="fas fa-home"></i>
+        返回主页
+    </a>
+    
     <div id="page-wrapper">
         <!-- 导航栏组件 -->
         <div id="navbar-container"></div>
