@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片编辑工具 - 在线图片编辑器 | ITMagical</title>
+    <meta name="description" content="专业的在线图片编辑工具，支持裁剪、旋转、滤镜、调色、文字添加、贴纸等功能，无需下载软件即可完成图片编辑。">
+    <meta name="keywords" content="图片编辑,在线编辑器,图片裁剪,图片滤镜,图片调色,图片旋转,图片美化,在线PS">
+    <meta name="author" content="ITMagical">
+    <meta property="og:title" content="图片编辑工具 - 在线图片编辑器">
+    <meta property="og:description" content="专业的在线图片编辑工具，支持裁剪、旋转、滤镜、调色、文字添加等功能">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tool.itmagical.top/tools/图片编辑工具.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="图片编辑工具 - 在线图片编辑器">
+    <meta name="twitter:description" content="专业的在线图片编辑工具，支持裁剪、旋转、滤镜、调色、文字添加等功能">
+    <link rel="canonical" href="https://tool.itmagical.top/tools/图片编辑工具.html">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-size: 14px;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            left: 20px;
+        }
+        
+
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .editor-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background-color: #f8f9ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background-color: #f0f2ff;
+        }
+        
+        .upload-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .editor-workspace {
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            gap: 20px;
+            min-height: 600px;
+        }
+        
+        .toolbar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .canvas-area {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .properties-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .tool-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .tool-section:last-child {
+            border-bottom: none;
+        }
+        
+        .tool-title {
+            color: #667eea;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tool-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .tool-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .tool-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .canvas {
+            max-width: 100%;
+            max-height: 500px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 13px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .range-input {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .range-value {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 12px;
+        }
+        
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 3px;
+            width: calc(50% - 6px);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-full {
+            width: calc(100% - 6px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .filter-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .history-item {
+            padding: 8px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            background: #f8f9ff;
+            border-color: #667eea;
+        }
+        
+        .crop-overlay {
+            position: absolute;
+            border: 2px dashed #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            cursor: move;
+            display: none;
+        }
+        
+        .crop-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .crop-handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
+        .crop-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+        .crop-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+        .crop-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+        
+        .guide-section,
+        .intro-section,
+        .promo-section,
+        .features-section,
+        .faq-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-title-main {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+        
+        .faq-answer {
+            padding: 15px 20px;
+            display: none;
+            background: white;
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        .footer-info {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 1200px) {
+            .editor-workspace {
+                grid-template-columns: 200px 1fr 200px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .editor-workspace {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .toolbar,
+            .properties-panel {
+                order: 2;
+            }
+            
+            .canvas-area {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" class="home-btn home-btn-top">
+        <i class="fas fa-home"></i>
+        返回首页
+    </a>
+    
+    <div id="navbar-placeholder"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎨 图片编辑工具</h1>
+            <p>专业的在线图片编辑器，支持裁剪、旋转、滤镜、调色、文字添加等功能，无需下载软件即可完成图片编辑</p>
+        </div>
+        
+        <div class="editor-container">
+            <div class="upload-area" id="uploadArea" style="display: block;">
+                <div class="upload-icon">🖼️</div>
+                <h3>拖拽图片到此处或点击选择文件</h3>
+                <p>支持 JPG、PNG、WEBP、BMP 等格式</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+            
+            <div class="editor-workspace" id="editorWorkspace" style="display: none;">
+                <!-- 左侧工具栏 -->
+                <div class="toolbar">
+                    <div class="tool-section">
+                        <div class="tool-title">🛠️ 基础工具</div>
+                        <div class="tool-btn" data-tool="select">🔍 选择工具</div>
+                        <div class="tool-btn" data-tool="crop">✂️ 裁剪</div>
+                        <div class="tool-btn" data-tool="rotate">🔄 旋转</div>
+                        <div class="tool-btn" data-tool="flip">🔃 翻转</div>
+                    </div>
+                    
+                    <div class="tool-section">
+                        <div class="tool-title">🎨 绘画工具</div>
+                        <div class="tool-btn" data-tool="brush">🖌️ 画笔</div>
+                        <div class="tool-btn" data-tool="eraser">🧽 橡皮擦</div>
+                        <div class="tool-btn" data-tool="text">📝 文字</div>
+                        <div class="tool-btn" data-tool="shape">⭕ 形状</div>
+                    </div>
+                    
+                    <div class="tool-section">
+                        <div class="tool-title">🌈 滤镜效果</div>
+                        <div class="filter-grid">
+                            <div class="filter-btn" data-filter="none">原图</div>
+                            <div class="filter-btn" data-filter="grayscale">黑白</div>
+                            <div class="filter-btn" data-filter="sepia">复古</div>
+                            <div class="filter-btn" data-filter="blur">模糊</div>
+                            <div class="filter-btn" data-filter="brightness">亮度</div>
+                            <div class="filter-btn" data-filter="contrast">对比度</div>
+                            <div class="filter-btn" data-filter="saturate">饱和度</div>
+                            <div class="filter-btn" data-filter="hue">色调</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-section">
+                        <div class="tool-title">📁 文件操作</div>
+                        <button class="btn btn-full" onclick="saveImage()">💾 保存图片</button>
+                        <button class="btn btn-secondary btn-full" onclick="resetImage()">🔄 重置</button>
+                        <button class="btn btn-danger btn-full" onclick="clearCanvas()">🗑️清空</button>
+                    </div>
+                </div>
+                
+                <!-- 中间画布区域 -->
+                <div class="canvas-area">
+                    <canvas id="mainCanvas" class="canvas"></canvas>
+                    <div class="crop-overlay" id="cropOverlay">
+                        <div class="crop-handle nw"></div>
+                        <div class="crop-handle ne"></div>
+                        <div class="crop-handle sw"></div>
+                        <div class="crop-handle se"></div>
+                    </div>
+                </div>
+                
+                <!-- 右侧属性面板 -->
+                <div class="properties-panel">
+                    <div class="tool-section">
+                        <div class="tool-title">⚙️ 图片属性</div>
+                        <div class="form-group">
+                            <label>宽度 (px)</label>
+                            <input type="number" id="imageWidth" min="1" max="5000">
+                        </div>
+                        <div class="form-group">
+                            <label>高度 (px)</label>
+                            <input type="number" id="imageHeight" min="1" max="5000">
+                        </div>
+                        <button class="btn btn-full" onclick="resizeImage()">📏 调整尺寸</button>
+                    </div>
+                    
+                    <div class="tool-section" id="adjustmentPanel">
+                        <div class="tool-title">🎛️ 图像调整</div>
+                        <div class="form-group">
+                            <label>亮度</label>
+                            <input type="range" class="range-input" id="brightnessRange" min="0" max="200" value="100" oninput="updateAdjustment()">
+                            <div class="range-value" id="brightnessValue">100%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>对比度</label>
+                            <input type="range" class="range-input" id="contrastRange" min="0" max="200" value="100" oninput="updateAdjustment()">
+                            <div class="range-value" id="contrastValue">100%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>饱和度</label>
+                            <input type="range" class="range-input" id="saturateRange" min="0" max="200" value="100" oninput="updateAdjustment()">
+                            <div class="range-value" id="saturateValue">100%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>色调</label>
+                            <input type="range" class="range-input" id="hueRange" min="0" max="360" value="0" oninput="updateAdjustment()">
+                            <div class="range-value" id="hueValue">0°</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-section" id="textPanel" style="display: none;">
+                        <div class="tool-title">📝 文字设置</div>
+                        <div class="form-group">
+                            <label>文字内容</label>
+                            <textarea id="textContent" rows="3" placeholder="输入文字内容"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>字体大小</label>
+                            <input type="range" class="range-input" id="fontSizeRange" min="12" max="100" value="24" oninput="updateTextSettings()">
+                            <div class="range-value" id="fontSizeValue">24px</div>
+                        </div>
+                        <div class="form-group">
+                            <label>文字颜色</label>
+                            <input type="color" class="color-picker" id="textColor" value="#000000" onchange="updateTextSettings()">
+                        </div>
+                        <div class="form-group">
+                            <label>字体</label>
+                            <select id="fontFamily" onchange="updateTextSettings()">
+                                <option value="Arial">Arial</option>
+                                <option value="微软雅黑">微软雅黑</option>
+                                <option value="宋体">宋体</option>
+                                <option value="黑体">黑体</option>
+                                <option value="楷体">楷体</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-full" onclick="addText()">➕ 添加文字</button>
+                    </div>
+                    
+                    <div class="tool-section" id="brushPanel" style="display: none;">
+                        <div class="tool-title">🖌️ 画笔设置</div>
+                        <div class="form-group">
+                            <label>画笔大小</label>
+                            <input type="range" class="range-input" id="brushSizeRange" min="1" max="50" value="5" oninput="updateBrushSettings()">
+                            <div class="range-value" id="brushSizeValue">5px</div>
+                        </div>
+                        <div class="form-group">
+                            <label>画笔颜色</label>
+                            <input type="color" class="color-picker" id="brushColor" value="#000000" onchange="updateBrushSettings()">
+                        </div>
+                        <div class="form-group">
+                            <label>透明度</label>
+                            <input type="range" class="range-input" id="brushOpacityRange" min="0.1" max="1" step="0.1" value="1" oninput="updateBrushSettings()">
+                            <div class="range-value" id="brushOpacityValue">100%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-section">
+                        <div class="tool-title">📚 操作历史</div>
+                        <div id="historyList">
+                            <div class="history-item">初始状态</div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="undo()">↶ 撤销</button>
+                        <button class="btn btn-secondary" onclick="redo()">↷ 重做</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="guide-section">
+            <h2 class="section-title-main">📖 使用指南</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>上传图片</h3>
+                    <p>拖拽或点击选择需要编辑的图片文件，支持多种常见格式</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>选择工具</h3>
+                    <p>从左侧工具栏选择需要的编辑工具，如裁剪、旋转、滤镜等</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>调整参数</h3>
+                    <p>在右侧属性面板调整相关参数，实时预览编辑效果</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>保存图片</h3>
+                    <p>编辑完成后点击保存按钮，下载编辑后的图片文件</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="intro-section">
+            <h2 class="section-title-main">🎯 工具详细介绍</h2>
+            <p>ITMagical图片编辑工具是一款功能强大的在线图片编辑器，基于HTML5 Canvas技术开发，无需安装任何软件即可在浏览器中完成专业级的图片编辑工作。工具集成了图片裁剪、旋转、滤镜、调色、文字添加、绘画等多种功能，满足日常图片处理的各种需求。</p>
+            
+            <h3>🔧 核心功能模块</h3>
+            <ul>
+                <li><strong>基础编辑：</strong>裁剪、旋转、翻转、缩放等基础图片操作</li>
+                <li><strong>滤镜效果：</strong>黑白、复古、模糊、亮度、对比度等多种滤镜</li>
+                <li><strong>图像调整：</strong>亮度、对比度、饱和度、色调的精细调节</li>
+                <li><strong>绘画工具：</strong>画笔、橡皮擦、形状绘制等创作工具</li>
+                <li><strong>文字添加：</strong>支持多种字体、颜色、大小的文字叠加</li>
+                <li><strong>操作历史：</strong>撤销重做功能，支持多步操作回退</li>
+            </ul>
+            
+            <h3>🎨 编辑器特性</h3>
+            <ul>
+                <li><strong>实时预览：</strong>所有编辑操作都能实时看到效果</li>
+                <li><strong>无损编辑：</strong>基于图层的编辑方式，保护原始图片质量</li>
+                <li><strong>响应式设计：</strong>适配各种屏幕尺寸，支持移动端操作</li>
+                <li><strong>快捷操作：</strong>支持键盘快捷键，提高编辑效率</li>
+                <li><strong>格式支持：</strong>支持JPG、PNG、WEBP、BMP等主流格式</li>
+            </ul>
+        </div>
+        
+        <div class="promo-section">
+            <h2 class="section-title-main">🌟 为什么选择我们的图片编辑工具？</h2>
+            <p>在众多图片编辑工具中，我们的在线编辑器以其简洁易用、功能全面、性能优异而脱颖而出。无论您是设计师、摄影师还是普通用户，都能在这里找到满足需求的编辑功能。与传统桌面软件相比，我们的工具具有以下显著优势：</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>即开即用</h3>
+                    <p>无需下载安装，打开浏览器即可使用，节省时间和存储空间</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>专业功能</h3>
+                    <p>涵盖图片编辑的各个方面，从基础调整到高级滤镜应有尽有</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>隐私保护</h3>
+                    <p>所有编辑在本地完成，图片不上传服务器，完全保护隐私</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>完全免费</h3>
+                    <p>所有功能永久免费使用，无水印，无限制，无需注册</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title-main">⭐ 工具优势与核心功能</h2>
+            
+            <h3>🏆 核心优势</h3>
+            <ul>
+                <li><strong>全功能编辑器：</strong>集成裁剪、滤镜、调色、绘画、文字等全套编辑功能</li>
+                <li><strong>专业级效果：</strong>基于先进算法的滤镜和调色功能，媲美专业软件</li>
+                <li><strong>直观操作界面：</strong>清晰的工具分类和参数面板，降低学习成本</li>
+                <li><strong>实时预览反馈：</strong>所有操作即时生效，所见即所得的编辑体验</li>
+                <li><strong>多平台兼容：</strong>支持Windows、Mac、Linux、移动端等各种平台</li>
+            </ul>
+            
+            <h3>🎯 应用场景</h3>
+            <ul>
+                <li><strong>社交媒体：</strong>制作朋友圈、微博、Instagram等社交平台的精美图片</li>
+                <li><strong>电商设计：</strong>产品图片美化、海报制作、详情页图片编辑</li>
+                <li><strong>办公文档：</strong>PPT配图、报告插图、宣传材料图片处理</li>
+                <li><strong>个人创作：</strong>照片美化、艺术创作、表情包制作</li>
+                <li><strong>教育培训：</strong>教学课件图片、学习资料配图编辑</li>
+                <li><strong>博客写作：</strong>文章配图、封面制作、图片水印添加</li>
+            </ul>
+            
+            <h3>🔧 技术特性</h3>
+            <ul>
+                <li><strong>Canvas渲染：</strong>基于HTML5 Canvas的高性能图像渲染引擎</li>
+                <li><strong>图层管理：</strong>支持多图层编辑，便于复杂图像的制作</li>
+                <li><strong>滤镜算法：</strong>优化的图像处理算法，确保滤镜效果的质量</li>
+                <li><strong>内存优化：</strong>智能内存管理，支持大尺寸图片的流畅编辑</li>
+                <li><strong>格式兼容：</strong>支持多种输入输出格式，满足不同需求</li>
+            </ul>
+        </div>
+        
+        <div class="faq-section">
+            <h2 class="section-title-main">❓ 常见问题解答</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>支持哪些图片格式？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>我们支持所有主流图片格式，包括JPG、JPEG、PNG、WEBP、BMP、GIF等。输出时可以选择JPG或PNG格式，以满足不同的使用需求。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>编辑的图片会被上传到服务器吗？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>不会。所有图片编辑都在您的浏览器本地完成，图片文件不会离开您的设备，完全保护您的隐私和数据安全。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>有图片尺寸限制吗？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>理论上没有严格限制，但受限于浏览器性能。建议上传的图片不超过20MB，分辨率不超过8000x8000像素，以确保最佳的编辑体验。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>如何保存编辑后的图片？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>编辑完成后，点击左侧工具栏的"保存图片"按钮，系统会自动下载编辑后的图片到您的设备。您可以选择保存为JPG或PNG格式。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>支持撤销和重做操作吗？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>是的，我们提供完整的操作历史功能。您可以使用撤销和重做按钮，或者使用快捷键Ctrl+Z（撤销）和Ctrl+Y（重做）来管理编辑步骤。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>移动设备上可以使用吗？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>可以。我们的编辑器采用响应式设计，完美适配手机和平板设备。在移动设备上，界面会自动调整为更适合触摸操作的布局。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>如何添加文字到图片上？</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>选择左侧工具栏的"文字"工具，然后在右侧属性面板中输入文字内容，调整字体、大小、颜色等属性，最后点击"添加文字"按钮即可在图片上添加文字。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-info">
+            <p>@2025 专业的在线图片编辑工具，让图片编辑变得简单高效</p>
+        </div>
+    </div>
+    
+    <div id="footer-placeholder"></div>
+    
+    <script>
+        // 全局变量
+        let canvas, ctx;
+        let originalImage = null;
+        let currentImage = null;
+        let currentTool = 'select';
+        let isDrawing = false;
+        let history = [];
+        let historyStep = 0;
+        let cropData = null;
+        
+        // 画笔设置
+        let brushSettings = {
+            size: 5,
+            color: '#000000',
+            opacity: 1
+        };
+        
+        // 文字设置
+        let textSettings = {
+            content: '',
+            fontSize: 24,
+            color: '#000000',
+            fontFamily: 'Arial'
+        };
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEditor();
+            loadComponents();
+        });
+        
+        // 初始化编辑器
+        function initializeEditor() {
+            canvas = document.getElementById('mainCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 初始化工具
+            selectTool('select');
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            // 文件上传事件
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // 工具选择事件
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tool = this.getAttribute('data-tool');
+                    selectTool(tool);
+                });
+            });
+            
+            // 滤镜选择事件
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    applyFilter(filter);
+                });
+            });
+            
+            // 画布事件
+            canvas.addEventListener('mousedown', handleCanvasMouseDown);
+            canvas.addEventListener('mousemove', handleCanvasMouseMove);
+            canvas.addEventListener('mouseup', handleCanvasMouseUp);
+            canvas.addEventListener('click', handleCanvasClick);
+            
+            // 键盘事件
+            document.addEventListener('keydown', handleKeyDown);
+        }
+        
+        // 拖拽处理
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+            if (files.length > 0) {
+                loadImage(files[0]);
+            }
+        }
+        
+        // 文件选择处理
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImage(file);
+            }
+        }
+        
+        // 加载图片
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // 设置画布尺寸
+                    canvas.width = Math.min(img.width, 800);
+                    canvas.height = Math.min(img.height, 600);
+                    
+                    // 保持宽高比
+                    const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    const newWidth = img.width * scale;
+                    const newHeight = img.height * scale;
+                    
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+                    
+                    // 绘制图片
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                    
+                    // 保存原始图片
+                    originalImage = img;
+                    currentImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    
+                    // 更新界面
+                    document.getElementById('uploadArea').style.display = 'none';
+                    document.getElementById('editorWorkspace').style.display = 'grid';
+                    
+                    // 更新属性面板
+                    document.getElementById('imageWidth').value = canvas.width;
+                    document.getElementById('imageHeight').value = canvas.height;
+                    
+                    // 保存到历史
+                    saveToHistory('加载图片');
+                    
+                    showNotification('图片加载成功');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 选择工具
+        function selectTool(tool) {
+            currentTool = tool;
+            
+            // 更新工具按钮状态
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
+            
+            // 显示/隐藏相关面板
+            document.getElementById('textPanel').style.display = tool === 'text' ? 'block' : 'none';
+            document.getElementById('brushPanel').style.display = (tool === 'brush' || tool === 'eraser') ? 'block' : 'none';
+            
+            // 更新画布样式
+            canvas.style.cursor = getCursorForTool(tool);
+        }
+        
+        // 获取工具对应的鼠标样式
+        function getCursorForTool(tool) {
+            const cursors = {
+                'select': 'default',
+                'crop': 'crosshair',
+                'brush': 'crosshair',
+                'eraser': 'crosshair',
+                'text': 'text'
+            };
+            return cursors[tool] || 'default';
+        }
+        
+        // 画布鼠标事件处理
+        function handleCanvasMouseDown(e) {
+            if (!currentImage) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (currentTool === 'brush' || currentTool === 'eraser') {
+                isDrawing = true;
+                startDrawing(x, y);
+            } else if (currentTool === 'crop') {
+                startCrop(x, y);
+            }
+        }
+        
+        function handleCanvasMouseMove(e) {
+            if (!currentImage) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (isDrawing && (currentTool === 'brush' || currentTool === 'eraser')) {
+                draw(x, y);
+            }
+        }
+        
+        function handleCanvasMouseUp(e) {
+            if (isDrawing) {
+                isDrawing = false;
+                saveToHistory(currentTool === 'brush' ? '画笔绘制' : '橡皮擦除');
+            }
+        }
+        
+        function handleCanvasClick(e) {
+            if (!currentImage) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (currentTool === 'text') {
+                addTextAtPosition(x, y);
+            }
+        }
+        
+        // 开始绘制
+        function startDrawing(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        // 绘制
+        function draw(x, y) {
+            ctx.lineWidth = brushSettings.size;
+            ctx.lineCap = 'round';
+            ctx.globalAlpha = brushSettings.opacity;
+            
+            if (currentTool === 'brush') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = brushSettings.color;
+            } else if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+            }
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        // 在指定位置添加文字
+        function addTextAtPosition(x, y) {
+            const content = textSettings.content || '示例文字';
+            
+            ctx.font = `${textSettings.fontSize}px ${textSettings.fontFamily}`;
+            ctx.fillStyle = textSettings.color;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            
+            ctx.fillText(content, x, y);
+            
+            saveToHistory('添加文字');
+        }
+        
+        // 添加文字
+        function addText() {
+            const content = document.getElementById('textContent').value;
+            if (!content.trim()) {
+                showNotification('请输入文字内容', 'error');
+                return;
+            }
+            
+            textSettings.content = content;
+            
+            // 在画布中心添加文字
+            const x = canvas.width / 2;
+            const y = canvas.height / 2;
+            
+            ctx.font = `${textSettings.fontSize}px ${textSettings.fontFamily}`;
+            ctx.fillStyle = textSettings.color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            ctx.fillText(content, x, y);
+            
+            saveToHistory('添加文字');
+            showNotification('文字已添加');
+        }
+        
+        // 应用滤镜
+        function applyFilter(filterType) {
+            if (!currentImage) return;
+            
+            // 更新滤镜按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filterType}"]`).classList.add('active');
+            
+            // 重置画布
+            ctx.putImageData(currentImage, 0, 0);
+            
+            // 应用滤镜
+            switch (filterType) {
+                case 'none':
+                    break;
+                case 'grayscale':
+                    canvas.style.filter = 'grayscale(100%)';
+                    break;
+                case 'sepia':
+                    canvas.style.filter = 'sepia(100%)';
+                    break;
+                case 'blur':
+                    canvas.style.filter = 'blur(2px)';
+                    break;
+                case 'brightness':
+                    canvas.style.filter = 'brightness(150%)';
+                    break;
+                case 'contrast':
+                    canvas.style.filter = 'contrast(150%)';
+                    break;
+                case 'saturate':
+                    canvas.style.filter = 'saturate(150%)';
+                    break;
+                case 'hue':
+                    canvas.style.filter = 'hue-rotate(90deg)';
+                    break;
+                default:
+                    canvas.style.filter = 'none';
+            }
+            
+            if (filterType !== 'none') {
+                saveToHistory(`应用${getFilterName(filterType)}滤镜`);
+            }
+        }
+        
+        // 获取滤镜名称
+        function getFilterName(filterType) {
+            const names = {
+                'grayscale': '黑白',
+                'sepia': '复古',
+                'blur': '模糊',
+                'brightness': '亮度',
+                'contrast': '对比度',
+                'saturate': '饱和度',
+                'hue': '色调'
+            };
+            return names[filterType] || filterType;
+        }
+        
+        // 更新图像调整
+        function updateAdjustment() {
+            if (!currentImage) return;
+            
+            const brightness = document.getElementById('brightnessRange').value;
+            const contrast = document.getElementById('contrastRange').value;
+            const saturate = document.getElementById('saturateRange').value;
+            const hue = document.getElementById('hueRange').value;
+            
+            // 更新显示值
+            document.getElementById('brightnessValue').textContent = brightness + '%';
+            document.getElementById('contrastValue').textContent = contrast + '%';
+            document.getElementById('saturateValue').textContent = saturate + '%';
+            document.getElementById('hueValue').textContent = hue + '°';
+            
+            // 应用滤镜
+            canvas.style.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturate}%) hue-rotate(${hue}deg)`;
+        }
+        
+        // 更新文字设置
+        function updateTextSettings() {
+            const fontSize = document.getElementById('fontSizeRange').value;
+            const color = document.getElementById('textColor').value;
+            const fontFamily = document.getElementById('fontFamily').value;
+            
+            textSettings.fontSize = parseInt(fontSize);
+            textSettings.color = color;
+            textSettings.fontFamily = fontFamily;
+            
+            document.getElementById('fontSizeValue').textContent = fontSize + 'px';
+        }
+        
+        // 更新画笔设置
+        function updateBrushSettings() {
+            const size = document.getElementById('brushSizeRange').value;
+            const color = document.getElementById('brushColor').value;
+            const opacity = document.getElementById('brushOpacityRange').value;
+            
+            brushSettings.size = parseInt(size);
+            brushSettings.color = color;
+            brushSettings.opacity = parseFloat(opacity);
+            
+            document.getElementById('brushSizeValue').textContent = size + 'px';
+            document.getElementById('brushOpacityValue').textContent = Math.round(opacity * 100) + '%';
+        }
+        
+        // 调整图片尺寸
+        function resizeImage() {
+            if (!currentImage) return;
+            
+            const newWidth = parseInt(document.getElementById('imageWidth').value);
+            const newHeight = parseInt(document.getElementById('imageHeight').value);
+            
+            if (newWidth <= 0 || newHeight <= 0) {
+                showNotification('请输入有效的尺寸', 'error');
+                return;
+            }
+            
+            // 保存当前画布内容
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            // 调整画布尺寸
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            
+            // 重新绘制图片
+            ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+            
+            saveToHistory('调整尺寸');
+            showNotification('图片尺寸已调整');
+        }
+        
+        // 旋转图片
+        function rotateImage(angle) {
+            if (!currentImage) return;
+            
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            if (angle === 90 || angle === 270) {
+                tempCanvas.width = canvas.height;
+                tempCanvas.height = canvas.width;
+            } else {
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+            }
+            
+            tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+            tempCtx.rotate(angle * Math.PI / 180);
+            tempCtx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+            
+            canvas.width = tempCanvas.width;
+            canvas.height = tempCanvas.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(tempCanvas, 0, 0);
+            
+            // 更新属性面板
+            document.getElementById('imageWidth').value = canvas.width;
+            document.getElementById('imageHeight').value = canvas.height;
+            
+            saveToHistory(`旋转${angle}度`);
+            showNotification(`图片已旋转${angle}度`);
+        }
+        
+        // 翻转图片
+        function flipImage(direction) {
+            if (!currentImage) return;
+            
+            ctx.save();
+            
+            if (direction === 'horizontal') {
+                ctx.scale(-1, 1);
+                ctx.drawImage(canvas, -canvas.width, 0);
+            } else {
+                ctx.scale(1, -1);
+                ctx.drawImage(canvas, 0, -canvas.height);
+            }
+            
+            ctx.restore();
+            
+            saveToHistory(`${direction === 'horizontal' ? '水平' : '垂直'}翻转`);
+            showNotification(`图片已${direction === 'horizontal' ? '水平' : '垂直'}翻转`);
+        }
+        
+        // 保存图片
+        function saveImage() {
+            if (!canvas) {
+                showNotification('没有可保存的图片', 'error');
+                return;
+            }
+            
+            // 创建临时画布以应用滤镜
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            
+            // 应用当前滤镜
+            tempCtx.filter = canvas.style.filter || 'none';
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            // 下载图片
+            const link = document.createElement('a');
+            link.download = 'edited-image.png';
+            link.href = tempCanvas.toDataURL();
+            link.click();
+            
+            showNotification('图片已保存');
+        }
+        
+        // 重置图片
+        function resetImage() {
+            if (!originalImage) {
+                showNotification('没有原始图片可重置', 'error');
+                return;
+            }
+            
+            // 重置画布
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(originalImage, 0, 0);
+            
+            // 重置滤镜
+            canvas.style.filter = 'none';
+            
+            // 重置调整滑块
+            document.getElementById('brightnessRange').value = 100;
+            document.getElementById('contrastRange').value = 100;
+            document.getElementById('saturateRange').value = 100;
+            document.getElementById('hueRange').value = 0;
+            updateAdjustment();
+            
+            // 重置滤镜按钮
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('[data-filter="none"]').classList.add('active');
+            
+            // 更新属性面板
+            document.getElementById('imageWidth').value = canvas.width;
+            document.getElementById('imageHeight').value = canvas.height;
+            
+            // 保存当前状态
+            currentImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            saveToHistory('重置图片');
+            showNotification('图片已重置');
+        }
+        
+        // 清空画布
+        function clearCanvas() {
+            if (!canvas) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.filter = 'none';
+            
+            // 隐藏编辑器，显示上传区域
+            document.getElementById('editorWorkspace').style.display = 'none';
+            document.getElementById('uploadArea').style.display = 'block';
+            
+            // 重置变量
+            originalImage = null;
+            currentImage = null;
+            history = [];
+            historyStep = 0;
+            
+            showNotification('画布已清空');
+        }
+        
+        // 保存到历史
+        function saveToHistory(action) {
+            if (!canvas) return;
+            
+            // 移除当前步骤之后的历史
+            history = history.slice(0, historyStep + 1);
+            
+            // 添加新的历史记录
+            const imageData = canvas.toDataURL();
+            history.push({
+                action: action,
+                data: imageData,
+                timestamp: new Date().toLocaleTimeString()
+            });
+            
+            historyStep = history.length - 1;
+            
+            // 限制历史记录数量
+            if (history.length > 20) {
+                history.shift();
+                historyStep--;
+            }
+            
+            updateHistoryList();
+        }
+        
+        // 更新历史列表
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            history.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                if (index === historyStep) {
+                    historyItem.style.background = '#667eea';
+                    historyItem.style.color = 'white';
+                }
+                historyItem.innerHTML = `
+                    <div style="font-weight: 600;">${item.action}</div>
+                    <div style="font-size: 11px; opacity: 0.8;">${item.timestamp}</div>
+                `;
+                historyItem.onclick = () => restoreFromHistory(index);
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        // 从历史恢复
+        function restoreFromHistory(index) {
+            if (index < 0 || index >= history.length) return;
+            
+            const img = new Image();
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                
+                historyStep = index;
+                updateHistoryList();
+                
+                // 更新属性面板
+                document.getElementById('imageWidth').value = canvas.width;
+                document.getElementById('imageHeight').value = canvas.height;
+            };
+            img.src = history[index].data;
+        }
+        
+        // 撤销
+        function undo() {
+            if (historyStep > 0) {
+                restoreFromHistory(historyStep - 1);
+                showNotification('已撤销');
+            }
+        }
+        
+        // 重做
+        function redo() {
+            if (historyStep < history.length - 1) {
+                restoreFromHistory(historyStep + 1);
+                showNotification('已重做');
+            }
+        }
+        
+        // 键盘事件处理
+        function handleKeyDown(e) {
+            if (e.ctrlKey) {
+                switch (e.key) {
+                    case 'z':
+                        e.preventDefault();
+                        undo();
+                        break;
+                    case 'y':
+                        e.preventDefault();
+                        redo();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        saveImage();
+                        break;
+                }
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                background: ${type === 'error' ? '#dc3545' : '#28a745'};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-size: 14px;
+                font-weight: 600;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 显示动画
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 工具栏按钮事件
+        document.addEventListener('click', function(e) {
+            const tool = e.target.getAttribute('data-tool');
+            if (tool) {
+                switch (tool) {
+                    case 'rotate':
+                        rotateImage(90);
+                        break;
+                    case 'flip':
+                        flipImage('horizontal');
+                        break;
+                }
+            }
+        });
+        
+        // FAQ切换功能
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span:last-child');
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                icon.textContent = '+';
+            } else {
+                // 关闭其他FAQ
+                document.querySelectorAll('.faq-answer.active').forEach(item => {
+                    item.classList.remove('active');
+                    item.previousElementSibling.querySelector('span:last-child').textContent = '+';
+                });
+                
+                answer.classList.add('active');
+                icon.textContent = '-';
+            }
+        }
+        
+        // 加载导航栏和页脚组件
+        function loadComponents() {
+            // 加载导航栏
+            fetch('../components/navbar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                })
+                .catch(error => console.log('导航栏加载失败:', error));
+            
+            // 加载页脚
+            fetch('../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                })
+                .catch(error => console.log('页脚加载失败:', error));
+        }
+    </script>
+</body>
+</html>
