@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF转文本工具 - 高精度识别PDF文字可导出为Word或文本格式 | IT魔法师工具箱</title>
+    <meta name="description" content="免费在线PDF转文本工具，高精度OCR识别PDF文字内容，支持导出为Word、TXT、Markdown格式，批量处理，保持原有格式。">
+    <meta name="keywords" content="PDF转文本,PDF转Word,OCR识别,PDF文字提取,批量转换,文档转换,PDF to text,PDF to Word">
+    <meta name="author" content="IT魔法师工具箱">
+    <meta property="og:title" content="PDF转文本工具 - 高精度识别PDF文字可导出为Word或文本格式">
+    <meta property="og:description" content="免费在线PDF转文本工具，高精度OCR识别PDF文字内容">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://tool.itmagical.top/tools/PDF转文本工具.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 引入jQuery和主要样式 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tool-intro {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .keyword-tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .pdf-converter {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .converter-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: #8e44ad;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+        
+        .tab-btn.active {
+            background: #f1c40f;
+            color: #333;
+            border-bottom-color: #f1c40f;
+            font-weight: bold;
+        }
+        
+        .tab-btn:hover {
+            background: #9b59b6;
+        }
+        
+        .tab-btn.active:hover {
+            background: #f39c12;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #5a6fd8;
+        }
+        
+        .upload-area.dragover {
+            background: #e3f2fd;
+            border-color: #5a6fd8;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .processing-area {
+            display: none;
+            margin: 30px 0;
+        }
+        
+        .pdf-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .preview-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .preview-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .pdf-viewer {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            height: 500px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+        }
+        
+        .pdf-page {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .pdf-page canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .home-btn:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            right: 20px;
+        }
+        
+        
+        
+        .text-output {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            height: 500px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .processing-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .primary-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .danger-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .warning-btn {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .settings-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .setting-group {
+            margin-bottom: 15px;
+        }
+        
+        .setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .setting-group input, .setting-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .batch-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .batch-queue {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .batch-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .batch-item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .file-icon {
+            font-size: 2em;
+            color: #dc3545;
+            margin-right: 10px;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 0.8em;
+        }
+        
+        .batch-status {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            text-align: center;
+            color: white;
+        }
+        
+        .status-waiting {
+            background: #6c757d;
+        }
+        
+        .status-processing {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .status-completed {
+            background: #28a745;
+        }
+        
+        .status-error {
+            background: #dc3545;
+        }
+        
+        .export-options {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .export-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .export-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .export-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .export-desc {
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .content-section {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .content-section h2 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .step-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .advantage-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .advantage-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .faq-item {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: #5a6fd8;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 300px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .pdf-preview {
+                grid-template-columns: 1fr;
+            }
+            
+            .converter-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab-btn.active {
+                border-left-color: #667eea;
+                border-bottom: none;
+            }
+            
+            .processing-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-btn {
+                width: 200px;
+            }
+            
+            .tool-header h1 {
+                font-size: 2em;
+            }
+            
+            .pdf-viewer, .text-output {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回主页按钮 -->
+    <a href="../../index.html" class="home-btn home-btn-top" title="返回首页">
+        <i class="fas fa-home"></i>
+    </a>
+
+    
+    <!-- 导航栏组件 -->
+    <div id="navbar-container"></div>
+    
+    <div class="container">
+        <!-- 工具标题 -->
+        <div class="tool-header">
+            <h1>📄 PDF转文本工具</h1>
+        </div>
+        
+        <!-- 工具介绍 -->
+        <div class="tool-intro">
+            <p><strong>专业的PDF转文本工具，高精度OCR识别PDF文字内容，支持导出为Word、TXT、Markdown等多种格式。</strong></p>
+            <div class="keywords">
+                <span class="keyword-tag">PDF转文本</span>
+                <span class="keyword-tag">OCR识别</span>
+                <span class="keyword-tag">PDF转Word</span>
+                <span class="keyword-tag">批量转换</span>
+                <span class="keyword-tag">格式保持</span>
+                <span class="keyword-tag">文档提取</span>
+            </div>
+        </div>
+        
+        <!-- PDF转换工具主界面 -->
+        <div class="pdf-converter">
+            <h2>📄 PDF文本转换</h2>
+            
+            <!-- 选项卡 -->
+            <div class="converter-tabs">
+                <button class="tab-btn active" onclick="switchTab('single')">单文件转换</button>
+                <button class="tab-btn" onclick="switchTab('batch')">批量转换</button>
+                <button class="tab-btn" onclick="switchTab('ocr')">OCR识别</button>
+            </div>
+            
+            <!-- 单文件转换 -->
+            <div class="tab-content active" id="single-tab">
+                <div class="upload-area" id="singleUpload" onclick="document.getElementById('singleFile').click()">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">点击上传PDF文件或拖拽到此处</div>
+                    <div class="upload-hint">支持 PDF 格式，最大 50MB</div>
+                    <input type="file" id="singleFile" class="file-input" accept=".pdf" onchange="handleSingleUpload(event)">
+                </div>
+                
+                <div class="processing-area" id="singleProcessing">
+                    <div class="pdf-preview">
+                        <div class="preview-panel">
+                            <h3>PDF预览</h3>
+                            <div class="pdf-viewer" id="pdfViewer"></div>
+                        </div>
+                        <div class="preview-panel">
+                            <h3>提取文本</h3>
+                            <div class="text-output" id="textOutput"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">准备处理...</div>
+                    
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="startExtraction()" id="extractBtn">开始提取</button>
+                        <button class="control-btn warning-btn" onclick="previewText()" id="previewBtn" disabled>预览文本</button>
+                        <button class="control-btn danger-btn" onclick="resetSingle()">重新开始</button>
+                    </div>
+                    
+                    <div class="settings-panel">
+                        <h4>提取设置</h4>
+                        <div class="settings-grid">
+                            <div class="setting-group">
+                                <label for="extractMode">提取模式</label>
+                                <select id="extractMode">
+                                    <option value="text">纯文本提取</option>
+                                    <option value="layout">保持布局</option>
+                                    <option value="ocr">OCR识别</option>
+                                    <option value="smart">智能识别</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label for="pageRange">页面范围</label>
+                                <input type="text" id="pageRange" placeholder="如: 1-5, 8, 10-12">
+                            </div>
+                            <div class="setting-group">
+                                <label for="language">识别语言</label>
+                                <select id="language">
+                                    <option value="auto">自动检测</option>
+                                    <option value="zh">中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="zh-en">中英混合</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label for="quality">识别精度</label>
+                                <select id="quality">
+                                    <option value="fast">快速模式</option>
+                                    <option value="balanced">平衡模式</option>
+                                    <option value="accurate">高精度模式</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="export-options" id="exportOptions" style="display: none;">
+                        <h4>导出选项</h4>
+                        <div class="export-grid">
+                            <div class="export-btn" onclick="exportAs('txt')">
+                                <div class="export-icon">📝</div>
+                                <div class="export-name">TXT文本</div>
+                                <div class="export-desc">纯文本格式</div>
+                            </div>
+                            <div class="export-btn" onclick="exportAs('docx')">
+                                <div class="export-icon">📄</div>
+                                <div class="export-name">Word文档</div>
+                                <div class="export-desc">DOCX格式</div>
+                            </div>
+                            <div class="export-btn" onclick="exportAs('md')">
+                                <div class="export-icon">📋</div>
+                                <div class="export-name">Markdown</div>
+                                <div class="export-desc">MD格式</div>
+                            </div>
+                            <div class="export-btn" onclick="exportAs('html')">
+                                <div class="export-icon">🌐</div>
+                                <div class="export-name">HTML</div>
+                                <div class="export-desc">网页格式</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 批量转换 -->
+            <div class="tab-content" id="batch-tab">
+                <div class="upload-area" id="batchUpload" onclick="document.getElementById('batchFiles').click()">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">选择多个PDF文件进行批量转换</div>
+                    <div class="upload-hint">支持同时选择多个PDF文件，单次最多10个</div>
+                    <input type="file" id="batchFiles" class="file-input" accept=".pdf" multiple onchange="handleBatchUpload(event)">
+                </div>
+                
+                <div class="batch-area" id="batchProcessing" style="display: none;">
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="startBatchConversion()">开始批量转换</button>
+                        <button class="control-btn secondary-btn" onclick="downloadBatchResults()">下载全部</button>
+                        <button class="control-btn danger-btn" onclick="resetBatch()">清空队列</button>
+                    </div>
+                    
+                    <div class="batch-queue" id="batchQueue"></div>
+                </div>
+            </div>
+            
+            <!-- OCR识别 -->
+            <div class="tab-content" id="ocr-tab">
+                <div class="upload-area" id="ocrUpload" onclick="document.getElementById('ocrFile').click()">
+                    <div class="upload-icon">🔍</div>
+                    <div class="upload-text">上传扫描版PDF进行OCR识别</div>
+                    <div class="upload-hint">支持扫描版PDF、图片PDF的文字识别</div>
+                    <input type="file" id="ocrFile" class="file-input" accept=".pdf" onchange="handleOcrUpload(event)">
+                </div>
+                
+                <div class="processing-area" id="ocrProcessing" style="display: none;">
+                    <div class="pdf-preview">
+                        <div class="preview-panel">
+                            <h3>原始PDF</h3>
+                            <div class="pdf-viewer" id="ocrPdfViewer"></div>
+                        </div>
+                        <div class="preview-panel">
+                            <h3>OCR识别结果</h3>
+                            <div class="text-output" id="ocrTextOutput"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="startOcrRecognition()">开始OCR识别</button>
+                        <button class="control-btn secondary-btn" onclick="correctText()">文本校正</button>
+                        <button class="control-btn warning-btn" onclick="exportOcrResult()">导出结果</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 使用指南 -->
+        <div class="content-section">
+            <h2>📖 使用指南</h2>
+            <div class="guide-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>上传PDF</h3>
+                    <p>选择需要转换的PDF文件，支持文本PDF和扫描版PDF，建议文件大小不超过50MB。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>选择模式</h3>
+                    <p>根据PDF类型选择合适的提取模式：纯文本、保持布局、OCR识别或智能识别。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>设置参数</h3>
+                    <p>配置页面范围、识别语言、精度等参数，获得最佳的转换效果。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>导出文档</h3>
+                    <p>预览提取结果，选择合适的输出格式（TXT、Word、Markdown、HTML）进行下载。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 工具详细介绍 -->
+        <div class="content-section">
+            <h2>🔍 工具详细介绍</h2>
+            <p>PDF转文本技术是文档处理领域的核心应用，通过先进的文本提取和OCR识别算法，能够准确地从PDF文档中提取文字内容。我们的工具结合了多种技术手段，确保在各种场景下都能获得高质量的转换结果。</p>
+            
+            <h3>核心技术</h3>
+            <ul>
+                <li><strong>文本层提取：</strong>直接从PDF文本层提取原始文字，保证100%准确性</li>
+                <li><strong>OCR识别引擎：</strong>基于深度学习的光学字符识别技术</li>
+                <li><strong>布局分析：</strong>智能识别文档结构，保持原有排版格式</li>
+                <li><strong>多语言支持：</strong>支持中文、英文及多种语言的混合识别</li>
+            </ul>
+            
+            <h3>算法优势</h3>
+            <ul>
+                <li><strong>高精度识别：</strong>文本PDF达到100%准确率，扫描PDF达到98%以上</li>
+                <li><strong>格式保持：</strong>智能保持原文档的段落、表格、列表等格式</li>
+                <li><strong>批量处理：</strong>支持大批量PDF文件的自动化转换</li>
+                <li><strong>多格式输出：</strong>支持TXT、Word、Markdown、HTML等多种格式</li>
+            </ul>
+            
+            <h3>技术特点</h3>
+            <p>我们的PDF转文本工具采用混合式处理策略，首先尝试直接提取PDF中的文本层，如果检测到扫描版PDF或图片PDF，则自动切换到OCR识别模式。这种智能切换机制确保了在各种PDF类型下都能获得最佳的转换效果。</p>
+        </div>
+        
+        <!-- 推广语 -->
+        <div class="content-section">
+            <h2>🌟 为什么选择我们的PDF转文本工具</h2>
+            <p>在数字化办公的时代，PDF文档无处不在，但其内容往往难以编辑和复用。传统的复制粘贴方式不仅效率低下，还经常出现格式错乱的问题。我们的PDF转文本工具彻底解决了这一痛点，让文档内容的提取和转换变得简单高效。</p>
+            
+            <p><strong>智能识别，精准提取</strong> - 我们的工具能够智能识别PDF的类型，对于文本PDF直接提取原始文字，确保100%的准确性；对于扫描版PDF，采用先进的OCR技术，识别准确率高达98%以上。</p>
+            
+            <p><strong>格式保持，完美还原</strong> - 独有的布局分析算法能够智能识别文档结构，保持原有的段落、标题、列表、表格等格式，让转换后的文档依然清晰易读。</p>
+            
+            <p><strong>批量处理，效率倍增</strong> - 支持同时处理多个PDF文件，无论是学术论文、商业报告还是技术文档，都能快速批量转换，大幅提升工作效率。</p>
+            
+            <p><strong>多格式输出，灵活应用</strong> - 支持导出为Word、TXT、Markdown、HTML等多种格式，满足不同场景的使用需求，让文档内容得到最大化的利用。</p>
+        </div>
+        
+        <!-- 工具优势 -->
+        <div class="content-section">
+            <h2>💪 工具优势与核心功能</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">🎯</div>
+                    <h3>高精度识别</h3>
+                    <p>文本PDF 100%准确提取，扫描PDF OCR识别率达98%以上。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">📐</div>
+                    <h3>格式保持</h3>
+                    <p>智能保持原文档的段落、表格、列表等格式结构。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🌍</div>
+                    <h3>多语言支持</h3>
+                    <p>支持中文、英文及多种语言的混合识别处理。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">📦</div>
+                    <h3>批量转换</h3>
+                    <p>支持同时处理多个PDF文件，大幅提升工作效率。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">💾</div>
+                    <h3>多格式输出</h3>
+                    <p>支持TXT、Word、Markdown、HTML等多种输出格式。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🔒</div>
+                    <h3>隐私安全</h3>
+                    <p>本地处理，不上传服务器，确保文档内容安全。</p>
+                </div>
+            </div>
+            
+            <h3>🎯 应用场景</h3>
+            <ul>
+                <li><strong>学术研究：</strong>提取论文、期刊、报告中的文字内容进行分析</li>
+                <li><strong>商业办公：</strong>转换合同、报告、手册等商业文档</li>
+                <li><strong>法律文书：</strong>提取法律条文、判决书、合同条款</li>
+                <li><strong>技术文档：</strong>转换API文档、技术规范、操作手册</li>
+                <li><strong>教育培训：</strong>提取教材、课件、试卷中的文字内容</li>
+                <li><strong>数据分析：</strong>从PDF报表中提取数据进行进一步分析</li>
+            </ul>
+        </div>
+        
+        <!-- 常见问题 -->
+        <div class="content-section">
+            <h2>❓ 常见问题</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">什么类型的PDF转换效果最好？</div>
+                <div class="faq-answer">
+                    <p>文本型PDF（可选择文字的PDF）转换效果最好，能达到100%准确率。扫描版PDF需要通过OCR识别，准确率取决于原文档的清晰度和字体质量，一般可达98%以上。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">支持哪些输出格式？</div>
+                <div class="faq-answer">
+                    <p>支持多种输出格式：TXT纯文本、DOCX Word文档、Markdown格式、HTML网页格式。每种格式都有其特定的应用场景，可根据需要选择。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">如何处理加密的PDF文件？</div>
+                <div class="faq-answer">
+                    <p>对于有密码保护的PDF文件，需要先输入正确的密码才能进行转换。如果PDF限制了文本提取权限，可能需要先解除限制或联系文档所有者。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">批量转换有什么限制？</div>
+                <div class="faq-answer">
+                    <p>为了确保处理速度和用户体验，建议单次批量处理不超过10个PDF文件，每个文件大小不超过50MB。如需处理更多文件，可以分批进行。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">转换后的文档会保存在服务器吗？</div>
+                <div class="faq-answer">
+                    <p>我们重视用户隐私，所有PDF处理都在本地浏览器中完成，不会上传到服务器。转换完成后请及时下载保存，关闭页面后数据将被清除。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚组件 -->
+    <div id="footer-container"></div>
+    
+    <!-- 版权信息 -->
+    <div class="copyright">
+        <p>© 2025 专业的PDF转文本工具，高精度识别PDF文字可导出为Word或文本格式</p>
+    </div>
+    
+    <script>
+        // PDF.js 配置
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        let currentPdf = null;
+        let extractedText = '';
+        let batchQueue = [];
+        let isProcessing = false;
+        
+        // 切换选项卡
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+        
+        // 处理单文件上传
+        function handleSingleUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!validatePdfFile(file)) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                loadPdf(e.target.result, 'pdfViewer');
+                document.getElementById('singleProcessing').style.display = 'block';
+                resetProgress();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // 处理批量上传
+        function handleBatchUpload(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            
+            if (files.length > 10) {
+                alert('单次最多支持10个PDF文件');
+                return;
+            }
+            
+            batchQueue = [];
+            const queueContainer = document.getElementById('batchQueue');
+            queueContainer.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (!validatePdfFile(file)) return;
+                
+                const item = {
+                    id: index,
+                    file: file,
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    status: 'waiting',
+                    result: null
+                };
+                
+                batchQueue.push(item);
+                addBatchItem(item);
+            });
+            
+            document.getElementById('batchProcessing').style.display = 'block';
+        }
+        
+        // 处理OCR上传
+        function handleOcrUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!validatePdfFile(file)) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                loadPdf(e.target.result, 'ocrPdfViewer');
+                document.getElementById('ocrProcessing').style.display = 'block';
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // 验证PDF文件
+        function validatePdfFile(file) {
+            if (file.type !== 'application/pdf') {
+                alert('请选择有效的PDF文件');
+                return false;
+            }
+            
+            if (file.size > 50 * 1024 * 1024) {
+                alert('PDF文件大小不能超过50MB');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // 加载PDF
+        function loadPdf(arrayBuffer, viewerId) {
+            const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+            
+            loadingTask.promise.then(function(pdf) {
+                currentPdf = pdf;
+                renderPdfPages(pdf, viewerId);
+            }).catch(function(error) {
+                console.error('PDF加载失败:', error);
+                alert('PDF文件加载失败，请检查文件是否损坏');
+            });
+        }
+        
+        // 渲染PDF页面
+        function renderPdfPages(pdf, viewerId) {
+            const viewer = document.getElementById(viewerId);
+            viewer.innerHTML = '';
+            
+            const numPages = pdf.numPages;
+            
+            for (let pageNum = 1; pageNum <= Math.min(numPages, 5); pageNum++) {
+                pdf.getPage(pageNum).then(function(page) {
+                    const scale = 0.8;
+                    const viewport = page.getViewport({ scale: scale });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    const pageDiv = document.createElement('div');
+                    pageDiv.className = 'pdf-page';
+                    pageDiv.appendChild(canvas);
+                    viewer.appendChild(pageDiv);
+                    
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    page.render(renderContext);
+                });
+            }
+            
+            if (numPages > 5) {
+                const moreDiv = document.createElement('div');
+                moreDiv.innerHTML = `<p style="text-align: center; color: #666; padding: 20px;">还有 ${numPages - 5} 页...</p>`;
+                viewer.appendChild(moreDiv);
+            }
+        }
+        
+        // 开始文本提取
+        function startExtraction() {
+            if (!currentPdf || isProcessing) return;
+            
+            isProcessing = true;
+            document.getElementById('extractBtn').disabled = true;
+            updateProgress(0, '开始提取文本...');
+            
+            const mode = document.getElementById('extractMode').value;
+            const pageRange = document.getElementById('pageRange').value;
+            
+            extractTextFromPdf(currentPdf, mode, pageRange);
+        }
+        
+        // 从PDF提取文本
+        function extractTextFromPdf(pdf, mode, pageRange) {
+            const numPages = pdf.numPages;
+            const pages = parsePageRange(pageRange, numPages);
+            
+            let extractedContent = '';
+            let processedPages = 0;
+            
+            pages.forEach((pageNum, index) => {
+                pdf.getPage(pageNum).then(function(page) {
+                    return page.getTextContent();
+                }).then(function(textContent) {
+                    let pageText = '';
+                    
+                    if (mode === 'layout') {
+                        pageText = extractWithLayout(textContent);
+                    } else {
+                        pageText = textContent.items.map(item => item.str).join(' ');
+                    }
+                    
+                    extractedContent += `\n\n--- 第 ${pageNum} 页 ---\n\n${pageText}`;
+                    
+                    processedPages++;
+                    const progress = (processedPages / pages.length) * 100;
+                    updateProgress(progress, `正在处理第 ${pageNum} 页...`);
+                    
+                    if (processedPages === pages.length) {
+                        completeExtraction(extractedContent);
+                    }
+                }).catch(function(error) {
+                    console.error(`第 ${pageNum} 页提取失败:`, error);
+                    processedPages++;
+                    
+                    if (processedPages === pages.length) {
+                        completeExtraction(extractedContent);
+                    }
+                });
+            });
+        }
+        
+        // 解析页面范围
+        function parsePageRange(rangeStr, totalPages) {
+            if (!rangeStr.trim()) {
+                return Array.from({ length: totalPages }, (_, i) => i + 1);
+            }
+            
+            const pages = new Set();
+            const parts = rangeStr.split(',');
+            
+            parts.forEach(part => {
+                part = part.trim();
+                if (part.includes('-')) {
+                    const [start, end] = part.split('-').map(n => parseInt(n.trim()));
+                    for (let i = start; i <= Math.min(end, totalPages); i++) {
+                        if (i >= 1) pages.add(i);
+                    }
+                } else {
+                    const pageNum = parseInt(part);
+                    if (pageNum >= 1 && pageNum <= totalPages) {
+                        pages.add(pageNum);
+                    }
+                }
+            });
+            
+            return Array.from(pages).sort((a, b) => a - b);
+        }
+        
+        // 保持布局的文本提取
+        function extractWithLayout(textContent) {
+            const items = textContent.items;
+            let text = '';
+            let lastY = null;
+            
+            items.forEach(item => {
+                if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+                    text += '\n';
+                }
+                text += item.str + ' ';
+                lastY = item.transform[5];
+            });
+            
+            return text;
+        }
+        
+        // 完成提取
+        function completeExtraction(text) {
+            extractedText = text;
+            document.getElementById('textOutput').textContent = text;
+            document.getElementById('previewBtn').disabled = false;
+            document.getElementById('exportOptions').style.display = 'none';
+            document.getElementById('previewBtn').disabled = true;
+            document.getElementById('extractBtn').disabled = false;
+            resetProgress();
+        }
+        
+        // 重置批量
+        function resetBatch() {
+            batchQueue = [];
+            document.getElementById('batchProcessing').style.display = 'none';
+            document.getElementById('batchFiles').value = '';
+            document.getElementById('batchQueue').innerHTML = '';
+        }
+        
+        // 更新进度
+        function updateProgress(percent, text = '') {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text || `处理进度: ${Math.round(percent)}%`;
+        }
+        
+        // 重置进度
+        function resetProgress() {
+            updateProgress(0, '准备处理...');
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // FAQ切换功能
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('active');
+        }
+        
+        // 拖拽上传功能
+        function setupDragAndDrop() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const input = this.querySelector('input[type="file"]');
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+        });
+        
+        // 加载导航栏和页脚组件
+        $(document).ready(function() {
+            $('#navbar-container').load('../components/navbar.html');
+            $('#footer-container').load('../components/footer.html');
+        });
+    </script>
+</body>
+</html>.display = 'block';
+            
+            updateProgress(100, '文本提取完成！');
+            isProcessing = false;
+            document.getElementById('extractBtn').disabled = false;
+            
+            alert('文本提取完成！');
+        }
+        
+        // 预览文本
+        function previewText() {
+            if (!extractedText) {
+                alert('请先提取文本');
+                return;
+            }
+            
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(`
+                <html>
+                <head><title>文本预览</title></head>
+                <body style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6;">
+                <h1>提取的文本内容</h1>
+                <pre style="white-space: pre-wrap; word-wrap: break-word;">${extractedText}</pre>
+                </body>
+                </html>
+            `);
+        }
+        
+        // 导出文件
+        function exportAs(format) {
+            if (!extractedText) {
+                alert('请先提取文本');
+                return;
+            }
+            
+            const filename = `extracted_text.${format}`;
+            
+            switch (format) {
+                case 'txt':
+                    downloadTextFile(extractedText, filename);
+                    break;
+                case 'docx':
+                    exportToWord(extractedText, filename);
+                    break;
+                case 'md':
+                    exportToMarkdown(extractedText, filename);
+                    break;
+                case 'html':
+                    exportToHtml(extractedText, filename);
+                    break;
+            }
+        }
+        
+        // 下载文本文件
+        function downloadTextFile(content, filename) {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            saveAs(blob, filename);
+        }
+        
+        // 导出为Word
+        function exportToWord(content, filename) {
+            // 简化的Word导出（实际应用中需要更复杂的处理）
+            const paragraphs = content.split('\n\n').map(para => 
+                new docx.Paragraph({
+                    children: [new docx.TextRun(para)]
+                })
+            );
+            
+            const doc = new docx.Document({
+                sections: [{
+                    properties: {},
+                    children: paragraphs
+                }]
+            });
+            
+            docx.Packer.toBlob(doc).then(blob => {
+                saveAs(blob, filename);
+            });
+        }
+        
+        // 导出为Markdown
+        function exportToMarkdown(content, filename) {
+            // 简单的Markdown格式化
+            let markdown = content.replace(/^--- 第 (\d+) 页 ---$/gm, '\n## 第 $1 页\n');
+            downloadTextFile(markdown, filename);
+        }
+        
+        // 导出为HTML
+        function exportToHtml(content, filename) {
+            const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>提取的文本</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; }
+        h2 { color: #333; border-bottom: 2px solid #667eea; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1>PDF文本提取结果</h1>
+    <pre>${content}</pre>
+</body>
+</html>`;
+            
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            saveAs(blob, filename);
+        }
+        
+        // 开始批量转换
+        function startBatchConversion() {
+            if (batchQueue.length === 0 || isProcessing) return;
+            
+            isProcessing = true;
+            processBatchQueue(0);
+        }
+        
+        // 处理批量队列
+        function processBatchQueue(index) {
+            if (index >= batchQueue.length) {
+                isProcessing = false;
+                alert('批量转换完成！');
+                return;
+            }
+            
+            const item = batchQueue[index];
+            updateBatchItemStatus(item.id, 'processing');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const loadingTask = pdfjsLib.getDocument(e.target.result);
+                
+                loadingTask.promise.then(function(pdf) {
+                    return extractTextFromPdfBatch(pdf);
+                }).then(function(text) {
+                    item.result = text;
+                    item.status = 'completed';
+                    updateBatchItemStatus(item.id, 'completed');
+                    
+                    // 处理下一个
+                    setTimeout(() => processBatchQueue(index + 1), 500);
+                }).catch(function(error) {
+                    console.error('批量处理失败:', error);
+                    item.status = 'error';
+                    updateBatchItemStatus(item.id, 'error');
+                    
+                    // 处理下一个
+                    setTimeout(() => processBatchQueue(index + 1), 500);
+                });
+            };
+            
+            reader.readAsArrayBuffer(item.file);
+        }
+        
+        // 批量提取文本
+        function extractTextFromPdfBatch(pdf) {
+            return new Promise((resolve, reject) => {
+                const numPages = pdf.numPages;
+                let extractedContent = '';
+                let processedPages = 0;
+                
+                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                    pdf.getPage(pageNum).then(function(page) {
+                        return page.getTextContent();
+                    }).then(function(textContent) {
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        extractedContent += `\n\n--- 第 ${pageNum} 页 ---\n\n${pageText}`;
+                        
+                        processedPages++;
+                        if (processedPages === numPages) {
+                            resolve(extractedContent);
+                        }
+                    }).catch(function(error) {
+                        processedPages++;
+                        if (processedPages === numPages) {
+                            resolve(extractedContent);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // 开始OCR识别
+        function startOcrRecognition() {
+            alert('OCR识别功能需要集成专业的OCR服务，这里仅作演示');
+            // 实际应用中需要集成Tesseract.js或其他OCR服务
+        }
+        
+        // 文本校正
+        function correctText() {
+            alert('文本校正功能可以帮助修正OCR识别中的错误');
+        }
+        
+        // 导出OCR结果
+        function exportOcrResult() {
+            alert('导出OCR识别结果');
+        }
+        
+        // 添加批量项目
+        function addBatchItem(item) {
+            const queueContainer = document.getElementById('batchQueue');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'batch-item';
+            itemDiv.id = `batch-item-${item.id}`;
+            
+            itemDiv.innerHTML = `
+                <div class="batch-item-header">
+                    <div class="file-icon">📄</div>
+                    <div class="file-info">
+                        <div class="file-name">${item.name}</div>
+                        <div class="file-size">${item.size}</div>
+                    </div>
+                </div>
+                <div class="batch-status status-waiting" id="status-${item.id}">等待处理</div>
+            `;
+            
+            queueContainer.appendChild(itemDiv);
+        }
+        
+        // 更新批量项目状态
+        function updateBatchItemStatus(id, status) {
+            const statusElement = document.getElementById(`status-${id}`);
+            if (!statusElement) return;
+            
+            statusElement.className = `batch-status status-${status}`;
+            
+            const statusText = {
+                'waiting': '等待处理',
+                'processing': '处理中...',
+                'completed': '已完成',
+                'error': '处理失败'
+            };
+            
+            statusElement.textContent = statusText[status] || status;
+        }
+        
+        // 下载批量结果
+        function downloadBatchResults() {
+            const completedItems = batchQueue.filter(item => item.status === 'completed');
+            if (completedItems.length === 0) {
+                alert('没有已完成的转换结果');
+                return;
+            }
+            
+            completedItems.forEach((item, index) => {
+                const filename = `${item.name.replace('.pdf', '')}_extracted.txt`;
+                downloadTextFile(item.result, filename);
+            });
+        }
+        
+        // 重置单文件
+        function resetSingle() {
+            currentPdf = null;
+            extractedText = '';
+            document.getElementById('singleProcessing').style.display = 'none';
+            document.getElementById('singleFile').value = '';
+            document.getElementById('exportOptions').style

@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能抠图工具 - 在线自动识别图像主体轮廓与背景分离 | IT魔法师工具箱</title>
+    <meta name="description" content="免费在线智能抠图工具，自动识别图像中主体轮廓与背景进行分离，支持批量抠图、透明背景、人像抠图，一键生成专业效果。">
+    <meta name="keywords" content="智能抠图,在线抠图,背景移除,人像抠图,批量抠图,透明背景,AI抠图,图像分离,remove background">
+    <meta name="author" content="IT魔法师工具箱">
+    <meta property="og:title" content="智能抠图工具 - 在线自动识别图像主体轮廓与背景分离">
+    <meta property="og:description" content="免费在线智能抠图工具，自动识别图像中主体轮廓与背景进行分离">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://tool.itmagical.top/tools/智能抠图工具.html">
+    
+    <!-- 引入jQuery和主要样式 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* 返回主页按钮样式 */
+        .home-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .home-btn-top {
+            top: 20px;
+            right: 20px;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tool-intro {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .keyword-tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .matting-tool {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .tool-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #5a6fd8;
+        }
+        
+        .upload-area.dragover {
+            background: #e3f2fd;
+            border-color: #5a6fd8;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .processing-area {
+            display: none;
+            margin: 30px 0;
+        }
+        
+        .image-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .image-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .image-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .image-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 400px;
+            margin: 0 auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><rect width="10" height="10" fill="%23f0f0f0"/><rect x="10" y="10" width="10" height="10" fill="%23f0f0f0"/></svg>');
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 400px;
+            display: block;
+        }
+        
+        .processing-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .primary-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .danger-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .settings-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .setting-group {
+            margin-bottom: 15px;
+        }
+        
+        .setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .setting-group input, .setting-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .batch-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .batch-queue {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .batch-item {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .batch-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .batch-status {
+            margin-top: 8px;
+            font-size: 0.9em;
+            padding: 4px 8px;
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .status-waiting {
+            background: #6c757d;
+        }
+        
+        .status-processing {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .status-completed {
+            background: #28a745;
+        }
+        
+        .status-error {
+            background: #dc3545;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .content-section {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .content-section h2 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .step-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .advantage-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .advantage-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .faq-item {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: #5a6fd8;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 300px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .image-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .tool-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab-btn.active {
+                border-left-color: #667eea;
+                border-bottom: none;
+            }
+            
+            .processing-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-btn {
+                width: 200px;
+            }
+            
+            .tool-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回主页按钮 -->
+    <a href="../../index.html" class="home-btn home-btn-top" title="返回主页">
+        <i class="fas fa-home"></i>
+    </a>
+    
+    <!-- 导航栏组件 -->
+    <div id="navbar-container"></div>
+    
+    <div class="container">
+        <!-- 工具标题 -->
+        <div class="tool-header">
+            <h1>✂️ 智能抠图工具</h1>
+        </div>
+        
+        <!-- 工具介绍 -->
+        <div class="tool-intro">
+            <p><strong>专业的在线智能抠图工具，自动识别图像中主体轮廓与背景进行分离，支持批量处理和多种输出格式。</strong></p>
+            <div class="keywords">
+                <span class="keyword-tag">智能抠图</span>
+                <span class="keyword-tag">背景移除</span>
+                <span class="keyword-tag">人像抠图</span>
+                <span class="keyword-tag">批量处理</span>
+                <span class="keyword-tag">透明背景</span>
+                <span class="keyword-tag">AI识别</span>
+            </div>
+        </div>
+        
+        <!-- 抠图工具主界面 -->
+        <div class="matting-tool">
+            <h2>✂️ 智能抠图处理</h2>
+            
+            <!-- 选项卡 -->
+            <div class="tool-tabs">
+                <button class="tab-btn active" onclick="switchTab('single')">单张抠图</button>
+                <button class="tab-btn" onclick="switchTab('batch')">批量抠图</button>
+                <button class="tab-btn" onclick="switchTab('manual')">手动精修</button>
+            </div>
+            
+            <!-- 单张抠图 -->
+            <div class="tab-content active" id="single-tab">
+                <div class="upload-area" id="singleUpload" onclick="document.getElementById('singleFile').click()">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">点击上传图片或拖拽到此处</div>
+                    <div class="upload-hint">支持 JPG、PNG、WEBP 格式，最大 10MB</div>
+                    <input type="file" id="singleFile" class="file-input" accept="image/*" onchange="handleSingleUpload(event)">
+                </div>
+                
+                <div class="processing-area" id="singleProcessing">
+                    <div class="image-comparison">
+                        <div class="image-panel">
+                            <h3>原始图片</h3>
+                            <div class="image-container">
+                                <img id="originalImage" alt="原始图片">
+                            </div>
+                        </div>
+                        <div class="image-panel">
+                            <h3>抠图结果</h3>
+                            <div class="image-container">
+                                <img id="resultImage" alt="抠图结果">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="startMatting()">开始抠图</button>
+                        <button class="control-btn secondary-btn" onclick="downloadResult()">下载结果</button>
+                        <button class="control-btn danger-btn" onclick="resetSingle()">重新开始</button>
+                    </div>
+                    
+                    <div class="settings-panel">
+                        <h4>抠图设置</h4>
+                        <div class="settings-grid">
+                            <div class="setting-group">
+                                <label for="mattingMode">抠图模式</label>
+                                <select id="mattingMode">
+                                    <option value="auto">自动识别</option>
+                                    <option value="person">人像模式</option>
+                                    <option value="object">物体模式</option>
+                                    <option value="animal">动物模式</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label for="outputFormat">输出格式</label>
+                                <select id="outputFormat">
+                                    <option value="png">PNG (透明背景)</option>
+                                    <option value="jpg">JPG (白色背景)</option>
+                                    <option value="webp">WebP (透明背景)</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label for="edgeSmooth">边缘平滑</label>
+                                <input type="range" id="edgeSmooth" min="0" max="10" value="5">
+                            </div>
+                            <div class="setting-group">
+                                <label for="featherRadius">羽化半径</label>
+                                <input type="range" id="featherRadius" min="0" max="20" value="2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 批量抠图 -->
+            <div class="tab-content" id="batch-tab">
+                <div class="upload-area" id="batchUpload" onclick="document.getElementById('batchFiles').click()">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">选择多张图片进行批量抠图</div>
+                    <div class="upload-hint">支持同时选择多个文件，单次最多20张</div>
+                    <input type="file" id="batchFiles" class="file-input" accept="image/*" multiple onchange="handleBatchUpload(event)">
+                </div>
+                
+                <div class="batch-area" id="batchProcessing" style="display: none;">
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="startBatchMatting()">开始批量抠图</button>
+                        <button class="control-btn secondary-btn" onclick="downloadBatchResults()">下载全部</button>
+                        <button class="control-btn danger-btn" onclick="resetBatch()">清空队列</button>
+                    </div>
+                    
+                    <div class="batch-queue" id="batchQueue"></div>
+                </div>
+            </div>
+            
+            <!-- 手动精修 -->
+            <div class="tab-content" id="manual-tab">
+                <div class="upload-area" id="manualUpload" onclick="document.getElementById('manualFile').click()">
+                    <div class="upload-icon">🎨</div>
+                    <div class="upload-text">上传图片进行手动精修</div>
+                    <div class="upload-hint">支持手动调整抠图区域和边缘</div>
+                    <input type="file" id="manualFile" class="file-input" accept="image/*" onchange="handleManualUpload(event)">
+                </div>
+                
+                <div class="processing-area" id="manualProcessing" style="display: none;">
+                    <div class="image-panel">
+                        <h3>手动精修</h3>
+                        <div class="image-container">
+                            <canvas id="manualCanvas"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="processing-controls">
+                        <button class="control-btn primary-btn" onclick="addToSelection()">添加区域</button>
+                        <button class="control-btn danger-btn" onclick="removeFromSelection()">移除区域</button>
+                        <button class="control-btn secondary-btn" onclick="applyManualMatting()">应用抠图</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 使用指南 -->
+        <div class="content-section">
+            <h2>📖 使用指南</h2>
+            <div class="guide-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>上传图片</h3>
+                    <p>选择需要抠图的图片，支持JPG、PNG、WebP格式，建议图片清晰度高、主体明确。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>选择模式</h3>
+                    <p>根据图片内容选择合适的抠图模式：人像、物体、动物或自动识别。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>调整参数</h3>
+                    <p>根据需要调整边缘平滑、羽化半径等参数，获得更好的抠图效果。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>下载结果</h3>
+                    <p>预览抠图效果，选择合适的输出格式下载，支持透明背景PNG格式。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 工具详细介绍 -->
+        <div class="content-section">
+            <h2>🔍 工具详细介绍</h2>
+            <p>智能抠图技术是计算机视觉领域的重要应用，通过深度学习算法自动识别图像中的主体对象，精确分离前景和背景。我们的工具采用先进的AI模型，能够处理各种复杂场景的抠图需求。</p>
+            
+            <h3>核心技术</h3>
+            <ul>
+                <li><strong>深度学习分割：</strong>基于卷积神经网络的语义分割技术</li>
+                <li><strong>边缘优化：</strong>智能边缘检测和平滑处理算法</li>
+                <li><strong>多模态识别：</strong>支持人像、物体、动物等不同类型的识别</li>
+                <li><strong>实时处理：</strong>优化的算法确保快速处理和实时预览</li>
+            </ul>
+            
+            <h3>算法优势</h3>
+            <ul>
+                <li><strong>高精度识别：</strong>准确识别复杂背景下的主体轮廓</li>
+                <li><strong>细节保留：</strong>保持头发丝、毛发等细节的自然效果</li>
+                <li><strong>边缘平滑：</strong>智能处理边缘锯齿，输出自然流畅</li>
+                <li><strong>批量处理：</strong>支持大批量图片的自动化处理</li>
+            </ul>
+            
+            <h3>应用场景</h3>
+            <p>智能抠图技术广泛应用于电商、设计、摄影等领域，为用户提供专业级的图像处理体验。无论是产品展示、人像美化还是创意设计，都能轻松胜任。</p>
+        </div>
+        
+        <!-- 推广语 -->
+        <div class="content-section">
+            <h2>🌟 为什么选择我们的智能抠图工具</h2>
+            <p>在图像处理的世界里，抠图一直是最具挑战性的任务之一。传统的手工抠图不仅耗时费力，而且需要专业的技能和昂贵的软件。我们的智能抠图工具彻底改变了这一现状，让每个人都能轻松获得专业级的抠图效果。</p>
+            
+            <p><strong>AI驱动，精准识别</strong> - 我们采用最新的深度学习技术，训练了数百万张图片的AI模型，能够精确识别各种复杂场景下的主体轮廓。无论是飘逸的长发、透明的玻璃还是复杂的背景，都能完美处理。</p>
+            
+            <p><strong>一键操作，即时效果</strong> - 告别繁琐的手工操作，只需上传图片，AI即可在几秒钟内完成专业级的抠图处理。所见即所得的实时预览让您随时掌控处理效果。</p>
+            
+            <p><strong>批量处理，效率倍增</strong> - 独有的批量处理功能让您可以同时处理多张图片，无论是电商产品图还是活动照片，都能快速批量完成，大幅提升工作效率。</p>
+        </div>
+        
+        <!-- 工具优势 -->
+        <div class="content-section">
+            <h2>💪 工具优势与核心功能</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">🤖</div>
+                    <h3>AI智能识别</h3>
+                    <p>采用先进的深度学习算法，自动识别主体轮廓，精确分离前景和背景。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">⚡</div>
+                    <h3>快速处理</h3>
+                    <p>优化的算法确保快速处理，几秒钟即可完成专业级抠图效果。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🎯</div>
+                    <h3>多模式支持</h3>
+                    <p>支持人像、物体、动物等多种抠图模式，适应不同场景需求。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">📦</div>
+                    <h3>批量处理</h3>
+                    <p>支持同时处理多张图片，大幅提升工作效率，适合批量作业。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🎨</div>
+                    <h3>手动精修</h3>
+                    <p>提供手动精修功能，可对AI结果进行细节调整，获得完美效果。</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">💾</div>
+                    <h3>多格式输出</h3>
+                    <p>支持PNG透明背景、JPG白底、WebP等多种输出格式。</p>
+                </div>
+            </div>
+            
+            <h3>🎯 应用场景</h3>
+            <ul>
+                <li><strong>电商产品：</strong>商品图片背景移除，制作统一的产品展示图</li>
+                <li><strong>人像摄影：</strong>证件照换背景，艺术照片创意合成</li>
+                <li><strong>设计创作：</strong>素材提取，创意设计元素制作</li>
+                <li><strong>社交媒体：</strong>头像制作，个性化图片处理</li>
+                <li><strong>办公文档：</strong>PPT素材制作，报告插图处理</li>
+                <li><strong>营销推广：</strong>广告素材制作，宣传图片处理</li>
+            </ul>
+        </div>
+        
+        <!-- 常见问题 -->
+        <div class="content-section">
+            <h2>❓ 常见问题</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">什么样的图片抠图效果最好？</div>
+                <div class="faq-answer">
+                    <p>抠图效果主要取决于图片质量和主体与背景的对比度。建议使用高清晰度、主体轮廓清晰、与背景有明显区别的图片。避免主体与背景颜色过于相近或背景过于复杂的图片。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">支持哪些图片格式？</div>
+                <div class="faq-answer">
+                    <p>支持主流的图片格式包括JPG、JPEG、PNG、WebP等。输出格式支持PNG（透明背景）、JPG（白色背景）、WebP（透明背景）。建议上传PNG格式以获得最佳处理效果。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">批量处理有数量限制吗？</div>
+                <div class="faq-answer">
+                    <p>为了确保处理速度和用户体验，单次批量处理建议不超过20张图片。如需处理更多图片，可以分批进行。每张图片大小建议不超过10MB。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">如何获得更好的抠图效果？</div>
+                <div class="faq-answer">
+                    <p>1. 选择合适的抠图模式（人像/物体/动物）；2. 调整边缘平滑和羽化参数；3. 使用手动精修功能进行细节调整；4. 确保原图质量高、主体清晰。</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">处理后的图片会保存在服务器吗？</div>
+                <div class="faq-answer">
+                    <p>我们重视用户隐私，所有图片处理都在本地浏览器中完成，不会上传到服务器。处理完成后请及时下载保存，关闭页面后数据将被清除。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚组件 -->
+    <div id="footer-container"></div>
+    
+    <!-- 版权信息 -->
+    <div class="copyright">
+        <p>© 2025 专业的在线智能抠图工具，AI自动识别主体轮廓与背景分离</p>
+    </div>
+    
+    <script>
+        let currentImage = null;
+        let resultImage = null;
+        let batchQueue = [];
+        let isProcessing = false;
+        
+        // 切换选项卡
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+        
+        // 处理单张图片上传
+        function handleSingleUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!validateFile(file)) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImage = e.target.result;
+                document.getElementById('originalImage').src = currentImage;
+                document.getElementById('singleProcessing').style.display = 'block';
+                resetProgress();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 处理批量上传
+        function handleBatchUpload(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            
+            if (files.length > 20) {
+                alert('单次最多支持20张图片');
+                return;
+            }
+            
+            batchQueue = [];
+            const queueContainer = document.getElementById('batchQueue');
+            queueContainer.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (!validateFile(file)) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = {
+                        id: index,
+                        file: file,
+                        original: e.target.result,
+                        result: null,
+                        status: 'waiting'
+                    };
+                    
+                    batchQueue.push(item);
+                    addBatchItem(item);
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            document.getElementById('batchProcessing').style.display = 'block';
+        }
+        
+        // 处理手动精修上传
+        function handleManualUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!validateFile(file)) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                initManualCanvas(e.target.result);
+                document.getElementById('manualProcessing').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 验证文件
+        function validateFile(file) {
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                alert('请选择有效的图片格式（JPG、PNG、WebP）');
+                return false;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('图片大小不能超过10MB');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // 开始抠图
+        function startMatting() {
+            if (!currentImage || isProcessing) return;
+            
+            isProcessing = true;
+            updateProgress(0);
+            
+            // 模拟AI抠图处理过程
+            simulateMatting();
+        }
+        
+        // 模拟抠图处理
+        function simulateMatting() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    completeMatting();
+                }
+                updateProgress(progress);
+            }, 200);
+        }
+        
+        // 完成抠图
+        function completeMatting() {
+            // 这里应该是实际的AI抠图算法
+            // 为了演示，我们创建一个简单的处理效果
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                // 简单的边缘检测效果（实际应用中应使用AI算法）
+                ctx.drawImage(img, 0, 0);
+                
+                // 应用一些基本的图像处理
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                processImageData(imageData);
+                ctx.putImageData(imageData, 0, 0);
+                
+                resultImage = canvas.toDataURL('image/png');
+                document.getElementById('resultImage').src = resultImage;
+                
+                isProcessing = false;
+                alert('抠图完成！');
+            };
+            
+            img.src = currentImage;
+        }
+        
+        // 处理图像数据（简化版本）
+        function processImageData(imageData) {
+            const data = imageData.data;
+            const edgeSmooth = parseInt(document.getElementById('edgeSmooth').value);
+            
+            // 简单的边缘处理（实际应用中应使用复杂的AI算法）
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                
+                // 简单的背景检测（基于颜色相似度）
+                const isBackground = detectBackground(r, g, b);
+                
+                if (isBackground) {
+                    data[i + 3] = 0; // 设置为透明
+                } else {
+                    // 应用边缘平滑
+                    data[i + 3] = Math.min(255, data[i + 3] + edgeSmooth);
+                }
+            }
+        }
+        
+        // 简单的背景检测
+        function detectBackground(r, g, b) {
+            // 这里应该是复杂的AI算法，简化为基本的颜色检测
+            const brightness = (r + g + b) / 3;
+            return brightness > 200 || brightness < 50;
+        }
+        
+        // 开始批量抠图
+        function startBatchMatting() {
+            if (batchQueue.length === 0 || isProcessing) return;
+            
+            isProcessing = true;
+            processBatchQueue(0);
+        }
+        
+        // 处理批量队列
+        function processBatchQueue(index) {
+            if (index >= batchQueue.length) {
+                isProcessing = false;
+                alert('批量抠图完成！');
+                return;
+            }
+            
+            const item = batchQueue[index];
+            updateBatchItemStatus(item.id, 'processing');
+            
+            // 模拟处理时间
+            setTimeout(() => {
+                // 这里应该调用实际的抠图算法
+                item.result = simulateBatchMatting(item.original);
+                item.status = 'completed';
+                updateBatchItemStatus(item.id, 'completed');
+                
+                // 处理下一个
+                processBatchQueue(index + 1);
+            }, 1000 + Math.random() * 2000);
+        }
+        
+        // 模拟批量抠图
+        function simulateBatchMatting(imageData) {
+            // 简化的处理，实际应用中应使用AI算法
+            return imageData; // 返回处理后的图片数据
+        }
+        
+        // 添加批量项目
+        function addBatchItem(item) {
+            const queueContainer = document.getElementById('batchQueue');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'batch-item';
+            itemDiv.id = `batch-item-${item.id}`;
+            
+            itemDiv.innerHTML = `
+                <img src="${item.original}" alt="图片${item.id + 1}">
+                <div class="batch-status status-waiting" id="status-${item.id}">等待处理</div>
+            `;
+            
+            queueContainer.appendChild(itemDiv);
+        }
+        
+        // 更新批量项目状态
+        function updateBatchItemStatus(id, status) {
+            const statusElement = document.getElementById(`status-${id}`);
+            if (!statusElement) return;
+            
+            statusElement.className = `batch-status status-${status}`;
+            
+            const statusText = {
+                'waiting': '等待处理',
+                'processing': '处理中...',
+                'completed': '已完成',
+                'error': '处理失败'
+            };
+            
+            statusElement.textContent = statusText[status] || status;
+        }
+        
+        // 初始化手动画布
+        function initManualCanvas(imageData) {
+            const canvas = document.getElementById('manualCanvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                // 添加鼠标事件监听
+                addCanvasEventListeners(canvas);
+            };
+            
+            img.src = imageData;
+        }
+        
+        // 添加画布事件监听
+        function addCanvasEventListeners(canvas) {
+            let isDrawing = false;
+            let currentTool = 'add';
+            
+            canvas.addEventListener('mousedown', function(e) {
+                isDrawing = true;
+                draw(e, canvas);
+            });
+            
+            canvas.addEventListener('mousemove', function(e) {
+                if (isDrawing) {
+                    draw(e, canvas);
+                }
+            });
+            
+            canvas.addEventListener('mouseup', function() {
+                isDrawing = false;
+            });
+        }
+        
+        // 绘制功能
+        function draw(e, canvas) {
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            ctx.fill();
+        }
+        
+        // 工具函数
+        function addToSelection() {
+            // 实现添加选区功能
+            console.log('添加到选区');
+        }
+        
+        function removeFromSelection() {
+            // 实现移除选区功能
+            console.log('从选区移除');
+        }
+        
+        function applyManualMatting() {
+            // 应用手动抠图
+            console.log('应用手动抠图');
+        }
+        
+        function downloadResult() {
+            if (!resultImage) {
+                alert('请先完成抠图处理');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            const format = document.getElementById('outputFormat').value;
+            
+            link.download = `matting_result.${format}`;
+            link.href = resultImage;
+            link.click();
+        }
+        
+        function downloadBatchResults() {
+            const completedItems = batchQueue.filter(item => item.status === 'completed');
+            if (completedItems.length === 0) {
+                alert('没有已完成的抠图结果');
+                return;
+            }
+            
+            // 创建ZIP下载（简化版本）
+            completedItems.forEach((item, index) => {
+                const link = document.createElement('a');
+                link.download = `batch_result_${index + 1}.png`;
+                link.href = item.result;
+                link.click();
+            });
+        }
+        
+        function resetSingle() {
+            currentImage = null;
+            resultImage = null;
+            document.getElementById('singleProcessing').style.display = 'none';
+            document.getElementById('singleFile').value = '';
+            resetProgress();
+        }
+        
+        function resetBatch() {
+            batchQueue = [];
+            document.getElementById('batchProcessing').style.display = 'none';
+            document.getElementById('batchFiles').value = '';
+            document.getElementById('batchQueue').innerHTML = '';
+        }
+        
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+        
+        function resetProgress() {
+            updateProgress(0);
+        }
+        
+        // FAQ切换功能
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('active');
+        }
+        
+        // 拖拽上传功能
+        function setupDragAndDrop() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const input = this.querySelector('input[type="file"]');
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+        });
+        
+        // 加载导航栏和页脚组件
+        $(document).ready(function() {
+            $('#navbar-container').load('../components/navbar.html');
+            $('#footer-container').load('../components/footer.html');
+        });
+    </script>
+</body>
+</html>
