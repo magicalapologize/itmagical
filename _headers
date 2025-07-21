@@ -1,2 +1,10 @@
-/*.html
-  Link: <$1>; rel="canonical"
+# 工具页面头部配置
+/tools/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 主页面头部配置
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff

@@ -1,1 +1,8 @@
-/*.html  $1.html  200
+# 工具页面重定向规则
+/tools/*  /tools/:splat/index.html  200
+
+# 处理不带.html后缀的工具访问
+/tools/:tool  /tools/:tool/index.html  200
+
+# 兼容旧的.html文件访问
+/tools/*.html  /tools/:splat/index.html  301
